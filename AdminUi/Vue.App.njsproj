@@ -28,15 +28,6 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  <ItemGroup>
-  
-  </ItemGroup>
-  <ItemGroup>
-  
-  </ItemGroup>
-  <ItemGroup>
-
-  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
       npm run build
