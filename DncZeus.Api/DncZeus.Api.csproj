@@ -16,6 +16,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="logs\**" />
+      <Content Remove="logs\**" />
+      <EmbeddedResource Remove="logs\**" />
+      <None Remove="logs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Remove="Migrations\20190504083800_Init.cs" />
         <Compile Remove="Migrations\20190504083800_Init.Designer.cs" />
         <Compile Remove="Migrations\20190504084421_Init.cs" />
