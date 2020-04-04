@@ -8,16 +8,10 @@
     <!-- 主体内容 -->
     <div class="d2-layout-header-aside-content" flex="dir:top">
       <!-- 顶栏 -->
-      <div
-        class="d2-theme-header"
-        :style="{
-          opacity: this.searchActive ? 0.5 : 1
-        }"
-        flex-box="0"
-        flex>
+      <div class="d2-theme-header" :style="{ opacity: this.searchActive ? 0.5 : 1 }" flex-box="0" flex>
         <router-link to="/index" class="logo-group" :style="{width: asideCollapse ? asideWidthCollapse : asideWidth}" flex-box="0">
-          <img v-if="asideCollapse" :src="`${$baseUrl}image/theme/${themeActiveSetting.name}/logo/icon-only.png`">
-          <img v-else :src="`${$baseUrl}image/theme/${themeActiveSetting.name}/logo/all.png`">
+          <img v-if="asideCollapse" :src="`${$env.BASE_URL}image/theme/${themeActiveSetting.name}/logo/icon-only.png`">
+          <img v-else :src="`${$env.BASE_URL}image/theme/${themeActiveSetting.name}/logo/all.png`">
         </router-link>
         <div class="toggle-aside-btn" @click="handleToggleAside" flex-box="0">
           <d2-icon name="bars"/>
@@ -27,12 +21,11 @@
         <div class="d2-header-right" flex-box="0">
           <!-- 如果你只想在开发环境显示这个按钮请添加 v-if="$env === 'development'" -->
           <d2-header-search @click="handleSearchClick"/>
+          <d2-header-base-url/>
           <d2-header-log/>
           <d2-header-fullscreen/>
           <d2-header-theme/>
-          <d2-header-size/>
           <d2-header-locales/>
-          <d2-header-color/>
           <d2-header-user/>
         </div>
       </div>
@@ -89,11 +82,10 @@ import d2Tabs from './components/tabs'
 import d2HeaderFullscreen from './components/header-fullscreen'
 import d2HeaderLocales from './components/header-locales'
 import d2HeaderSearch from './components/header-search'
-import d2HeaderSize from './components/header-size'
 import d2HeaderTheme from './components/header-theme'
 import d2HeaderUser from './components/header-user'
 import d2HeaderLog from './components/header-log'
-import d2HeaderColor from './components/header-color'
+import d2HeaderBaseUrl from './components/header-base-url'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import mixinSearch from './mixins/search'
 export default {
@@ -108,11 +100,10 @@ export default {
     d2HeaderFullscreen,
     d2HeaderLocales,
     d2HeaderSearch,
-    d2HeaderSize,
     d2HeaderTheme,
     d2HeaderUser,
     d2HeaderLog,
-    d2HeaderColor
+    d2HeaderBaseUrl
   },
   data () {
     return {
@@ -138,7 +129,7 @@ export default {
     styleLayoutMainGroup () {
       return {
         ...this.themeActiveSetting.backgroundImage ? {
-          backgroundImage: `url('${this.$baseUrl}${this.themeActiveSetting.backgroundImage}')`
+          backgroundImage: `url('${this.$env.BASE_URL}${this.themeActiveSetting.backgroundImage}')`
         } : {}
       }
     }

@@ -145,7 +145,7 @@ namespace DncZeus.Api
             app.UseStaticFiles();
             app.UseFileServer();
             app.UseAuthentication();
-             app.UseCors("OAuthCorsPolicy");//授权指定的域名
+            app.UseCors("OAuthCorsPolicy");//授权指定的域名
             //app.UseCors("AllowAllOrigins");
             app.ConfigureCustomExceptionMiddleware();
 

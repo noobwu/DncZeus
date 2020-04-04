@@ -1,6 +1,6 @@
 import { mapState } from 'vuex'
 import menuMixin from '../mixin/menu'
-import { elMenuItem, elSubmenu } from '../libs/util.menu'
+import { elMenuItem, elSubmenu } from '../utils/menu'
 import BScroll from 'better-scroll'
 
 export default {
@@ -11,7 +11,7 @@ export default {
   render (createElement) {
     return createElement('div', { attrs: { class: 'd2-layout-header-aside-menu-side' } }, [
       createElement('el-menu', {
-        props: { collapse: this.asideCollapse, uniqueOpened: true, defaultActive: this.active },
+        props: { collapse: this.asideCollapse, uniqueOpened: true },
         ref: 'menu',
         on: { select: this.handleMenuSelect }
       }, this.aside.map(menu => (menu.children === undefined ? elMenuItem : elSubmenu).call(this, createElement, menu))),
@@ -25,8 +25,6 @@ export default {
   },
   data () {
     return {
-      active: '',
-      asideHeight: 300,
       BS: null
     }
   },
@@ -44,10 +42,14 @@ export default {
         this.scrollInit()
       }, 500)
     },
-    // 监听路由 控制侧边栏激活状态
+    // 侧边栏数据发生变化时重新计算侧边栏展开状态
+    aside: 'initOpenedMenu',
+    // 路由变化时控制侧边栏激活状态
     '$route.fullPath': {
-      handler (value) {
-        this.active = value
+      handler () {
+        this.$nextTick(() => {
+          if (this.$refs.menu) this.$refs.menu.updateActiveIndex(this.$route.fullPath)
+        })
       },
       immediate: true
     }
@@ -59,6 +61,17 @@ export default {
     this.scrollDestroy()
   },
   methods: {
+    /**
+     * @description 将之前保存的展开状态恢复到侧边栏上
+     */
+    initOpenedMenu () {
+      this.$nextTick(() => {
+        if (this.$refs.menu) this.$refs.menu.initOpenedMenu()
+      })
+    },
+    /**
+     * @description 初始化 betterscroll
+     */
     scrollInit () {
       this.BS = new BScroll(this.$el, {
         mouseWheel: true,
@@ -70,6 +83,9 @@ export default {
         // }
       })
     },
+    /**
+     * @description 销毁 betterscroll
+     */
     scrollDestroy () {
       // https://github.com/d2-projects/d2-admin/issues/75
       try {

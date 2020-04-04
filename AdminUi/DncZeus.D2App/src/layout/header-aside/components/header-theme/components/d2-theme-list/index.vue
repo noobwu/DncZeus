@@ -13,7 +13,7 @@
         slot-scope="scope"
         class="theme-preview"
         :style="{
-          backgroundImage: `url(${$baseUrl}${scope.row.preview})`
+          backgroundImage: `url(${$env.BASE_URL}${scope.row.preview})`
         }">
       </div>
     </el-table-column>
@@ -21,19 +21,17 @@
       prop="address"
       align="center">
       <template slot-scope="scope">
-        <el-button
+        <d2-button
           v-if="activeName === scope.row.name"
           type="success"
           icon="el-icon-check"
-          round>
-          已激活
-        </el-button>
-        <el-button
+          label="已激活"
+          round/>
+        <d2-button
           v-else
           round
-          @click="handleSelectTheme(scope.row.name)">
-          使用
-        </el-button>
+          label="使用"
+          @click="handleSelectTheme(scope.row.name)"/>
       </template>
     </el-table-column>
   </el-table>

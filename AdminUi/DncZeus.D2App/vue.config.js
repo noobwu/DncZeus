@@ -1,7 +1,5 @@
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 const VueFilenameInjector = require('@d2-projects/vue-filename-injector')
-const ThemeColorReplacer = require('webpack-theme-color-replacer')
-const forElementUI = require('webpack-theme-color-replacer/forElementUI')
 const cdnDependencies = require('./dependencies-cdn')
 
 // 拼接路径
@@ -9,14 +7,15 @@ const resolve = dir => require('path').join(__dirname, dir)
 
 // 增加环境变量
 process.env.VUE_APP_VERSION = require('./package.json').version
-process.env.VUE_APP_BUILD_TIME = require('dayjs')().format('YYYY-M-D HH:mm:ss')
-
-// 基础路径 注意发布之前要先修改这里
-let publicPath = process.env.VUE_APP_PUBLIC_PATH || '/'
+// 构建时间 | 服务器时间转为中国时间
+// Unix 时间戳 (毫秒)
+let time = require('dayjs')()
+time = time.subtract(time.utcOffset(), 'minute').add(480, 'minute')
+process.env.VUE_APP_BUILD_TIME = `${time.valueOf()}|number`
 
 // 设置不参与构建的库
 let externals = {}
-cdnDependencies.forEach(package => { externals[package.name] = package.library })
+cdnDependencies.forEach(pkg => { externals[pkg.name] = pkg.library })
 
 // 引入文件的 cdn 链接
 const cdn = {
@@ -26,16 +25,8 @@ const cdn = {
 
 module.exports = {
   // 根据你的实际情况更改这里
-  publicPath,
+  publicPath: process.env.VUE_APP_PUBLIC_PATH || '/',
   lintOnSave: true,
-  devServer: {
-    publicPath, // 和 publicPath 保持一致
-     // proxy: 'localhost:3000',
-    port: 8000,
-    //禁用host检查,不然在部分流利器中会报[WDS disconnected]的错误
-    // 参考:https://github.com/webpack/webpack-dev-server/issues/851
-    disableHostCheck: true
-  },
   css: {
     loaderOptions: {
       // 设置 scss 公用变量文件
@@ -93,18 +84,9 @@ module.exports = {
     config.resolve
       .symlinks(true)
     config
-      .plugin('theme-color-replacer')
-      .use(ThemeColorReplacer, [{
-        fileName: 'css/theme-colors.[contenthash:8].css',
-        matchColors: [
-          ...forElementUI.getElementUISeries(process.env.VUE_APP_ELEMENT_COLOR) // Element-ui主色系列
-        ],
-        externalCssFiles: [ './node_modules/element-ui/lib/theme-chalk/index.css' ], // optional, String or string array. Set external css files (such as cdn css) to extract colors.
-        changeSelector: forElementUI.changeSelector
-      }])
-    config
-      // 开发环境 sourcemap 不包含列信息
+      // 开发环境
       .when(process.env.NODE_ENV === 'development',
+        // sourcemap不包含列信息
         config => config.devtool('cheap-source-map')
       )
       // 预览环境构建 vue-loader 添加 filename
@@ -144,13 +126,7 @@ module.exports = {
     // 重新设置 alias
     config.resolve.alias
       .set('@api', resolve('src/api'))
-    // 判断环境加入模拟数据
-    const entry = config.entry('app')
-    if (process.env.VUE_APP_BUILD_MODE !== 'NOMOCK') {
-      entry
-        .add('@/mock')
-        .end()
-    }
+      .end()
     // 分析工具
     if (process.env.npm_config_report) {
       config

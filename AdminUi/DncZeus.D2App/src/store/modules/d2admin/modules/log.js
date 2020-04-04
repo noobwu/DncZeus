@@ -1,8 +1,8 @@
 import dayjs from 'dayjs'
 import { get } from 'lodash'
-import util from '@/libs/util.js'
+import utils from '@/utils'
 
-export default {
+export default context => ({
   namespaced: true,
   state: {
     // 错误日志
@@ -32,7 +32,7 @@ export default {
   actions: {
     /**
      * @description 添加一个日志
-     * @param {Object} context
+     * @param {Object} vuex context
      * @param {String} param message {String} 信息
      * @param {String} param type {String} 类型
      * @param {Object} payload meta {Object} 附带的信息
@@ -46,9 +46,9 @@ export default {
           // 当前用户信息
           user: rootState.d2admin.user.info,
           // 当前用户的 uuid
-          uuid: util.cookies.get('uuid'),
+          uuid: utils.cookies.get('uuid'),
           // 当前的 token
-          token: util.cookies.get('token'),
+          token: utils.cookies.get('token'),
           // 当前地址
           url: get(window, 'location.href', ''),
           // 用户设置
@@ -75,4 +75,4 @@ export default {
       state.log = []
     }
   }
-}
+})

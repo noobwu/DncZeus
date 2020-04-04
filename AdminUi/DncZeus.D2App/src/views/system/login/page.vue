@@ -5,119 +5,88 @@
         <li v-for="n in 10" :key="n"></li>
       </ul>
     </div>
-    <div
-      class="page-login--layer page-login--layer-time"
-      flex="main:center cross:center">
-      {{time}}
-    </div>
+    <div class="page-login--layer page-login--layer-time" flex="main:center cross:center">{{time}}</div>
     <div class="page-login--layer">
       <div
         class="page-login--content"
         flex="dir:top main:justify cross:stretch box:justify">
         <div class="page-login--content-header">
-          <p class="page-login--content-header-motto">
-            时间是一切财富中最宝贵的财富
-          </p>
+          <p class="page-login--content-header-motto">时间是一切财富中最宝贵的财富</p>
         </div>
-        <div
-          class="page-login--content-main"
-          flex="dir:top main:center cross:center">
+        <div class="page-login--content-main" flex="dir:top main:center cross:center">
           <!-- logo -->
           <img class="page-login--logo" src="./image/logo@2x.png">
           <!-- form -->
           <div class="page-login--form">
             <el-card shadow="never">
-              <el-form
-                ref="loginForm"
-                label-position="top"
-                :rules="rules"
-                :model="formLogin"
-                size="default">
+              <el-form ref="loginForm" label-position="top" :rules="rules" :model="formLogin" size="default">
                 <el-form-item prop="username">
-                  <el-input
-                    type="text"
-                    v-model="formLogin.username"
-                    placeholder="用户名">
+                  <el-input type="text" v-model="formLogin.username" placeholder="用户名">
                     <i slot="prepend" class="fa fa-user-circle-o"></i>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                  <el-input
-                    type="password"
-                    v-model="formLogin.password"
-                    placeholder="密码">
+                  <el-input type="password" v-model="formLogin.password" placeholder="密码">
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
                   </el-input>
                 </el-form-item>
-                <el-form-item prop="code">
-                  <el-input
-                    type="text"
-                    v-model="formLogin.code"
-                    placeholder="验证码">
-                    <template slot="append">
-                      <img class="login-code" src="./image/login-code.png">
-                    </template>
-                  </el-input>
-                </el-form-item>
-                <el-button
-                  size="default"
-                  @click="submit"
-                  type="primary"
-                  class="button-login">
-                  登录
-                </el-button>
               </el-form>
+              <d2-tencent-captcha @success="submit">
+                <d2-button size="default" type="primary" label="登录" class="button-login"/>
+              </d2-tencent-captcha>
             </el-card>
-            <p
-              class="page-login--options"
-              flex="main:justify cross:center">
+            <p class="page-login--options" flex="main:justify cross:center">
               <span><d2-icon name="question-circle"/> 忘记密码</span>
               <span>注册用户</span>
             </p>
-            <!-- quick login -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
-              快速选择用户（测试功能）
-            </el-button>
           </div>
         </div>
         <div class="page-login--content-footer">
-          <p class="page-login--content-footer-locales">
-            <a
-              v-for="language in $languages"
-              :key="language.value"
-              @click="onChangeLocale(language.value)">
-              {{ language.label }}
-            </a>
+          <p>
+            <template v-for="(language, index) in $languages">
+              <a
+                :key="language.value"
+                @click="onChangeLocale(language.value)">
+                {{ language.label }}
+              </a>
+              <el-divider
+                :key="language.value"
+                v-if="index !== $languages.length - 1"
+                direction="vertical"/>
+            </template>
           </p>
-          <p class="page-login--content-footer-copyright">
-            Copyright
-            <d2-icon name="copyright"/>
-            2018 D2 Projects 开源组织出品
-            <a href="https://github.com/FairyEver">
+          <p>
+            <a href="https://github.com/d2-projects/d2-admin-xiya-go-cms/actions" target="_blank">
+              构建于 {{ $env.VUE_APP_BUILD_TIME | timeFormat('YYYY年M月D日 dddd Ah点mm分') }}
+              <d2-time-relative :value="$env.VUE_APP_BUILD_TIME"/>
+            </a>
+            <el-divider direction="vertical"/>
+            <d2-api-base-url-controller>
+              切换环境
+            </d2-api-base-url-controller>
+          </p>
+          <p>
+            <a href="https://github.com/d2-projects/d2-admin-xiya-go-cms/blob/master/LICENSE" target="_blank">
+              Copyright
+              <d2-icon name="copyright"/>
+              2018
+            </a>
+            <a href="https://github.com/FairyEver" target="_blank">
               @FairyEver
             </a>
+            出品
           </p>
-          <p class="page-login--content-footer-options">
+          <p>
             <a href="#">帮助</a>
+            <el-divider direction="vertical"/>
             <a href="#">隐私</a>
+            <el-divider direction="vertical"/>
             <a href="#">条款</a>
           </p>
         </div>
       </div>
     </div>
-    <el-dialog
-      title="快速选择用户"
-      :visible.sync="dialogVisible"
-      width="400px">
-      <el-row :gutter="10" style="margin: -20px 0px -10px 0px;">
-        <el-col v-for="(user, index) in users" :key="index" :span="8">
-          <div class="page-login--quick-user" @click="handleUserBtnClick(user)">
-            <d2-icon name="user-circle-o"/>
-            <span>{{user.name}}</span>
-          </div>
-        </el-col>
-      </el-row>
-    </el-dialog>
+    <d2-fork-me-on-github/>
   </div>
 </template>
 
@@ -130,33 +99,13 @@ export default {
     localeMixin
   ],
   data () {
-    return {
+    let data = {
       timeInterval: null,
       time: dayjs().format('HH:mm:ss'),
-      // 快速选择用户
-      dialogVisible: false,
-      users: [
-        {
-          name: 'Admin',
-          username: 'admin',
-          password: 'admin'
-        },
-        {
-          name: 'Editor',
-          username: 'editor',
-          password: 'editor'
-        },
-        {
-          name: 'User1',
-          username: 'user1',
-          password: 'user1'
-        }
-      ],
       // 表单
       formLogin: {
-        username: 'admin',
-        password: 'admin',
-        code: 'v9am'
+        username: '',
+        password: ''
       },
       // 表单校验
       rules: {
@@ -173,16 +122,12 @@ export default {
             message: '请输入密码',
             trigger: 'blur'
           }
-        ],
-        code: [
-          {
-            required: true,
-            message: '请输入验证码',
-            trigger: 'blur'
-          }
         ]
       }
     }
+    data.formLogin.username = this.$env.VUE_APP_USER || ''
+    data.formLogin.password = this.$env.VUE_APP_PASSWORD || ''
+    return data
   },
   mounted () {
     this.timeInterval = setInterval(() => {
@@ -193,20 +138,11 @@ export default {
     clearInterval(this.timeInterval)
   },
   methods: {
-    ...mapActions('d2admin/account', [
+    ...mapActions('d2admin/user', [
       'login'
     ]),
     refreshTime () {
       this.time = dayjs().format('HH:mm:ss')
-    },
-    /**
-     * @description 接收选择一个用户快速登录的事件
-     * @param {Object} user 用户信息
-     */
-    handleUserBtnClick (user) {
-      this.formLogin.username = user.username
-      this.formLogin.password = user.password
-      this.submit()
     },
     /**
      * @description 提交表单
@@ -216,16 +152,11 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           // 登录
-          // 注意 这里的演示没有传验证码
-          // 具体需要传递的数据请自行修改代码
           this.login({
             username: this.formLogin.username,
-            password: this.formLogin.password
+            password: this.formLogin.password,
+            to: this.$route.query.redirect || '/'
           })
-            .then(() => {
-              // 重定向对象不存在则返回顶层路径
-              this.$router.replace(this.$route.query.redirect || '/')
-            })
         } else {
           // 登录表单校验失败
           this.$message.error('表单校验失败，请检查')
@@ -277,7 +208,7 @@ export default {
   }
   // main
   .page-login--logo {
-    width: 240px;
+    width: 280px;
     margin-bottom: 2em;
     margin-top: -2em;
   }
@@ -296,13 +227,6 @@ export default {
     .el-input-group__prepend {
       padding: 0px 14px;
     }
-    .login-code {
-      height: 40px - 2px;
-      display: block;
-      margin: 0px -20px;
-      border-top-right-radius: 2px;
-      border-bottom-right-radius: 2px;
-    }
     // 登陆选项
     .page-login--options {
       margin: 0px;
@@ -312,38 +236,11 @@ export default {
       margin-bottom: 15px;
       font-weight: bold;
     }
-    .page-login--quick {
-      width: 100%;
-    }
-  }
-  // 快速选择用户面板
-  .page-login--quick-user {
-    @extend %flex-center-col;
-    padding: 10px 0px;
-    border-radius: 4px;
-    &:hover {
-      background-color: $color-bg;
-      i {
-        color: $color-text-normal;
-      }
-      span {
-        color: $color-text-normal;
-      }
-    }
-    i {
-      font-size: 36px;
-      color: $color-text-sub;
-    }
-    span {
-      font-size: 12px;
-      margin-top: 10px;
-      color: $color-text-sub;
-    }
   }
   // footer
   .page-login--content-footer {
     padding: 1em 0;
-    .page-login--content-footer-locales {
+    p {
       padding: 0px;
       margin: 0px;
       margin-bottom: 15px;
@@ -353,33 +250,9 @@ export default {
       color: $color-text-normal;
       a {
         color: $color-text-normal;
-        margin: 0 .5em;
         &:hover {
           color: $color-text-main;
         }
-      }
-    }
-    .page-login--content-footer-copyright {
-      padding: 0px;
-      margin: 0px;
-      margin-bottom: 10px;
-      font-size: 12px;
-      line-height: 12px;
-      text-align: center;
-      color: $color-text-normal;
-      a {
-        color: $color-text-normal;
-      }
-    }
-    .page-login--content-footer-options {
-      padding: 0px;
-      margin: 0px;
-      font-size: 12px;
-      line-height: 12px;
-      text-align: center;
-      a {
-        color: $color-text-normal;
-        margin: 0 1em;
       }
     }
   }

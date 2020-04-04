@@ -9,7 +9,6 @@
 </template>
 
 <script>
-import { last, get } from 'lodash'
 export default {
   data () {
     return {
@@ -19,13 +18,15 @@ export default {
   },
   computed: {
     show () {
-      return process.env.VUE_APP_SCOURCE_LINK === 'TRUE'
+      return this.$env.VUE_APP_SCOURCE_LINK === 'TRUE'
     }
   },
   watch: {
     $route: {
       handler (to) {
-        this.path = get(last(to.matched), 'components.default.__source')
+        const pathFromMeta = this._.get(this._.last(to.matched), 'meta.source')
+        const pathFromComponent = this._.get(this._.last(to.matched), 'components.default.__source')
+        this.path = pathFromComponent || pathFromMeta
       },
       immediate: true
     }
@@ -39,7 +40,7 @@ export default {
   methods: {
     // 点击按钮的时候跳转到源代码
     handleClick () {
-      this.$open(`${process.env.VUE_APP_REPO}/blob/master/${this.path}`)
+      this.$open(`${this.$env.VUE_APP_REPO}/blob/master/${this.path}`)
     }
   }
 }

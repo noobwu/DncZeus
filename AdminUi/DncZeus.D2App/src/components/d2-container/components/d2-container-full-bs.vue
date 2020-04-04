@@ -4,7 +4,11 @@
       <slot name="header"/>
     </div>
     <div class="d2-container-full-bs__body" ref="wrapper">
-      <div class="d2-container-full-bs__body-wrapper-inner">
+      <div
+        class="d2-container-full-bs__body-wrapper-inner"
+        :class="{
+          'is-spacious': spacious
+        }">
         <slot/>
       </div>
     </div>
