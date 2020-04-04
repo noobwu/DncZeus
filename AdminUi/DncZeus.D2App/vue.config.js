@@ -29,7 +29,12 @@ module.exports = {
   publicPath,
   lintOnSave: true,
   devServer: {
-    publicPath // 和 publicPath 保持一致
+    publicPath, // 和 publicPath 保持一致
+     // proxy: 'localhost:3000',
+    port: 8000,
+    //禁用host检查,不然在部分流利器中会报[WDS disconnected]的错误
+    // 参考:https://github.com/webpack/webpack-dev-server/issues/851
+    disableHostCheck: true
   },
   css: {
     loaderOptions: {

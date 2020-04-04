@@ -47,17 +47,26 @@ namespace DncZeus.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            var oAuthCorsOrigins=Configuration.GetValue<string>("OAuthCorsOrigins").Split(',');
             //跨域请求 (CORS):https://docs.microsoft.com/zh-cn/aspnet/core/security/cors?view=aspnetcore-3.1
-            services.AddCors(o =>
-                o.AddPolicy("CorsPolicy",
-                    builder => builder
-                        //.WithOrigins("http://localhost:9000")
-                         .WithOrigins("http://localhost:1002")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        //.AllowAnyOrigin() //允许任何来源的主机访问
-                        .AllowCredentials() //指定处理cookie
-                ));
+            //Demo:https://github.com/dotnet/AspNetCore.Docs/blob/master/aspnetcore/security/cors/sample/CorsExample4/Startup.cs
+            services.AddCors(options =>
+              {
+                  options.AddPolicy("OAuthCorsPolicy",
+                     builder =>
+                        {
+                            builder.WithOrigins(oAuthCorsOrigins)
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); //指定处理cookie
+                        });
+
+                  options.AddPolicy("AllowAllOrigins",
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin();//允许任何来源的主机访问
+                      });
+              });
 
             services.AddMemoryCache();
             services.AddHttpContextAccessor();
@@ -88,8 +97,8 @@ namespace DncZeus.Api
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddDbContext<DncZeusDbContext>(options =>
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                // replace with your connection string
+                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                 // replace with your connection string
                  options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), mySqlOptions => mySqlOptions
                     // replace with your Server Version and Type
                     .ServerVersion(new Version(8, 0, 18), ServerType.MySql))
@@ -136,7 +145,8 @@ namespace DncZeus.Api
             app.UseStaticFiles();
             app.UseFileServer();
             app.UseAuthentication();
-            app.UseCors("CorsPolicy");
+             app.UseCors("OAuthCorsPolicy");//授权指定的域名
+            //app.UseCors("AllowAllOrigins");
             app.ConfigureCustomExceptionMiddleware();
 
             var serviceProvider = app.ApplicationServices;
