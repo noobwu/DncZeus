@@ -46,14 +46,16 @@ namespace DncZeus.Api
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            //跨域请求 (CORS):https://docs.microsoft.com/zh-cn/aspnet/core/security/cors?view=aspnetcore-3.1
             services.AddCors(o =>
                 o.AddPolicy("CorsPolicy",
                     builder => builder
-                        .WithOrigins("http://localhost:9000")
+                        //.WithOrigins("http://localhost:9000")
+                         .WithOrigins("http://localhost:1002")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        //.AllowAnyOrigin()
-                        .AllowCredentials()
+                        //.AllowAnyOrigin() //允许任何来源的主机访问
+                        .AllowCredentials() //指定处理cookie
                 ));
 
             services.AddMemoryCache();
