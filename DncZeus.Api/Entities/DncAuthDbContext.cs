@@ -57,11 +57,11 @@ namespace DncZeus.Api.Entities
         /// <summary>
         /// 
         /// </summary>
-        public DbQuery<DncPermissionWithAssignProperty> DncPermissionWithAssignProperty { get; set; }
+        public DbSet<DncPermissionWithAssignProperty> DncPermissionWithAssignProperty { get; set; }
         /// <summary>
         /// 
         /// </summary>
-        public DbQuery<DncPermissionWithMenu> DncPermissionWithMenu { get; set; }
+        public DbSet<DncPermissionWithMenu> DncPermissionWithMenu { get; set; }
         #endregion
 
         /// <summary>
@@ -134,7 +134,12 @@ namespace DncZeus.Api.Entities
                     .HasForeignKey(x => x.PermissionCode)
                     .OnDelete(DeleteBehavior.Restrict);
             });
-
+            modelBuilder.Entity<DncPermissionWithAssignProperty>(entity=> {
+                entity.HasNoKey();
+            });
+            modelBuilder.Entity<DncPermissionWithMenu>(entity => {
+                entity.HasNoKey();
+            });
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -29,6 +29,7 @@ namespace DncZeus.Api.Controllers
         /// 
         /// </summary>
         /// <param name="appSettings"></param>
+        /// <param name="dbContext"></param>
         public OauthController(IOptions<AppAuthenticationSettings> appSettings, DncZeusDbContext dbContext)
         {
             _appSettings = appSettings.Value;

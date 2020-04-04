@@ -260,7 +260,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 CreatedOn = DateTime.Now,
                 RoleCode = x.Trim()
             }).ToList();
-            _dbContext.Database.ExecuteSqlCommand("DELETE FROM DncUserRoleMapping WHERE UserGuid={0}", model.UserGuid);
+            _dbContext.Database.ExecuteSqlRaw("DELETE FROM DncUserRoleMapping WHERE UserGuid={0}", model.UserGuid);
             var success = true;
             if (roles.Count > 0)
             {
@@ -293,14 +293,14 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
             {
                 //var idList = ids.Split(",").ToList();
                 ////idList.ForEach(x => {
-                ////  _dbContext.Database.ExecuteSqlCommand($"UPDATE DncUser SET IsDeleted=1 WHERE Id = {x}");
+                ////  _dbContext.Database.ExecuteSqlRaw($"UPDATE DncUser SET IsDeleted=1 WHERE Id = {x}");
                 ////});
-                //_dbContext.Database.ExecuteSqlCommand($"UPDATE DncUser SET IsDeleted={(int)isDeleted} WHERE Id IN ({ids})");
+                //_dbContext.Database.ExecuteSqlRaw($"UPDATE DncUser SET IsDeleted={(int)isDeleted} WHERE Id IN ({ids})");
                 var parameters = ids.Split(",").Select((id, index) => new SqlParameter(string.Format("@p{0}", index), id)).ToList();
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncUser SET IsDeleted=@IsDeleted WHERE Guid IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -320,7 +320,7 @@ namespace DncZeus.Api.Controllers.Api.V1.Rbac
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncUser SET Status=@Status WHERE Guid IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@Status", (int)status));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }

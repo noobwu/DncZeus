@@ -319,7 +319,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncPermission SET IsDeleted=@IsDeleted WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@IsDeleted", (int)isDeleted));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
@@ -339,7 +339,7 @@ WHERE P.IsDeleted=0 AND P.Status=1";
                 var parameterNames = string.Join(", ", parameters.Select(p => p.ParameterName));
                 var sql = string.Format("UPDATE DncPermission SET Status=@Status WHERE Code IN ({0})", parameterNames);
                 parameters.Add(new SqlParameter("@Status", status));
-                _dbContext.Database.ExecuteSqlCommand(sql, parameters);
+                _dbContext.Database.ExecuteSqlRaw(sql, parameters);
                 var response = ResponseModelFactory.CreateInstance;
                 return response;
             }
