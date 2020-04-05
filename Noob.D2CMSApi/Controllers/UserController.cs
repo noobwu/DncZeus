@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-05
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-05
+// ***********************************************************************
+// <copyright file="UserController.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -14,17 +27,28 @@ using Noob.D2CMSApi.Models.Responses;
 
 namespace Noob.D2CMSApi.Controllers
 {
+    /// <summary>
+    /// Class UserController.
+    /// Implements the <see cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        /// <summary>
+        /// The application settings
+        /// </summary>
         private readonly AppAuthenticationSettings _appSettings;
+        /// <summary>
+        /// The database context
+        /// </summary>
         private readonly D2CmsDbContext _dbContext;
         /// <summary>
-        /// 
+        /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
-        /// <param name="appSettings"></param>
-        /// <param name="dbContext"></param>
+        /// <param name="appSettings">The application settings.</param>
+        /// <param name="dbContext">The database context.</param>
         public UserController(IOptions<AppAuthenticationSettings> appSettings, D2CmsDbContext dbContext)
         {
             _appSettings = appSettings.Value;

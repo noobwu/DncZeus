@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <AssemblyName>Noob.D2CMSApi</AssemblyName>
-    <RootNamespace>Noob</RootNamespace>
+    <RootNamespace>Noob.D2CMSApi</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -13,7 +13,9 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "DncZeus.D2App", "AdminUi\Dn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noob.D2CMSApi", "Noob.D2CMSApi\Noob.D2CMSApi.csproj", "{F83DC987-58A6-4E19-AEED-D84C7A061D81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Noob.Core", "Noob.Core\Noob.Core.csproj", "{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noob.Core", "Noob.Core\Noob.Core.csproj", "{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Noob.NUnitTests", "Noob.NUnitTests\Noob.NUnitTests.csproj", "{0FB22991-85C1-4D4A-9CA9-83C95331407C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FB22991-85C1-4D4A-9CA9-83C95331407C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB22991-85C1-4D4A-9CA9-83C95331407C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB22991-85C1-4D4A-9CA9-83C95331407C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB22991-85C1-4D4A-9CA9-83C95331407C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

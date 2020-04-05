@@ -22,11 +22,15 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
         /// <param name="options">The options.</param>
         public D2CmsDbContext(DbContextOptions<D2CmsDbContext> options) : base(options, Assembly.GetExecutingAssembly())
         {
-            //SysUser = this.Set<SysUser>();
+            
         }
         /// <summary>
         /// 用户
         /// </summary>
         public DbSet<SysUser> SysUser { get; set; }
+        /// <summary>
+        /// 菜单
+        /// </summary>
+        public DbSet<SysMenu> SysMenu { get; set; }
     }
 }
