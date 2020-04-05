@@ -265,3 +265,4 @@ __pycache__/
 # logs
 **/logs/
 /DncZeus.Api/appsettings.json
+/Noob.D2CMSApi/appsettings.json
