@@ -104,14 +104,21 @@ namespace Noob.D2CMSApi
             );
             services.AddControllers().AddNewtonsoftJson();
 
+            string dbType = Configuration.GetValue<string>("DbType");
             services.AddDbContext<D2CmsDbContext>(options =>
             {
-
-                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-                // replace with your connection string
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), mySqlOptions => mySqlOptions
-                   // replace with your Server Version and Type
-                   .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
+                if (dbType == "MySql")
+                {
+                   
+                    // replace with your connection string
+                    options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), mySqlOptions => mySqlOptions
+                       // replace with your Server Version and Type
+                       .ServerVersion(new Version(8, 0, 18), ServerType.MySql));
+                }
+                else
+                {
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                }
                 // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
                 // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616 
                 // 【重要说明】:2020-03-23更新，微软官方最新的Entity Framework Core已不再支持UseRowNumberForPaging()，请尽量使用SQL Server 2012 +版本
