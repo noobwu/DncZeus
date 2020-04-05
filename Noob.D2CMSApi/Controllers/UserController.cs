@@ -50,9 +50,9 @@ namespace Noob.D2CMSApi.Controllers
             }
             var claimsIdentity = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.LoginName),
+                    new Claim(ClaimTypes.Name, user.LoginName??string.Empty),
                     new Claim(ClaimTypes.PrimarySid,user.Id.ToString()),
-                    new Claim("avatar",user.Avatar),
+                    new Claim("avatar",user.Avatar??string.Empty),
                 });
             var token = JwtBearerAuthenticationExtension.GetJwtAccessToken(_appSettings, claimsIdentity);
 
