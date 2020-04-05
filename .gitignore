@@ -268,3 +268,7 @@ __pycache__/
 /Noob.D2CMSApi/appsettings.json
 /Noob.D2CMSApi/appsettings.json
 /Noob.D2CMSApi/appsettings.Development.json
+/Noob.D2CMSApi/appsettings.sqlserver.json
+/Noob.D2CMSApi/appsettings.mysql.Development.json
+/Noob.D2CMSApi/appsettings.mysql.json
+/Noob.D2CMSApi/appsettings.sqlserver.Development.json
