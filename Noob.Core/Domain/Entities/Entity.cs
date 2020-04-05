@@ -13,6 +13,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 
 namespace Noob.Domain.Entities
@@ -66,6 +67,7 @@ namespace Noob.Domain.Entities
         /// </summary>
         /// <value>The identifier.</value>
         /// <inheritdoc />
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual TKey Id { get; protected set; }
 
         /// <summary>

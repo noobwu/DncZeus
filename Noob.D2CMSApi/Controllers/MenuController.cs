@@ -47,6 +47,26 @@ namespace Noob.D2CMSApi.Controllers
             _dbContext = dbContext;
         }
         /// <summary>
+        /// Gets the list.
+        /// </summary>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        public IActionResult GetList()
+        {
+            var response = new ResponseResult<MenuResult>();
+            using (_dbContext)
+            {
+                if (_dbContext.SysMenu.Count(a => a.Id > 0) > 0)
+                {
+                    return Ok(response.Error((int)ResponseCode.ERROR, "菜单已初始化"));
+                }
+                else
+                {
+                    return Ok(response.Error((int)ResponseCode.ERROR, "菜单初始化成功"));
+                }
+            }
+        }
+        /// <summary>
         /// Logins the specified login request.
         /// </summary>
         /// <param name="menus">The menus.</param>
@@ -64,7 +84,7 @@ namespace Noob.D2CMSApi.Controllers
             {
                 HandleMenuData(a, sysMenus);
             });
-            sysMenus = sysMenus.DistinctBy(p => new { p.Id }).OrderBy(o=> new {o.Id }).ToList();
+            sysMenus = sysMenus.DistinctBy(p => new { p.Id }).ToList();
             using (_dbContext)
             {
                 if (_dbContext.SysMenu.Count(a => a.Id > 0) > 0)
@@ -74,6 +94,7 @@ namespace Noob.D2CMSApi.Controllers
                 else
                 {
                     _dbContext.SysMenu.AddRange(sysMenus.ToArray());
+                    _dbContext.SaveChanges();
                     return Ok(response.Error((int)ResponseCode.ERROR, "菜单初始化成功"));
                 }
             }
@@ -83,6 +104,7 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <param name="item">The item.</param>
         /// <param name="sysMenus">The system menus.</param>
+        [NonAction]
         private void HandleMenuData(MenuResult item, List<SysMenu> sysMenus)
         {
             if (item == null)
@@ -110,7 +132,8 @@ namespace Noob.D2CMSApi.Controllers
             }
             else
             {
-                item.ChildrenList.Each(a => {
+                item.ChildrenList.Each(a =>
+                {
                     HandleMenuData(a, sysMenus);
                 });
             }

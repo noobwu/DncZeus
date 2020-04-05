@@ -134,7 +134,7 @@ namespace Noob.D2CMSApi.Models.Responses
         /// </summary>
         /// <value>The remark.</value>
         [JsonProperty("route_component")]
-        public virtual byte RouteComponent { get; set; }
+        public virtual string RouteComponent { get; set; }
         /// <summary>
         /// 子菜单
         /// </summary>
