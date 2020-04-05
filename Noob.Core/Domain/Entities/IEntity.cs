@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Noob.D2CMSApi.Domain.Entities
+namespace Noob.Domain.Entities
 {
     /// <summary>
     /// Defines an entity. It's primary key may not be "Id" or it may have a composite primary key.
@@ -34,8 +34,10 @@ namespace Noob.D2CMSApi.Domain.Entities
     /// <summary>
     /// Defines an entity with a single primary key with "Id" property.
     /// Implements the <see cref="Noob.D2CMSApi.Domain.Entities.IEntity" />
+    /// Implements the <see cref="Noob.Domain.Entities.IEntity" />
     /// </summary>
     /// <typeparam name="TKey">Type of the primary key of the entity</typeparam>
+    /// <seealso cref="Noob.Domain.Entities.IEntity" />
     /// <seealso cref="Noob.D2CMSApi.Domain.Entities.IEntity" />
     public interface IEntity<TKey> : IEntity
     {

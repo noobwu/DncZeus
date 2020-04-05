@@ -11,7 +11,9 @@ Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "DncZeus.App", "AdminUi\DncZ
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "DncZeus.D2App", "AdminUi\DncZeus.D2App\DncZeus.D2App.njsproj", "{7CBF5B19-B970-4683-9900-FF331495D17D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Noob.D2CMSApi", "Noob.D2CMSApi\Noob.D2CMSApi.csproj", "{F83DC987-58A6-4E19-AEED-D84C7A061D81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noob.D2CMSApi", "Noob.D2CMSApi\Noob.D2CMSApi.csproj", "{F83DC987-58A6-4E19-AEED-D84C7A061D81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Noob.Core", "Noob.Core\Noob.Core.csproj", "{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{F83DC987-58A6-4E19-AEED-D84C7A061D81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F83DC987-58A6-4E19-AEED-D84C7A061D81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F83DC987-58A6-4E19-AEED-D84C7A061D81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

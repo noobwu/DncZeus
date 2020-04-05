@@ -13,7 +13,7 @@
 // ***********************************************************************
 using System;
 
-namespace Noob.D2CMSApi.Domain.Entities
+namespace Noob.Domain.Entities
 {
     /// <summary>
     /// Class DisableIdGenerationAttribute.

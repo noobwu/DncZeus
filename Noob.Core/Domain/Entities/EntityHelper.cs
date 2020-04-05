@@ -17,7 +17,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Noob.D2CMSApi.Domain.Entities
+namespace Noob.Domain.Entities
 {
     /// <summary>
     /// Some helper methods for entities.

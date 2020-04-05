@@ -43,7 +43,7 @@ namespace Noob.D2CMSApi.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WeatherForecastController"/> class.
+        /// Initializes a new instance of the <see cref="WeatherForecastController" /> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         public WeatherForecastController(ILogger<WeatherForecastController> logger)

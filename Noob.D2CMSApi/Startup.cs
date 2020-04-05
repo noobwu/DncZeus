@@ -38,7 +38,7 @@ namespace Noob.D2CMSApi
     public class Startup
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// Initializes a new instance of the <see cref="Startup" /> class.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
