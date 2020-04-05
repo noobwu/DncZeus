@@ -20,5 +20,9 @@
     <ProjectReference Include="..\Noob.Core\Noob.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 
 </Project>
