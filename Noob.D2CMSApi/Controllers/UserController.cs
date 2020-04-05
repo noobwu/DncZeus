@@ -42,7 +42,7 @@ namespace Noob.D2CMSApi.Controllers
             SysUser user;
             using (_dbContext)
             {
-                user = _dbContext.SysUser.FirstOrDefault(x => x.UserName == loginRequest.UserName.Trim());
+                user = _dbContext.SysUser.FirstOrDefault(x => x.UserName == loginRequest.UserName);
                 if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
                 {
                     return Ok(response.Error((int)ResponseCode.USER_NOT_EXIST, "用户不存在"));
