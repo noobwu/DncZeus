@@ -34,6 +34,7 @@ namespace Noob.D2CMSApi
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+
         }
 
         /// <summary>

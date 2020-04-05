@@ -16,7 +16,7 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class D2CmsDbContext : EfCoreDbContext
     {
-        public D2CmsDbContext() : base(Assembly.GetExecutingAssembly())
+        public D2CmsDbContext(DbContextOptions<D2CmsDbContext> options) : base(options, Assembly.GetExecutingAssembly())
         {
             
         }

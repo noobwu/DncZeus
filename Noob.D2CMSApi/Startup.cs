@@ -78,13 +78,13 @@ namespace Noob.D2CMSApi
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials(); //指定处理cookie
-                     });
+                   });
 
                 options.AddPolicy("AllowAllOrigins",
                     builder =>
                     {
                         builder.AllowAnyOrigin();//允许任何来源的主机访问
-                      });
+                    });
             });
 
             services.AddMemoryCache();

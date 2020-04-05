@@ -15,11 +15,13 @@ namespace Noob.EntityFrameworkCore
     public class EfCoreDbContext : DbContext
     {
         Assembly[] configAssemblies;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreDbContext"/> class.
         /// </summary>
+        /// <param name="options">The options.</param>
         /// <param name="configAssemblies">The configuration assemblies.</param>
-        public EfCoreDbContext(params Assembly[] configAssemblies)
+        public EfCoreDbContext(DbContextOptions options, params Assembly[] configAssemblies) : base(options)
         {
             this.configAssemblies = configAssemblies;
         }
