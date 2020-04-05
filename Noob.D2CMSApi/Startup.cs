@@ -13,22 +13,29 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
+using Microsoft.OpenApi.Models;
 using Noob.D2CMSApi.Auth;
+using Noob.D2CMSApi.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace Noob.D2CMSApi
 {
@@ -96,6 +103,34 @@ namespace Noob.D2CMSApi
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs)
             );
             services.AddControllers().AddNewtonsoftJson();
+
+            services.AddDbContext<D2CmsDbContext>(options =>
+                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                 // replace with your connection string
+                 options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), mySqlOptions => mySqlOptions
+                    // replace with your Server Version and Type
+                    .ServerVersion(new Version(8, 0, 18), ServerType.MySql))
+                // 如果使用SQL Server 2008数据库，请添加UseRowNumberForPaging的选项
+                // 参考资料:https://github.com/aspnet/EntityFrameworkCore/issues/4616 
+                // 【重要说明】:2020-03-23更新，微软官方最新的Entity Framework Core已不再支持UseRowNumberForPaging()，请尽量使用SQL Server 2012 +版本
+                //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),b=>b.UseRowNumberForPaging())
+                );
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "D2 CMS API", Version = "v1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
+
+            // 注入日志
+            services.AddLogging(config =>
+            {
+                config.AddLog4Net();
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,16 +144,43 @@ namespace Noob.D2CMSApi
 
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
             }
+            app.UseDeveloperExceptionPage();
+            //app.UseExceptionHandler("/error/500");
+            //app.UseStatusCodePagesWithReExecute("/error/{0}");
+
+            app.UseStaticFiles();
+            app.UseFileServer();
+            app.UseAuthentication();
+            app.UseCors("OAuthCorsPolicy");//授权指定的域名
+            //app.UseCors("AllowAllOrigins");
+            //app.ConfigureCustomExceptionMiddleware();
+
+            var serviceProvider = app.ApplicationServices;
+            var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+            //AuthContextService.Configure(httpContextAccessor);
 
             app.UseRouting();
-
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseEndpoints(ep =>
             {
-                endpoints.MapControllers();
+                ep.MapControllerRoute(name: "areaRoute", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                ep.MapControllerRoute(name: "apiDefault", pattern: "api/{controller=Home}/{action=Index}/{id?}");
+                ep.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSwagger(o =>
+            {
+                //o.PreSerializeFilters.Add((document, request) =>
+                //{
+                //    document.Paths = document.Paths.ToDictionary(p => p.Key.ToLowerInvariant(), p => p.Value);
+                //});
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "D2 CMS API V1");
+                //c.RoutePrefix = "";
             });
         }
     }

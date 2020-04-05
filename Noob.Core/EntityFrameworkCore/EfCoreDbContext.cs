@@ -35,7 +35,6 @@ namespace Noob.EntityFrameworkCore
         /// then this method will not be run.</remarks>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
             if (configAssemblies != null && configAssemblies.Length > 0)
             {
                 foreach (var assembly in configAssemblies)
@@ -44,6 +43,7 @@ namespace Noob.EntityFrameworkCore
                 }
                 
             }
+            base.OnModelCreating(modelBuilder);
         }
 
     }
