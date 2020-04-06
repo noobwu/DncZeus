@@ -84,7 +84,7 @@ namespace Noob.D2CMSApi.Controllers
             {
                 HandleMenuData(a, sysMenus);
             });
-            sysMenus = sysMenus.DistinctBy(p => new { p.Id }).ToList();
+            sysMenus = sysMenus.DistinctBy(p => new { p.Id }).OrderBy(a=>a.Id).ToList();
             using (_dbContext)
             {
                 if (_dbContext.SysMenu.Count(a => a.Id > 0) > 0)
@@ -111,26 +111,23 @@ namespace Noob.D2CMSApi.Controllers
             {
                 return;
             }
-            if (item.ChildrenList.IsEmpty())
+            sysMenus.Add(new SysMenu(item.Id)
             {
-                sysMenus.Add(new SysMenu(item.Id)
-                {
-                    MenuName = item.MenuName,
-                    ParentId = item.ParentId,
-                    OrderNum = item.OrderNum,
-                    Url = item.Url,
-                    MenuType = item.MenuType,
-                    Visible = item.Visible,
-                    Perms = item.Perms,
-                    Icon = item.Icon,
-                    CreateBy = item.CreateBy,
-                    CreatedAt = (int)item.CreatedAt.UtcTimeToUnixTime(),
-                    UpdateBy = item.UpdateBy,
-                    UpdatedAt = (int)item.UpdatedAt.UtcTimeToUnixTime(),
-                    Remark = item.Remark,
-                });
-            }
-            else
+                MenuName = item.MenuName,
+                ParentId = item.ParentId,
+                OrderNum = item.OrderNum,
+                Url = item.Url,
+                MenuType = item.MenuType,
+                Visible = item.Visible,
+                Perms = item.Perms,
+                Icon = item.Icon,
+                CreateBy = item.CreateBy,
+                CreatedAt = (int)item.CreatedAt.UtcTimeToUnixTime(),
+                UpdateBy = item.UpdateBy,
+                UpdatedAt = (int)item.UpdatedAt.UtcTimeToUnixTime(),
+                Remark = item.Remark,
+            });
+            if(item.ChildrenList.IsAny())
             {
                 item.ChildrenList.Each(a =>
                 {
