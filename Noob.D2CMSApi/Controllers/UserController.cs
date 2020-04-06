@@ -167,6 +167,8 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <returns>IActionResult.</returns>
         [HttpPost("/api/user/check_token")]
+        [HttpGet("/api/user/check_token")]
+        [HttpOptions("/api/user/check_token")]
         //[Authorize]
         public IActionResult CheckToken()
         {
@@ -175,7 +177,6 @@ namespace Noob.D2CMSApi.Controllers
             using (_dbContext)
             {
                 user = _dbContext.SysUser.FirstOrDefault(x => x.Id == AuthContextService.CurrentUser.UserId);
-              
             }
             if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
             {
@@ -188,6 +189,16 @@ namespace Noob.D2CMSApi.Controllers
                 UserId = user.Id,
                 UserName = user.LoginName
             }));
+        }
+
+        /// <summary>
+        /// Logouts this instance.
+        /// </summary>
+        /// <returns>IActionResult.</returns>
+        public IActionResult Logout()
+        {
+            var response = new ResponseResult<bool>();
+            return Ok(response.Success("注销成功",true));
         }
     }
 }
