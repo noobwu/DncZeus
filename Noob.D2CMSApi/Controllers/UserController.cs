@@ -34,8 +34,6 @@ namespace Noob.D2CMSApi.Controllers
     /// Implements the <see cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
-    [Route("api/[controller]/[action]")]
-    [ApiController]
     public class UserController : OAuthControllerBase
     {
         /// <summary>
@@ -43,18 +41,13 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         private readonly AppAuthenticationSettings _appSettings;
         /// <summary>
-        /// The database context
-        /// </summary>
-        private readonly D2CmsDbContext _dbContext;
-        /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
         /// <param name="appSettings">The application settings.</param>
         /// <param name="dbContext">The database context.</param>
-        public UserController(IOptions<AppAuthenticationSettings> appSettings, D2CmsDbContext dbContext)
+        public UserController(IOptions<AppAuthenticationSettings> appSettings, D2CmsDbContext dbContext):base(dbContext)
         {
             _appSettings = appSettings.Value;
-            _dbContext = dbContext;
         }
         /// <summary>
         /// Logins the specified login request.
@@ -103,10 +96,10 @@ namespace Noob.D2CMSApi.Controllers
         [HttpPost]
         public IActionResult Init(IEnumerable<UserResult> list)
         {
-            var response = new ResponseResult<UserResult>();
+            var response = new ResponseResult<bool>();
             if (list.IsEmpty())
             {
-                return Ok(response.Error((int)ResponseCode.ERROR, "数据不能为空"));
+                return Ok(response.Error(ResponseCode.ERROR, "数据不能为空"));
             }
             List<SysUser> insertList = new List<SysUser>();
             list.Each(a =>
@@ -118,13 +111,13 @@ namespace Noob.D2CMSApi.Controllers
             {
                 if (_dbContext.SysUser.Count(a => a.Id > 0) > 0)
                 {
-                    return Ok(response.Error((int)ResponseCode.ERROR, "数据已初始化"));
+                    return Ok(response.Error(ResponseCode.ERROR, "数据已初始化"));
                 }
                 else
                 {
                     _dbContext.SysUser.AddRange(insertList.ToArray());
                     _dbContext.SaveChanges();
-                    return Ok(response.Error((int)ResponseCode.ERROR, "数据初始化成功"));
+                    return Ok(response.Success("数据初始化成功",true));
                 }
             }
         }

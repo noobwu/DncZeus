@@ -433,7 +433,16 @@ namespace Noob.Extensions
         /// <returns>DateTime.</returns>
         public static DateTime ParseUtcDateTime(string dateTimeStr)
         {
-            return DateTime.ParseExact(dateTimeStr, UtcDateTimeFormat, CultureInfo.InvariantCulture);
+            try
+            {
+                return DateTime.ParseExact(dateTimeStr, UtcDateTimeFormat, CultureInfo.InvariantCulture);
+            }
+            catch (Exception ex)
+            {
+
+                return UnixEpochDateTimeUtc;
+            }
+           
         }
         /// <summary>
         /// 获取当前时间戳
@@ -451,7 +460,7 @@ namespace Noob.Extensions
         /// <returns>System.Int32.</returns>
         public static long UtcTimeToUnixTime(this string dateTimeStr)
         {
-            if (string.IsNullOrWhiteSpace(dateTimeStr))
+            if (string.IsNullOrWhiteSpace(dateTimeStr)||dateTimeStr== "0001-01-01T00:00:00Z")
             {
                 return UnixEpochSecond;
             }

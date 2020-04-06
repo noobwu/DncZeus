@@ -13,6 +13,7 @@
 // ***********************************************************************
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Noob.D2CMSApi.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +28,20 @@ namespace Noob.D2CMSApi.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class OAuthControllerBase : ControllerBase
     {
+        /// <summary>
+        /// The database context
+        /// </summary>
+        protected readonly D2CmsDbContext _dbContext;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OAuthControllerBase"/> class.
+        /// </summary>
+        /// <param name="dbContext">The database context.</param>
+        public OAuthControllerBase(D2CmsDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
     }
 }

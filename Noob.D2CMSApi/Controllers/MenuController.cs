@@ -34,17 +34,10 @@ namespace Noob.D2CMSApi.Controllers
     public class MenuController : OAuthControllerBase
     {
         /// <summary>
-        /// The database context
-        /// </summary>
-        private readonly D2CmsDbContext _dbContext;
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserController" /> class.
+        /// Initializes a new instance of the <see cref="MenuController"/> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        public MenuController(D2CmsDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+        public MenuController(D2CmsDbContext dbContext) : base(dbContext) { }
         /// <summary>
         /// Gets the list.
         /// </summary>
@@ -57,11 +50,11 @@ namespace Noob.D2CMSApi.Controllers
             {
                 if (_dbContext.SysMenu.Count(a => a.Id > 0) > 0)
                 {
-                    return Ok(response.Error((int)ResponseCode.ERROR, "菜单已初始化"));
+                    return Ok(response.Error(ResponseCode.ERROR, "菜单已初始化"));
                 }
                 else
                 {
-                    return Ok(response.Error((int)ResponseCode.ERROR, "菜单初始化成功"));
+                    return Ok(response.Success("菜单初始化成功",null));
                 }
             }
         }
@@ -73,10 +66,10 @@ namespace Noob.D2CMSApi.Controllers
         [HttpPost]
         public IActionResult Init(IEnumerable<MenuResult> menus)
         {
-            var response = new ResponseResult<MenuResult>();
+            var response = new ResponseResult<bool>();
             if (menus.IsEmpty())
             {
-                return Ok(response.Error((int)ResponseCode.ERROR, "菜单数据不能为空"));
+                return Ok(response.Error(ResponseCode.ERROR, "菜单数据不能为空"));
             }
             List<SysMenu> sysMenus = new List<SysMenu>();
             menus.Each(a =>
@@ -88,13 +81,13 @@ namespace Noob.D2CMSApi.Controllers
             {
                 if (_dbContext.SysMenu.Count(a => a.Id > 0) > 0)
                 {
-                    return Ok(response.Error((int)ResponseCode.ERROR, "菜单已初始化"));
+                    return Ok(response.Error(ResponseCode.ERROR, "菜单已初始化"));
                 }
                 else
                 {
                     _dbContext.SysMenu.AddRange(sysMenus.ToArray());
                     _dbContext.SaveChanges();
-                    return Ok(response.Error((int)ResponseCode.ERROR, "菜单初始化成功"));
+                    return Ok(response.Success("菜单初始化成功",true));
                 }
             }
         }
@@ -150,7 +143,7 @@ namespace Noob.D2CMSApi.Controllers
             }
             if (sysMenus.IsEmpty())
             {
-                return Ok(response.Error((int)ResponseCode.ERROR_CODE__DB__NO_ROW, "请先添加菜单"));
+                return Ok(response.Error(ResponseCode.ERROR_CODE__DB__NO_ROW, "请先添加菜单"));
             }
             var menuResults = from item in sysMenus.Where(a => a.ParentId == 0).OrderBy(a=>a.OrderNum)
                               select new MenuResult

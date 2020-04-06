@@ -32,5 +32,9 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
         /// 菜单
         /// </summary>
         public DbSet<SysMenu> SysMenu { get; set; }
+        /// <summary>
+        ///  部门管理
+        /// </summary>
+        public DbSet<SysDept> SysDept { get; set; }
     }
 }

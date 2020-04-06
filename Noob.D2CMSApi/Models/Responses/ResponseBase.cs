@@ -463,6 +463,16 @@ namespace Noob.D2CMSApi.Models.Responses
 		/// <param name="code">The code.</param>
 		/// <param name="msg">The MSG.</param>
 		/// <returns>ResponseBase&lt;T&gt;.</returns>
+		public virtual ResponseBase<T> Error(ResponseCode code, string msg)
+		{
+			return Error((int)code,msg);
+		}
+		/// <summary>
+		/// Errors this instance.
+		/// </summary>
+		/// <param name="code">The code.</param>
+		/// <param name="msg">The MSG.</param>
+		/// <returns>ResponseBase&lt;T&gt;.</returns>
 		public virtual ResponseBase<T> Error(int code,string msg){
 			this.Code = code;
 			this.Msg = string.IsNullOrWhiteSpace(msg) ? "error" : msg;
