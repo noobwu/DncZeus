@@ -485,6 +485,16 @@ namespace Noob.Extensions
             }
             return ParseUtcDateTime(dateTimeStr);
         }
+        /// <summary>
+        /// Converts to utcdatetimestring.
+        /// </summary>
+        /// <param name="unixTime">The unix time.</param>
+        /// <returns>System.String.</returns>
+        public static string ToUtcDateTimeString(this int unixTime)
+        {
+            return FromUnixTime(unixTime).ToString(DateTimeExtensions.UtcDateTimeFormat);
+        }
+
     }
 
 }

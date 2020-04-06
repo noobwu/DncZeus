@@ -36,7 +36,7 @@ namespace Noob.D2CMSApi.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : OAuthControllerBase
     {
         /// <summary>
         /// The application settings
@@ -55,6 +55,45 @@ namespace Noob.D2CMSApi.Controllers
         {
             _appSettings = appSettings.Value;
             _dbContext = dbContext;
+        }
+        /// <summary>
+        /// Logins the specified login request.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        public IActionResult Index(UserQueryRequest request)
+        {
+            var response = new ResponseResult<PaggingResult<UserResult>>();
+            List<SysUser> sysUsers = null;
+            using (_dbContext)
+            {
+                sysUsers = _dbContext.SysUser.ToList();
+            }
+            var users = from item in sysUsers select new UserResult {
+                Id = item.Id,
+                UserName = item.UserName,
+                UserType = item.UserType,
+                Email = item.Email,
+                Phone = item.Phone,
+                Phonenumber = item.Phonenumber,
+                Sex = item.Sex,
+                Avatar = item.Avatar,
+                Password = item.Password,
+                Salt = item.Salt,
+                Status = item.Status,
+                DelFlag = item.DelFlag,
+                LoginIp = item.LoginIp,
+                LoginDate = item.LoginDate?.ToUtcDateTimeString(),
+                CreateBy = item.CreateBy,
+                CreatedAt = item.CreatedAt?.ToUtcDateTimeString(),
+                UpdateBy = item.UpdateBy,
+                UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
+                DeletedAt = item.DeletedAt?.ToString(DateTimeExtensions.UtcDateTimeFormat),
+                Remark = item.Remark,
+
+            };
+            return Ok(response.Success("数据获取成功",new PaggingResult<UserResult>(new Pagging(request.Page,request.PageSize,sysUsers.Count), users)));
         }
         /// <summary>
         /// Logins the specified login request.
@@ -131,6 +170,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <param name="loginRequest">The login request.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
+        [AllowAnonymous]
         public IActionResult Login(LoginRequest loginRequest)
         {
             var response = new ResponseResult<LoginResult>();
@@ -156,10 +196,10 @@ namespace Noob.D2CMSApi.Controllers
 
             return Ok(response.Success("登录成功", new LoginResult()
             {
-                Nickname=user.UserName,
-                Token=token,
-                UserId=user.Id,
-                UserName=user.LoginName
+                Nickname = user.UserName,
+                Token = token,
+                UserId = user.Id,
+                UserName = user.LoginName
             }));
         }
         /// <summary>
@@ -167,8 +207,7 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <returns>IActionResult.</returns>
         [HttpPost("/api/user/check_token")]
-        [HttpGet("/api/user/check_token")]
-        [HttpOptions("/api/user/check_token")]
+        [AllowAnonymous]
         //[Authorize]
         public IActionResult CheckToken()
         {
@@ -180,8 +219,9 @@ namespace Noob.D2CMSApi.Controllers
             }
             if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
             {
-                user = new SysUser(0) {
-                    LoginName="D2Cms"
+                user = new SysUser(0)
+                {
+                    LoginName = "D2Cms"
                 };
             }
             return Ok(response.Success("登录成功", new CheckTokenResult()
@@ -195,10 +235,12 @@ namespace Noob.D2CMSApi.Controllers
         /// Logouts this instance.
         /// </summary>
         /// <returns>IActionResult.</returns>
+        [AllowAnonymous]
+        [HttpPost]
         public IActionResult Logout()
         {
             var response = new ResponseResult<bool>();
-            return Ok(response.Success("注销成功",true));
+            return Ok(response.Success("注销成功", true));
         }
     }
 }

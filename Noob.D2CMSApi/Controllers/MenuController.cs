@@ -167,9 +167,9 @@ namespace Noob.D2CMSApi.Controllers
                                   IsFrame=(byte)(item.MenuType==1?2:0),
                                   Component=string.Empty,
                                   CreateBy = item.CreateBy,
-                                  CreatedAt = item.CreatedAt?.FromUnixTime().ToString(DateTimeExtensions.UtcDateTimeFormat),
+                                  CreatedAt = item.CreatedAt?.ToUtcDateTimeString(),
                                   UpdateBy = item.UpdateBy,
-                                  UpdatedAt = item.UpdatedAt?.FromUnixTime().ToString(DateTimeExtensions.UtcDateTimeFormat),
+                                  UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
                                   Remark = item.Remark,
                                   ChildrenList = GetChildMenus(item.Id, sysMenus),
                                   RouteCache= (byte)(item.MenuType == 1 ? 2 : 0),
@@ -186,7 +186,8 @@ namespace Noob.D2CMSApi.Controllers
         /// <param name="menuId">The menu identifier.</param>
         /// <param name="sysMenus">The system menus.</param>
         /// <returns>IEnumerable&lt;MenuResult&gt;.</returns>
-        public IEnumerable<MenuResult> GetChildMenus(int menuId, List<SysMenu> sysMenus)
+        [NonAction]
+        private IEnumerable<MenuResult> GetChildMenus(int menuId, List<SysMenu> sysMenus)
         {
             if (sysMenus.IsEmpty() || !sysMenus.Exists(a => a.ParentId == menuId))
             {
@@ -207,9 +208,9 @@ namespace Noob.D2CMSApi.Controllers
                                           Perms = item.Perms,
                                           Icon = item.Icon,
                                           CreateBy = item.CreateBy,
-                                          CreatedAt = item.CreatedAt?.FromUnixTime().ToString(DateTimeExtensions.UtcDateTimeFormat),
+                                          CreatedAt = item.CreatedAt?.ToUtcDateTimeString(),
                                           UpdateBy = item.UpdateBy,
-                                          UpdatedAt = item.UpdatedAt?.FromUnixTime().ToString(DateTimeExtensions.UtcDateTimeFormat),
+                                          UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
                                           Remark = item.Remark,
                                           ChildrenList = GetChildMenus(item.Id, sysMenus),
                                           RouteCache = (byte)(item.MenuType == 1 ? 2 : 0),
