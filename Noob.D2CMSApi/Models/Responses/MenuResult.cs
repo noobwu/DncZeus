@@ -68,7 +68,7 @@ namespace Noob.D2CMSApi.Models.Responses
         /// </summary>
         /// <value>The visible.</value>
         [JsonProperty("visible")]
-        public virtual string Visible { get; set; }
+        public virtual byte Visible { get; set; }
         /// <summary>
         /// 权限标识
         /// </summary>

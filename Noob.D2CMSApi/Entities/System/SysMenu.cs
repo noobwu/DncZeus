@@ -38,7 +38,7 @@ namespace Noob.D2CMSApi.Entities
     	/// <summary>
         /// 菜单状态（0显示 1隐藏）
         /// </summary>
-    	public virtual string Visible { get;set;}
+    	public virtual byte Visible { get;set;}
     	/// <summary>
         /// 权限标识
         /// </summary>
