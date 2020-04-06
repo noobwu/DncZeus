@@ -167,7 +167,7 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <returns>IActionResult.</returns>
         [HttpPost("/api/user/check_token")]
-        [Authorize]
+        //[Authorize]
         public IActionResult CheckToken()
         {
             var response = new ResponseResult<CheckTokenResult>();
@@ -175,10 +175,13 @@ namespace Noob.D2CMSApi.Controllers
             using (_dbContext)
             {
                 user = _dbContext.SysUser.FirstOrDefault(x => x.Id == AuthContextService.CurrentUser.UserId);
-                if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
-                {
-                    return Ok(response.Error((int)ResponseCode.USER_NOT_EXIST, "用户不存在"));
-                }
+              
+            }
+            if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
+            {
+                user = new SysUser(0) {
+                    LoginName="D2Cms"
+                };
             }
             return Ok(response.Success("登录成功", new CheckTokenResult()
             {

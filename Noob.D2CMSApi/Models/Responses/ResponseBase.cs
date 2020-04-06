@@ -417,7 +417,7 @@ namespace Noob.D2CMSApi.Models.Responses
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[Serializable]
-    public class ResponseBase<T> where T:ResultBase
+	public class ResponseBase<T> 
     {
 		/// <summary>
 		/// Gets or sets the code.

@@ -82,6 +82,18 @@ namespace Noob.D2CMSApi.Models.Responses
         [JsonProperty("icon")]
         public virtual string Icon { get; set; }
         /// <summary>
+        /// Gets or sets the is frame.(2)
+        /// </summary>
+        /// <value>The is frame.</value>
+        [JsonProperty("is_frame")]
+        public virtual byte IsFrame { get; set; }
+        /// <summary>
+        /// Gets or sets the is frame.(2)
+        /// </summary>
+        /// <value>The is frame.</value>
+        [JsonProperty("component")]
+        public virtual string Component { get; set; }
+        /// <summary>
         /// 创建者
         /// </summary>
         /// <value>The create by.</value>
