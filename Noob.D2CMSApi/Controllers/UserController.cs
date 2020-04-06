@@ -65,7 +65,7 @@ namespace Noob.D2CMSApi.Controllers
             var response = new ResponseResult<UserResult>();
             if (list.IsEmpty())
             {
-                return Ok(response.Error((int)ResponseCode.ERROR, "菜单数据不能为空"));
+                return Ok(response.Error((int)ResponseCode.ERROR, "数据不能为空"));
             }
             List<SysUser> insertList = new List<SysUser>();
             list.Each(a =>
@@ -101,7 +101,7 @@ namespace Noob.D2CMSApi.Controllers
             }
             list.Add(new SysUser(item.Id)
             {
-                LoginName = item.LoginName,
+                LoginName = item.UserName,
                 UserName = item.UserName,
                 UserType = item.UserType,
                 Email = item.Email,

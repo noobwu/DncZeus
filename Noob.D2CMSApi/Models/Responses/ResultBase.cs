@@ -21,7 +21,7 @@ namespace Noob.D2CMSApi.Models.Responses
     /// <summary>
     /// Class ResultBase.
     /// </summary>
-    public interface ResultBase
+    public class ResultBase
     {
     }
 }

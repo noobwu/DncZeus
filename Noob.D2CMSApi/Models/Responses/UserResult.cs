@@ -19,11 +19,6 @@ namespace Noob.D2CMSApi.Models.Responses
         [JsonProperty("id")]
         public virtual int Id { get; set; }
         /// <summary>
-        /// 登录账号
-        /// </summary>
-        [JsonProperty("login_name")]
-        public virtual string LoginName { get; set; }
-        /// <summary>
         /// 用户昵称
         /// </summary>
         [JsonProperty("user_name")]
