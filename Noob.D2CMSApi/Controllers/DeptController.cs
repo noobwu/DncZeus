@@ -97,7 +97,7 @@ namespace Noob.D2CMSApi.Controllers
         /// Checks the token.
         /// </summary>
         /// <returns>IActionResult.</returns>
-        [HttpPost("/api/menu/findall")]
+        [HttpPost("/api/dept/findall")]
         public IActionResult GetAllDepts()
         {
             var response = new ResponseResult<IEnumerable<DeptResult>>();
@@ -128,6 +128,7 @@ namespace Noob.D2CMSApi.Controllers
                                   UpdateBy = item.UpdateBy,
                                   UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
                                   Remark = item.Remark,
+                                  ChildrenList = GetChildDatas(item.Id, dataList)
                               };
             return Ok(response.Success("数据获取成功", menuResults));
         }
@@ -135,17 +136,17 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Gets the child menus.
         /// </summary>
-        /// <param name="menuId">The menu identifier.</param>
+        /// <param name="id">The menu identifier.</param>
         /// <param name="allDatas">The system menus.</param>
         /// <returns>IEnumerable&lt;MenuResult&gt;.</returns>
         [NonAction]
-        private IEnumerable<DeptResult> GetChildDatas(int menuId, List<SysDept> allDatas)
+        private IEnumerable<DeptResult> GetChildDatas(int id, List<SysDept> allDatas)
         {
-            if (allDatas.IsEmpty() || !allDatas.Exists(a => a.ParentId == menuId))
+            if (allDatas.IsEmpty() || !allDatas.Exists(a => a.ParentId == id))
             {
                 return new DeptResult[] { };
             }
-            return from item in allDatas.Where(a => a.ParentId == menuId).OrderBy(a => a.OrderNum)
+            return from item in allDatas.Where(a => a.ParentId == id).OrderBy(a => a.OrderNum)
                    select new DeptResult
                    {
                        Id = item.Id,
