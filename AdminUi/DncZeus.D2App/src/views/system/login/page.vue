@@ -18,23 +18,24 @@
           <img class="page-login--logo" src="./image/logo@2x.png">
           <!-- form -->
           <div class="page-login--form">
-            <el-card shadow="never">
-              <el-form ref="loginForm" label-position="top" :rules="rules" :model="formLogin" size="default">
-                <el-form-item prop="username">
-                  <el-input type="text" v-model="formLogin.username" placeholder="用户名">
-                    <i slot="prepend" class="fa fa-user-circle-o"></i>
-                  </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                  <el-input type="password" v-model="formLogin.password" placeholder="密码">
-                    <i slot="prepend" class="fa fa-keyboard-o"></i>
-                  </el-input>
-                </el-form-item>
-              </el-form>
-              <d2-tencent-captcha @success="submit">
-                <d2-button size="default" type="primary" label="登录" class="button-login"/>
-              </d2-tencent-captcha>
-            </el-card>
+              <el-card shadow="never">
+                  <el-form ref="loginForm" label-position="top" :rules="rules" :model="formLogin" size="default">
+                      <el-form-item prop="username">
+                          <el-input type="text" v-model="formLogin.username" placeholder="用户名">
+                              <i slot="prepend" class="fa fa-user-circle-o"></i>
+                          </el-input>
+                      </el-form-item>
+                      <el-form-item prop="password">
+                          <el-input type="password" v-model="formLogin.password" placeholder="密码">
+                              <i slot="prepend" class="fa fa-keyboard-o"></i>
+                          </el-input>
+                      </el-form-item>
+                  </el-form>
+                  <d2-button size="default" @click="submit" type="primary" label="登录" class="button-login" />
+                  <!--<d2-tencent-captcha @success="submit">
+        <d2-button size="default" type="primary" label="登录" class="button-login" />
+    </d2-tencent-captcha>-->
+              </el-card>
             <p class="page-login--options" flex="main:justify cross:center">
               <span><d2-icon name="question-circle"/> 忘记密码</span>
               <span>注册用户</span>
