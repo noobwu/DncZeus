@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
+using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
 using Noob.D2CMSApi.OAuth.AuthContext;
 using Noob.Extensions;
@@ -38,26 +39,6 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public MenuController(D2CmsDbContext dbContext) : base(dbContext) { }
-        /// <summary>
-        /// Gets the list.
-        /// </summary>
-        /// <returns>IActionResult.</returns>
-        [HttpPost]
-        public IActionResult GetList()
-        {
-            var response = new ResponseResult<MenuResult>();
-            using (_dbContext)
-            {
-                if (_dbContext.SysMenu.Count(a => a.Id > 0) > 0)
-                {
-                    return Ok(response.Error(ResponseCode.ERROR, "菜单已初始化"));
-                }
-                else
-                {
-                    return Ok(response.Success("菜单初始化成功",null));
-                }
-            }
-        }
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
@@ -126,6 +107,46 @@ namespace Noob.D2CMSApi.Controllers
                     HandleMenuData(a, sysMenus);
                 });
             }
+        }
+        /// <summary>
+        /// Gets the list.
+        /// </summary>
+        /// <returns>IActionResult.</returns>
+        [HttpPost("/api/menu/menus")]
+        public IActionResult Index(MenuQueryRequest request)
+        {
+            var response = new ResponseResult<PaggingResult<MenuResult>>();
+            List<SysMenu> allDataList = null;
+            using (_dbContext)
+            {
+                allDataList = _dbContext.SysMenu.ToList();
+            }
+            var datas = from item in allDataList.Where(a => a.ParentId == 0).OrderBy(a => a.OrderNum)
+                              select new MenuResult
+                              {
+                                  Id = item.Id,
+                                  MenuName = item.MenuName,
+                                  ParentId = item.ParentId,
+                                  OrderNum = item.OrderNum,
+                                  Url = item.Url,
+                                  MenuType = item.MenuType,
+                                  Visible = item.Visible,
+                                  Perms = item.Perms,
+                                  Icon = item.Icon,
+                                  IsFrame = (byte)(item.MenuType == 1 ? 2 : 0),
+                                  Component = string.Empty,
+                                  CreateBy = item.CreateBy,
+                                  CreatedAt = item.CreatedAt?.ToUtcDateTimeString(),
+                                  UpdateBy = item.UpdateBy,
+                                  UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
+                                  Remark = item.Remark,
+                                  ChildrenList = GetChildMenus(item.Id, allDataList),
+                                  RouteCache = (byte)(item.MenuType == 1 ? 2 : 0),
+                                  RouteComponent = string.Empty,
+                                  RouteName = string.Empty,
+                                  RoutePath = string.Empty,
+                              };
+            return Ok(response.Success("数据获取成功", new PaggingResult<MenuResult>(new Pagging(request.Page, request.PageSize, allDataList.Count), datas)));
         }
         /// <summary>
         /// Checks the token.
