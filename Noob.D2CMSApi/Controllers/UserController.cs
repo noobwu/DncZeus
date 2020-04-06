@@ -24,7 +24,7 @@ using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
-
+using Noob.Extensions;
 namespace Noob.D2CMSApi.Controllers
 {
     /// <summary>
@@ -53,6 +53,75 @@ namespace Noob.D2CMSApi.Controllers
         {
             _appSettings = appSettings.Value;
             _dbContext = dbContext;
+        }
+        /// <summary>
+        /// Logins the specified login request.
+        /// </summary>
+        /// <param name="list">The menus.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        public IActionResult Init(IEnumerable<UserResult> list)
+        {
+            var response = new ResponseResult<UserResult>();
+            if (list.IsEmpty())
+            {
+                return Ok(response.Error((int)ResponseCode.ERROR, "菜单数据不能为空"));
+            }
+            List<SysUser> insertList = new List<SysUser>();
+            list.Each(a =>
+            {
+                HandleData(a, insertList);
+            });
+            insertList = insertList.DistinctBy(p => new { p.Id }).OrderBy(a => a.Id).ToList();
+            using (_dbContext)
+            {
+                if (_dbContext.SysUser.Count(a => a.Id > 0) > 0)
+                {
+                    return Ok(response.Error((int)ResponseCode.ERROR, "数据已初始化"));
+                }
+                else
+                {
+                    _dbContext.SysUser.AddRange(insertList.ToArray());
+                    _dbContext.SaveChanges();
+                    return Ok(response.Error((int)ResponseCode.ERROR, "数据初始化成功"));
+                }
+            }
+        }
+        /// <summary>
+        /// Handles the data.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="list">The list.</param>
+        [NonAction]
+        private void HandleData(UserResult item, List<SysUser> list)
+        {
+            if (item == null)
+            {
+                return;
+            }
+            list.Add(new SysUser(item.Id)
+            {
+                LoginName = item.LoginName,
+                UserName = item.UserName,
+                UserType = item.UserType,
+                Email = item.Email,
+                Phone = item.Phone,
+                Phonenumber = item.Phonenumber,
+                Sex = item.Sex,
+                Avatar = item.Avatar,
+                Password = item.Password,
+                Salt = item.Salt,
+                Status = item.Status,
+                DelFlag = item.DelFlag,
+                LoginIp = item.LoginIp,
+                LoginDate = (int)item.LoginDate.UtcTimeToUnixTime(),
+                CreateBy = item.CreateBy,
+                CreatedAt = (int)item.CreatedAt.UtcTimeToUnixTime(),
+                UpdateBy = item.UpdateBy,
+                UpdatedAt = (int)item.UpdatedAt.UtcTimeToUnixTime(),
+                DeletedAt = item.DeletedAt.UtcTimeToNullableDateTime(),
+                Remark = item.Remark,
+            });
         }
         /// <summary>
         /// Logins the specified login request.

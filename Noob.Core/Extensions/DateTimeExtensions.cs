@@ -46,6 +46,10 @@ namespace Noob.Extensions
         /// </summary>
         public const long UnixEpoch = 621355968000000000L;
         /// <summary>
+        /// The unix epoch
+        /// </summary>
+        public static long UnixEpochSecond = 621355968000000000L/TimeSpan.TicksPerSecond;
+        /// <summary>
         /// The unix epoch date time UTC
         /// </summary>
         private static readonly DateTime UnixEpochDateTimeUtc = new DateTime(UnixEpoch, DateTimeKind.Utc);
@@ -68,7 +72,11 @@ namespace Noob.Extensions
         /// <summary>
         /// The XSD date time format seconds
         /// </summary>
-        public const string XsdDateTimeFormatSeconds = "yyyy-MM-ddTHH:mm:ssZ";                //21
+        public const string XsdDateTimeFormatSeconds = "yyyy-MM-ddTHH:mm:ssZ";                //21      
+        /// <summary>
+        /// The minimum XSD date time format seconds
+        /// </summary>
+        public const string MinXsdDateTimeFormatSeconds = "0001-01-01T00:00:00Z";
         /// <summary>
         /// Froms the unix time.
         /// </summary>
@@ -441,10 +449,37 @@ namespace Noob.Extensions
         {
             if (string.IsNullOrWhiteSpace(dateTimeStr))
             {
-                return UnixEpoch;
+                return UnixEpochSecond;
             }
             DateTime utcDateTime = ParseUtcDateTime(dateTimeStr);
             return ToUnixTime(utcDateTime);
+        }
+        /// <summary>
+        /// Dates the time to unix timestamp.
+        /// </summary>
+        /// <param name="dateTimeStr">The date time string.</param>
+        /// <returns>System.Int32.</returns>
+        public static DateTime UtcTimeToDateTime(this string dateTimeStr)
+        {
+            if (string.IsNullOrWhiteSpace(dateTimeStr)||dateTimeStr==MinXsdDateTimeFormatSeconds)
+            {
+                return DateTime.MinValue;
+            }
+            return ParseUtcDateTime(dateTimeStr);
+        }
+
+        /// <summary>
+        /// UTCs the time to nullable date time.
+        /// </summary>
+        /// <param name="dateTimeStr">The date time string.</param>
+        /// <returns>System.Nullable&lt;DateTime&gt;.</returns>
+        public static DateTime? UtcTimeToNullableDateTime(this string dateTimeStr)
+        {
+            if (string.IsNullOrWhiteSpace(dateTimeStr) || dateTimeStr == MinXsdDateTimeFormatSeconds)
+            {
+                return null;
+            }
+            return ParseUtcDateTime(dateTimeStr);
         }
     }
 

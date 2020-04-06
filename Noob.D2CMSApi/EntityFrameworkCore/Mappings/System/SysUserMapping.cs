@@ -17,7 +17,10 @@ namespace Noob.D2CMSApi.Entities
         {
             builder.ToTable("sys_user");
             builder.HasKey(t => t.Id);
-            builder.Property(t => t.Id).HasColumnName("id"); ;
+            //builder.Property(e => e.Id).ValueGeneratedOnAdd();
+            //builder.Property(e => e.Id).UseIdentityColumn();
+            //builder.Property(t => t.Id).UseHiLo();
+            builder.Property(t => t.Id).HasColumnName("id");
             builder.Property(t => t.LoginName).HasColumnName("login_name").IsRequired().HasMaxLength(30);
             builder.Property(t => t.UserName).HasColumnName("user_name").IsRequired().HasMaxLength(30);
             builder.Property(t => t.UserType).HasColumnName("user_type");

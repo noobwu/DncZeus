@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
+﻿using Newtonsoft.Json;
+using System;
 namespace Noob.D2CMSApi.Models.Responses
 {
     /// <summary>
@@ -18,27 +14,27 @@ namespace Noob.D2CMSApi.Models.Responses
         /// Gets or sets the nickname.
         /// </summary>
         /// <value>The nickname.</value>
-        [JsonPropertyName("nickname")]
+        [JsonProperty("nickname")]
         public string Nickname { get; set; }
         /// <summary>
         /// Gets or sets the token.
         /// </summary>
         /// <value>The token.</value>
-        [JsonPropertyName("token")]
+        [JsonProperty("token")]
         public string Token { get; set; }
 
         /// <summary>
         /// Gets or sets the user identifier.
         /// </summary>
         /// <value>The user identifier.</value>
-        [JsonPropertyName("userId")]
+        [JsonProperty("userId")]
         public int UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the name of the user.
         /// </summary>
         /// <value>The name of the user.</value>
-        [JsonPropertyName("userName")]
+        [JsonProperty("userName")]
         public string UserName { get; set; }
 
     }
