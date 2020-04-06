@@ -36,5 +36,9 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
         ///  部门管理
         /// </summary>
         public DbSet<SysDept> SysDept { get; set; }
+        /// <summary>
+        ///  字典数据管理
+        /// </summary>
+        public DbSet<SysDictData> SysDictData { get; set; }
     }
 }

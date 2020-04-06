@@ -30,10 +30,10 @@ namespace Noob.D2CMSApi.Controllers
         [HttpPost]
         public IActionResult Init(IEnumerable<DeptResult> initDatas)
         {
-            var response = new ResponseResult<MenuResult>();
+            var response = new ResponseResult<bool>();
             if (initDatas.IsEmpty())
             {
-                return Ok(response.Error(ResponseCode.ERROR, "菜单数据不能为空"));
+                return Ok(response.Error(ResponseCode.ERROR, "数据不能为空"));
             }
             List<SysDept> insertDatas = new List<SysDept>();
             initDatas.Each(a =>
@@ -51,7 +51,7 @@ namespace Noob.D2CMSApi.Controllers
                 {
                     _dbContext.SysDept.AddRange(insertDatas.ToArray());
                     _dbContext.SaveChanges();
-                    return Ok(response.Error(ResponseCode.ERROR, "数据初始化成功"));
+                    return Ok(response.Success("数据初始化成功",true));
                 }
             }
         }
