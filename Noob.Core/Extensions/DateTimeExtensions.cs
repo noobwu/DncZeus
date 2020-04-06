@@ -72,7 +72,11 @@ namespace Noob.Extensions
         /// <summary>
         /// The XSD date time format seconds
         /// </summary>
-        public const string XsdDateTimeFormatSeconds = "yyyy-MM-ddTHH:mm:ssZ";                //21      
+        public const string XsdDateTimeFormatSeconds = "yyyy-MM-ddTHH:mm:ssZ";                //21       
+        /// <summary>
+        /// The date time format ticks UTC offset
+        /// </summary>
+        public const string DateTimeFormatTicksUtcOffset = "yyyy-MM-ddTHH:mm:ss.fffffffzzz";  //30
         /// <summary>
         /// The minimum XSD date time format seconds
         /// </summary>
@@ -421,7 +425,7 @@ namespace Noob.Extensions
         /// <summary>
         /// The UTC date time format
         /// </summary>
-        public const string UtcDateTimeFormat = "yyyy-MM-ddTHH:mm:ss+08:00"; //UTC
+        public const string UtcDateTimeFormat = "yyyy-MM-ddTHH:mm:sszzz"; //UTC
         /// <summary>
         /// Parses the date time.
         /// </summary>

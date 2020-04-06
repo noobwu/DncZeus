@@ -13,7 +13,7 @@
 // ***********************************************************************
 
 
-namespace Noob.D2CMSApi.Auth
+namespace Noob.D2CMSApi.OAuth
 {
     /// <summary>
     /// JWT授权的配置项

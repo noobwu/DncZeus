@@ -33,9 +33,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.OpenApi.Models;
-using Noob.D2CMSApi.Auth;
+using Noob.D2CMSApi.OAuth;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Noob.D2CMSApi.OAuth.AuthContext;
 
 namespace Noob.D2CMSApi
 {
@@ -169,7 +170,7 @@ namespace Noob.D2CMSApi
 
             var serviceProvider = app.ApplicationServices;
             var httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-            //AuthContextService.Configure(httpContextAccessor);
+            AuthContextService.Configure(httpContextAccessor);
 
             app.UseRouting();
             app.UseAuthorization();

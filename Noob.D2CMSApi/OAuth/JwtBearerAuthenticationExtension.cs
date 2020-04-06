@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Noob.D2CMSApi.Auth
+namespace Noob.D2CMSApi.OAuth
 {
     /// <summary>
     /// Class JwtBearerAuthenticationExtension.

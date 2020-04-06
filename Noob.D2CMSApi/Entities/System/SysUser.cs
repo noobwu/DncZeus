@@ -95,9 +95,8 @@ namespace Noob.D2CMSApi.Entities
         /// 备注
         /// </summary>
     	public virtual string Remark { get;set;}
-        
-         
-       
+
+
         /// <summary>
         /// 获取主键的属性名称
         /// </summary>
@@ -107,6 +106,16 @@ namespace Noob.D2CMSApi.Entities
             return "Id";
         }
 	  
-    }	
-   
+    }
+    /// <summary>
+    /// 用户类型
+    /// </summary>
+    public enum UserType
+    {
+        /// <summary>
+        /// 超级管理员
+        /// </summary>
+        SuperAdministrator = 1,
+    }
+
 }

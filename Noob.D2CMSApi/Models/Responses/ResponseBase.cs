@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using Noob.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -437,6 +438,18 @@ namespace Noob.D2CMSApi.Models.Responses
 		[JsonPropertyName("msg")]
         public string Msg { get; set; }
 		/// <summary>
+		/// Gets or sets the time stamp.
+		/// </summary>
+		/// <value>The time stamp.</value>
+		[JsonPropertyName("time_stamp")]
+		public string TimeStamp 
+		{
+			get {
+				return DateTime.Now.ToString(DateTimeExtensions.DateTimeFormatTicksUtcOffset);
+			}
+		
+		} 
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ResponseBase{T}" /> class.
 		/// </summary>
 		public ResponseBase()
@@ -452,7 +465,7 @@ namespace Noob.D2CMSApi.Models.Responses
 		/// <returns>ResponseBase&lt;T&gt;.</returns>
 		public virtual ResponseBase<T> Error(int code,string msg){
 			this.Code = code;
-			this.Msg = msg;
+			this.Msg = string.IsNullOrWhiteSpace(msg) ? "error" : msg;
 			return this;
 		}
 		/// <summary>
@@ -464,7 +477,7 @@ namespace Noob.D2CMSApi.Models.Responses
 		public virtual ResponseBase<T> Success(string msg,T data=default(T))
 		{
 			this.Code = (int)ResponseCode.SUCCESS;
-			this.Msg = msg;
+			this.Msg =string.IsNullOrWhiteSpace(msg)? "success":msg;
 			this.Data = data;
 			return this;
 		}

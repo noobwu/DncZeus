@@ -16,14 +16,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Noob.D2CMSApi.Auth;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
+using Noob.D2CMSApi.OAuth;
+using Noob.D2CMSApi.OAuth.AuthContext;
 using Noob.Extensions;
 namespace Noob.D2CMSApi.Controllers
 {
@@ -143,9 +145,12 @@ namespace Noob.D2CMSApi.Controllers
             }
             var claimsIdentity = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.LoginName??string.Empty),
                     new Claim(ClaimTypes.PrimarySid,user.Id.ToString()),
-                    new Claim("avatar",user.Avatar??string.Empty),
+                    new Claim(ClaimTypes.NameIdentifier, user.LoginName??string.Empty),
+                    new Claim(ClaimTypes.Email, user.Email??string.Empty),
+                    new Claim(ClaimTypes.Name, user.UserName??string.Empty),
+                    new Claim(ClaimTypes.Role,user.UserType.ToString()),
+                    new Claim("Avatar",user.Avatar??string.Empty),
                 });
             var token = JwtBearerAuthenticationExtension.GetJwtAccessToken(_appSettings, claimsIdentity);
 
@@ -155,6 +160,30 @@ namespace Noob.D2CMSApi.Controllers
                 Token=token,
                 UserId=user.Id,
                 UserName=user.LoginName
+            }));
+        }
+        /// <summary>
+        /// Checks the token.
+        /// </summary>
+        /// <returns>IActionResult.</returns>
+        [HttpPost("/api/user/check_token")]
+        [Authorize]
+        public IActionResult CheckToken()
+        {
+            var response = new ResponseResult<CheckTokenResult>();
+            SysUser user;
+            using (_dbContext)
+            {
+                user = _dbContext.SysUser.FirstOrDefault(x => x.Id == AuthContextService.CurrentUser.UserId);
+                if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
+                {
+                    return Ok(response.Error((int)ResponseCode.USER_NOT_EXIST, "用户不存在"));
+                }
+            }
+            return Ok(response.Success("登录成功", new CheckTokenResult()
+            {
+                UserId = user.Id,
+                UserName = user.LoginName
             }));
         }
     }
