@@ -70,6 +70,14 @@ namespace Noob.D2CMSApi.OAuth
                         {
                             context.Token = authorization.Substring("Token ".Length).Trim();
                         }
+                        else if (authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            context.Token = authorization.Substring("Bearer ".Length).Trim();
+                        }
+                        else if (authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            context.Token = authorization.Trim();
+                        }
                         // If no token found, no further work possible
                         if (string.IsNullOrEmpty(context.Token))
                         {

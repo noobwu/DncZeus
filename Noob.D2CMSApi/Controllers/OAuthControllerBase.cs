@@ -28,7 +28,7 @@ namespace Noob.D2CMSApi.Controllers
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]/[action]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class OAuthControllerBase : ControllerBase
     {
         /// <summary>
