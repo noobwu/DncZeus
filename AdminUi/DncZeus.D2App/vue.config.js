@@ -51,9 +51,12 @@ module.exports = {
       ]
     }
     if (process.env.NODE_ENV === 'development') {
-      // 关闭 host check，方便使用 ngrok 之类的内网转发工具
-      configNew.devServer = {
-        disableHostCheck: true
+        configNew.devServer = {
+           // proxy: 'localhost:3000'
+           port: 8081,
+           // 关闭 host check,不然在部分流利器中会报[WDS disconnected]的错误，方便使用 ngrok 之类的内网转发工具
+            // 参考:https://github.com/webpack/webpack-dev-server/issues/851
+            disableHostCheck: true
       }
     }
     return configNew

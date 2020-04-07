@@ -74,7 +74,7 @@ namespace Noob.D2CMSApi.OAuth
                         {
                             context.Token = authorization.Substring("Bearer ".Length).Trim();
                         }
-                        else if (authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        else
                         {
                             context.Token = authorization.Trim();
                         }
