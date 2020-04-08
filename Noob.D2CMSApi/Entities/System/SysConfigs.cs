@@ -50,7 +50,7 @@ namespace Noob.D2CMSApi.Entities
     	/// <summary>
         /// 删除时间
         /// </summary>
-    	public virtual byte[] DeletedAt { get;set;}
+    	public virtual DateTime? DeletedAt { get;set;}
     	/// <summary>
         /// 备注
         /// </summary>

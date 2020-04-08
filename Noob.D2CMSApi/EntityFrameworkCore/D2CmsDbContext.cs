@@ -40,5 +40,15 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
         ///  字典数据管理
         /// </summary>
         public DbSet<SysDictData> SysDictData { get; set; }
+
+        /// <summary>
+        ///  角色
+        /// </summary>
+        public DbSet<SysRole> SysRole { get; set; }
+
+        /// <summary>
+        ///  参数配置
+        /// </summary>
+        public DbSet<SysConfigs> SysConfigs { get; set; }
     }
 }

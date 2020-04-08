@@ -82,6 +82,10 @@ namespace Noob.Extensions
         /// </summary>
         public const string MinXsdDateTimeFormatSeconds = "0001-01-01T00:00:00Z";
         /// <summary>
+        /// The minimum date time
+        /// </summary>
+        public static readonly DateTime MinDateTime= new DateTime(1900, 1, 1);
+        /// <summary>
         /// Froms the unix time.
         /// </summary>
         /// <param name="unixTime">The unix time.</param>
@@ -460,7 +464,7 @@ namespace Noob.Extensions
         /// <returns>System.Int32.</returns>
         public static long UtcTimeToUnixTime(this string dateTimeStr)
         {
-            if (string.IsNullOrWhiteSpace(dateTimeStr)||dateTimeStr== "0001-01-01T00:00:00Z")
+            if (string.IsNullOrWhiteSpace(dateTimeStr)||dateTimeStr== MinXsdDateTimeFormatSeconds)
             {
                 return UnixEpochSecond;
             }

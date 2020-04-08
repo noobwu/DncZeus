@@ -23,9 +23,9 @@ namespace Noob.D2CMSApi.Controllers
         /// <param name="dbContext">The database context.</param>
         public DeptController(D2CmsDbContext dbContext) : base(dbContext) { }
         /// <summary>
-        /// Logins the specified login request.
+        /// Initializes the specified initialize datas.
         /// </summary>
-        /// <param name="initDatas"></param>
+        /// <param name="initDatas">The initialize datas.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
         public IActionResult Init(IEnumerable<DeptResult> initDatas)
