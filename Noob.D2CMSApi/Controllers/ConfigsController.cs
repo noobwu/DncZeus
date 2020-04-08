@@ -86,7 +86,6 @@ namespace Noob.D2CMSApi.Controllers
             }
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
-                cfg.CreateMap<DateTime, DateTime>().ConvertUsing(new UtcTimeTypeConverter());
                 cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
                 cfg.CreateMap<ConfigsResult, SysConfigs>();
             });
