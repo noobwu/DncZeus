@@ -50,7 +50,23 @@ namespace Noob.Extensions
             var mapper = config.CreateMapper();
             return mapper.Map<TDestination>(source);
         }
-
+        /// <summary>
+        /// 使用AutoMapper将从源对象到现有目标对象的映射
+        /// </summary>
+        /// <typeparam name="TSource">The type of the t source.</typeparam>
+        /// <typeparam name="TDestination">The type of the t destination.</typeparam>
+        /// <param name="source">The source.</param>
+        /// <param name="config">The configuration.</param>
+        /// <returns>IEnumerable&lt;TDestination&gt;.</returns>
+        public static IEnumerable<TDestination> MapTo<TSource, TDestination>(this IEnumerable<TSource> source, MapperConfiguration config)
+        {
+            if (source == null)
+            {
+                return default(IEnumerable<TDestination>);
+            }
+            var mapper = config.CreateMapper();
+            return mapper.Map<IEnumerable<TDestination>>(source);
+        }
 
         /// <summary>
         ///使用AutoMapper将从源对象到现有目标对象的映射
@@ -68,6 +84,52 @@ namespace Noob.Extensions
             var config = new MapperConfiguration(cfg => cfg.CreateMap<TSource, TDestination>());
             var mapper = config.CreateMapper();
             return mapper.Map<TDestination>(source);
+        }
+    }
+    /// <summary>
+    /// Class UtcDateTimeTypeConverter.
+    /// Implements the <see cref="AutoMapper.ITypeConverter{System.DateTime?, System.String}" />
+    /// </summary>
+    /// <seealso cref="AutoMapper.ITypeConverter{System.DateTime?, System.String}" />
+    public class UtcDateTimeTypeConverter : ITypeConverter<DateTime?, string>
+    {
+        /// <summary>
+        /// Performs conversion from source to destination type
+        /// </summary>
+        /// <param name="source">Source object</param>
+        /// <param name="destination">Destination object</param>
+        /// <param name="context">Resolution context</param>
+        /// <returns>Destination object</returns>
+        public string Convert(DateTime? source, string destination, ResolutionContext context)
+        {
+            if (!source.HasValue || source.Value < DateTimeExtensions.MinDateTime)
+            {
+                return DateTimeExtensions.MinXsdDateTimeFormatSeconds;
+            }
+            return source.Value.ToString(DateTimeExtensions.UtcDateTimeFormat);
+        }
+    }
+    /// <summary>
+    /// Class UtcStringTimeTypeConverter.
+    /// Implements the <see cref="AutoMapper.ITypeConverter{System.Int32?, System.String}" />
+    /// </summary>
+    /// <seealso cref="AutoMapper.ITypeConverter{System.Int32?, System.String}" />
+    public class UtcStringTimeTypeConverter : ITypeConverter<int?,string>
+    {
+        /// <summary>
+        /// Performs conversion from source to destination type
+        /// </summary>
+        /// <param name="source">Source object</param>
+        /// <param name="destination">Destination object</param>
+        /// <param name="context">Resolution context</param>
+        /// <returns>Destination object</returns>
+        public string Convert(int? source, string destination, ResolutionContext context)
+        {
+            if (!source.HasValue )
+            {
+                return DateTimeExtensions.MinXsdDateTimeFormatSeconds;
+            }
+            return source.Value.ToUtcDateTimeString();
         }
     }
     /// <summary>

@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
+using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
 using Noob.Extensions;
 
@@ -92,6 +93,30 @@ namespace Noob.D2CMSApi.Controllers
             //mapConfig.AssertConfigurationIsValid();
             SysConfigs result = item.MapTo<ConfigsResult, SysConfigs>(mapConfig);
             list.Add(result);
+        }
+
+
+        /// <summary>
+        /// Indexes the specified request.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        public IActionResult Index(ConfigsQueryRequest request)
+        {
+            var response = new ResponseResult<PaggingResult<ConfigsResult>>();
+            List<SysConfigs> allDataList = null;
+            using (_dbContext)
+            {
+                allDataList = _dbContext.SysConfigs.ToList();
+            }
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
+                cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
+                cfg.CreateMap<SysConfigs, ConfigsResult>();
+            });
+            var datas = allDataList.MapTo<SysConfigs, ConfigsResult>(mapConfig);
+            return Ok(response.Success("数据获取成功", new PaggingResult<ConfigsResult>(new Pagging(request.Page, request.PageSize, allDataList.Count), datas)));
         }
     }
 }
