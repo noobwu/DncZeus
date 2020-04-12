@@ -17,14 +17,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Noob.D2CMSApi.Models.Requests
+namespace Noob.D2CMSApi.Models.Querys
 {
     /// <summary>
-    /// Class ConfigsQueryRequest.
-    /// Implements the <see cref="Noob.D2CMSApi.Models.Requests.PaggingRequest" />
+    /// Class ConfigsQuery.
+    /// Implements the <see cref="Noob.D2CMSApi.Models.PaggingBase" />
     /// </summary>
-    /// <seealso cref="Noob.D2CMSApi.Models.Requests.PaggingRequest" />
-    public class ConfigsQueryRequest : PaggingRequest
+    /// <seealso cref="Noob.D2CMSApi.Models.PaggingBase" />
+    public class ConfigsQuery : PaggingBase
     {
         /// <summary>
         /// config_name

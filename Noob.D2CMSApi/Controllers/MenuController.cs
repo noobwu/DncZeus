@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,7 @@ using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
+using Noob.D2CMSApi.Models.Results;
 using Noob.D2CMSApi.OAuth.AuthContext;
 using Noob.Extensions;
 
@@ -44,18 +46,18 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
-        /// <param name="menus">The menus.</param>
+        /// <param name="initDatas">The menus.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
-        public IActionResult Init(IEnumerable<MenuResult> menus)
+        public IActionResult Init(IEnumerable<MenuResult> initDatas)
         {
             var response = new ResponseResult<bool>();
-            if (menus.IsEmpty())
+            if (initDatas.IsEmpty())
             {
-                return Ok(response.Error(ResponseCode.ERROR, "菜单数据不能为空"));
+                return Ok(response.Error(ResponseCode.ERROR, "数据不能为空"));
             }
             List<SysMenu> sysMenus = new List<SysMenu>();
-            menus.Each(a =>
+            initDatas.Each(a =>
             {
                 HandleMenuData(a, sysMenus);
             });
@@ -64,7 +66,7 @@ namespace Noob.D2CMSApi.Controllers
             {
                 if (_dbContext.SysMenu.Count(a => a.Id > 0) > 0)
                 {
-                    return Ok(response.Error(ResponseCode.ERROR, "菜单已初始化"));
+                    return Ok(response.Error(ResponseCode.ERROR, "数据已初始化"));
                 }
                 else
                 {
@@ -78,45 +80,37 @@ namespace Noob.D2CMSApi.Controllers
         /// Handles the menu data.
         /// </summary>
         /// <param name="item">The item.</param>
-        /// <param name="sysMenus">The system menus.</param>
+        /// <param name="list">The system menus.</param>
         [NonAction]
-        private void HandleMenuData(MenuResult item, List<SysMenu> sysMenus)
+        private void HandleMenuData(MenuResult item, List<SysMenu> list)
         {
             if (item == null)
             {
                 return;
             }
-            sysMenus.Add(new SysMenu(item.Id)
-            {
-                MenuName = item.MenuName,
-                ParentId = item.ParentId,
-                OrderNum = item.OrderNum,
-                Url = item.Url,
-                MenuType = item.MenuType,
-                Visible = item.Visible,
-                Perms = item.Perms,
-                Icon = item.Icon,
-                CreateBy = item.CreateBy,
-                CreatedAt = (int)item.CreatedAt.UtcTimeToUnixTime(),
-                UpdateBy = item.UpdateBy,
-                UpdatedAt = (int)item.UpdatedAt.UtcTimeToUnixTime(),
-                Remark = item.Remark,
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
+                cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
+                cfg.CreateMap<MenuResult, SysMenu>();
             });
+            //mapConfig.AssertConfigurationIsValid();
+            var result = item.MapTo<MenuResult, SysMenu>(mapConfig);
+            list.Add(result);
             if (item.ChildrenList.IsAny())
             {
                 item.ChildrenList.Each(a =>
                 {
-                    HandleMenuData(a, sysMenus);
+                    HandleMenuData(a, list);
                 });
             }
         }
         /// <summary>
         /// Gets the list.
         /// </summary>
-        /// <param name="request">The request.</param>
+        /// <param name="model">The request.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost("/api/menu/menus")]
-        public IActionResult Index(MenuQueryRequest request)
+        public IActionResult Index(MenuQuery model)
         {
             var response = new ResponseResult<PaggingResult<MenuResult>>();
             List<SysMenu> allDataList = null;
@@ -149,7 +143,7 @@ namespace Noob.D2CMSApi.Controllers
                                   RouteName = string.Empty,
                                   RoutePath = string.Empty,
                               };
-            return Ok(response.Success("数据获取成功", new PaggingResult<MenuResult>(new Pagging(request.Page, request.PageSize, allDataList.Count), datas)));
+            return Ok(response.Success("数据获取成功", new PaggingResult<MenuResult>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
         }
         /// <summary>
         /// Checks the token.
@@ -200,17 +194,17 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Gets the child menus.
         /// </summary>
-        /// <param name="menuId">The menu identifier.</param>
-        /// <param name="sysMenus">The system menus.</param>
+        /// <param name="curId">The menu identifier.</param>
+        /// <param name="list">The system menus.</param>
         /// <returns>IEnumerable&lt;MenuResult&gt;.</returns>
         [NonAction]
-        private IEnumerable<MenuResult> GetChildMenus(int menuId, List<SysMenu> sysMenus)
+        private IEnumerable<MenuResult> GetChildMenus(int curId, List<SysMenu> list)
         {
-            if (sysMenus.IsEmpty() || !sysMenus.Exists(a => a.ParentId == menuId))
+            if (list.IsEmpty() || !list.Exists(a => a.ParentId == curId))
             {
                 return new MenuResult[] { };
             }
-           return from item in sysMenus.Where(a => a.ParentId == menuId).OrderBy(a=>a.OrderNum)
+           return from item in list.Where(a => a.ParentId == curId).OrderBy(a=>a.OrderNum)
                                       select new MenuResult
                                       {
                                           Id = item.Id,
@@ -229,7 +223,7 @@ namespace Noob.D2CMSApi.Controllers
                                           UpdateBy = item.UpdateBy,
                                           UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
                                           Remark = item.Remark,
-                                          ChildrenList = GetChildMenus(item.Id, sysMenus),
+                                          ChildrenList = GetChildMenus(item.Id, list),
                                           RouteCache = (byte)(item.MenuType == 1 ? 2 : 0),
                                           RouteComponent = item.MenuType == 1 ? item.Url?.Trim('/') : string.Empty,
                                           RouteName = item.MenuType == 1 ? item.Url?.Trim('/').Replace("/","-") : string.Empty,

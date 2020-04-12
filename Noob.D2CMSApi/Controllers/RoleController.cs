@@ -15,13 +15,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
-using Noob.D2CMSApi.Models.Responses.System;
+using Noob.D2CMSApi.Models.Results;
 using Noob.Extensions;
 namespace Noob.D2CMSApi.Controllers
 {
@@ -84,29 +85,23 @@ namespace Noob.D2CMSApi.Controllers
             {
                 return;
             }
-            list.Add(new SysRole(item.Id)
-            {
-                RoleName = item.RoleName,
-                RoleKey = item.RoleKey,
-                RoleSort = item.RoleSort,
-                DataScope = item.DataScope,
-                Status = item.Status,
-                DelFlag = item.DelFlag,
-                CreateBy = item.CreateBy,
-                CreatedAt = (int)item.CreatedAt?.UtcTimeToUnixTime(),
-                UpdateBy = item.UpdateBy,
-                UpdatedAt = (int)item.UpdatedAt?.UtcTimeToUnixTime(),
-                Remark = item.Remark,
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
+                cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
+                cfg.CreateMap<RoleResult, SysRole>();
             });
+            //mapConfig.AssertConfigurationIsValid();
+            var result = item.MapTo<RoleResult, SysRole>(mapConfig);
+            list.Add(result);
         }
 
         /// <summary>
         /// Indexes the specified request.
         /// </summary>
-        /// <param name="request">The request.</param>
+        /// <param name="model">The request.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
-        public IActionResult Index(RoleQueryRequest request)
+        public IActionResult Index(RoleQuery model)
         {
             var response = new ResponseResult<PaggingResult<RoleResult>>();
             List<SysRole> allDataList = null;
@@ -114,23 +109,14 @@ namespace Noob.D2CMSApi.Controllers
             {
                 allDataList = _dbContext.SysRole.ToList();
             }
-            var datas = from item in allDataList
-                        select new RoleResult
-                        {
-                            Id = item.Id,
-                            RoleName = item.RoleName,
-                            RoleKey = item.RoleKey,
-                            RoleSort = item.RoleSort,
-                            DataScope = item.DataScope,
-                            Status = item.Status,
-                            DelFlag = item.DelFlag,
-                            CreateBy = item.CreateBy,
-                            CreatedAt = item.CreatedAt?.ToUtcDateTimeString(),
-                            UpdateBy = item.UpdateBy,
-                            UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
-                            Remark = item.Remark,
-                        };
-            return Ok(response.Success("数据获取成功", new PaggingResult<RoleResult>(new Pagging(request.Page, request.PageSize, allDataList.Count), datas)));
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
+                cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
+                cfg.CreateMap<SysRole, RoleResult>();
+            });
+            var datas = allDataList.MapTo<SysRole, RoleResult
+                >(mapConfig);
+            return Ok(response.Success("数据获取成功", new PaggingResult<RoleResult>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
         }
     }
 }

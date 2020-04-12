@@ -47,10 +47,10 @@ namespace Noob.D2CMSApi.Entities
         /// <value>The post sort.</value>
         public virtual int PostSort { get;set;}
         /// <summary>
-        /// 状态（0正常 1停用）
+        /// 状态（1:正常,2:停用）
         /// </summary>
         /// <value>The status.</value>
-        public virtual string Status { get;set;}
+        public virtual byte Status { get;set;}
         /// <summary>
         /// 创建者
         /// </summary>

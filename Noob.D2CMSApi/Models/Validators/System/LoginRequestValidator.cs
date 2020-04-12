@@ -7,7 +7,7 @@ namespace Noob.D2CMSApi.Models.Validators
     /// <summary>
     /// 用户信息表验证
     /// </summary>
-    public class LoginRequestValidator : BaseValidator<LoginRequest>
+    public class LoginRequestValidator : BaseValidator<LoginModel>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="LoginRequestValidator"/> class.

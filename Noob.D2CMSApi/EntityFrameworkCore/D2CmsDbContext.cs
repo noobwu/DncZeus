@@ -71,5 +71,11 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
         /// </summary>
         /// <value>The system configs.</value>
         public DbSet<SysConfigs> SysConfigs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the system post.
+        /// </summary>
+        /// <value>The system post.</value>
+        public DbSet<SysPost> SysPost { get; set; }
     }
 }

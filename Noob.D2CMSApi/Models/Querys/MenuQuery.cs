@@ -6,7 +6,7 @@
 // Last Modified By : Administrator
 // Last Modified On : 2020-04-06
 // ***********************************************************************
-// <copyright file="DictDataQueryRequest.cs" company="Noob.D2CMSApi">
+// <copyright file="MenuQueryRequest.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -20,17 +20,24 @@ using System.Threading.Tasks;
 namespace Noob.D2CMSApi.Models.Requests
 {
     /// <summary>
-    /// Class DictDataQueryRequest.
-    /// Implements the <see cref="Noob.D2CMSApi.Models.Requests.PaggingRequest" />
+    /// Class MenuQuery.
+    /// Implements the <see cref="Noob.D2CMSApi.Models.PaggingBase" />
     /// </summary>
-    /// <seealso cref="Noob.D2CMSApi.Models.Requests.PaggingRequest" />
-    public class DictDataQueryRequest : PaggingRequest
+    /// <seealso cref="Noob.D2CMSApi.Models.PaggingBase" />
+    public class MenuQuery : PaggingBase
     {
+
         /// <summary>
-        /// Gets or sets the type of the dictionary.
+        /// menu_name
         /// </summary>
-        /// <value>The type of the dictionary.</value>
-        [JsonProperty("dict_type")]
-        public string DictType { get; set; }
+        /// <value>The name of the menu.</value>
+        [JsonProperty("menu_name")]
+        public string MenuName { get; set; }
+        /// <summary>
+        /// 菜单状态（0显示 1隐藏）
+        /// </summary>
+        /// <value>The visible.</value>
+        [JsonProperty("visible")]
+        public byte? Visible { get; set; }
     }
 }

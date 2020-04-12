@@ -6,7 +6,7 @@
 // Last Modified By : Administrator
 // Last Modified On : 2020-04-12
 // ***********************************************************************
-// <copyright file="RoleResult.cs" company="Noob.D2CMSApi">
+// <copyright file="DictDataResult.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -17,58 +17,76 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Noob.D2CMSApi.Models.Responses.System
+namespace Noob.D2CMSApi.Models.Results
 {
     /// <summary>
-    /// 角色
+    /// 字典数据表
     /// Implements the <see cref="Noob.D2CMSApi.Models.ModelBase" />
     /// </summary>
     /// <seealso cref="Noob.D2CMSApi.Models.ModelBase" />
     [Serializable]
-    public class RoleResult : ModelBase
+    public class DictDataResult : ModelBase
     {
         /// <summary>
-        /// 角色ID
+        /// Gets or sets the identifier.
         /// </summary>
         /// <value>The identifier.</value>
         [JsonProperty("id")]
         public virtual int Id { get; set; }
         /// <summary>
-        /// 角色名称
+        /// ID
         /// </summary>
-        /// <value>The name of the role.</value>
-        [JsonProperty("role_name")]
-        public virtual String RoleName { get; set; }
+        /// <value>The dictionary code.</value>
+        [JsonProperty("dict_code")]
+        public virtual int DictCode { get; set; }
         /// <summary>
-        /// 角色权限字符串
+        /// 字典排序
         /// </summary>
-        /// <value>The role key.</value>
-        [JsonProperty("role_key")]
-        public virtual String RoleKey { get; set; }
+        /// <value>The dictionary sort.</value>
+        [JsonProperty("dict_sort")]
+        public virtual int? DictSort { get; set; }
         /// <summary>
-        /// 显示顺序
+        /// 字典标签
         /// </summary>
-        /// <value>The role sort.</value>
-        [JsonProperty("role_sort")]
-        public virtual int RoleSort { get; set; }
+        /// <value>The dictionary label.</value>
+        [JsonProperty("dict_label")]
+        public virtual String DictLabel { get; set; }
         /// <summary>
-        /// 数据范围（1：全部数据权限 2：自定数据权限）
+        /// 字典键值
         /// </summary>
-        /// <value>The data scope.</value>
-        [JsonProperty("data_scope")]
-        public virtual byte DataScope { get; set; }
+        /// <value>The dictionary value.</value>
+        [JsonProperty("dict_value")]
+        public virtual String DictValue { get; set; }
         /// <summary>
-        /// 角色状态（0正常 1停用）
+        /// 字典类型
+        /// </summary>
+        /// <value>The type of the dictionary.</value>
+        [JsonProperty("dict_type")]
+        public virtual String DictType { get; set; }
+        /// <summary>
+        /// 样式属性（其他样式扩展）
+        /// </summary>
+        /// <value>The CSS class.</value>
+        [JsonProperty("css_class")]
+        public virtual String CssClass { get; set; }
+        /// <summary>
+        /// 表格回显样式
+        /// </summary>
+        /// <value>The list class.</value>
+        [JsonProperty("list_class")]
+        public virtual String ListClass { get; set; }
+        /// <summary>
+        /// 是否默认（Y是 N否）
+        /// </summary>
+        /// <value>The is default.</value>
+        [JsonProperty("is_default")]
+        public virtual String IsDefault { get; set; }
+        /// <summary>
+        /// 状态（0正常 1停用）
         /// </summary>
         /// <value>The status.</value>
         [JsonProperty("status")]
-        public virtual byte Status { get; set; }
-        /// <summary>
-        /// 删除标志（0代表存在 2代表删除）
-        /// </summary>
-        /// <value>The delete flag.</value>
-        [JsonProperty("del_flag")]
-        public virtual byte DelFlag { get; set; }
+        public virtual String Status { get; set; }
         /// <summary>
         /// 创建者
         /// </summary>
@@ -80,7 +98,7 @@ namespace Noob.D2CMSApi.Models.Responses.System
         /// </summary>
         /// <value>The created at.</value>
         [JsonProperty("created_at")]
-        public virtual String CreatedAt { get; set; }
+        public virtual string CreatedAt { get; set; }
         /// <summary>
         /// 更新者
         /// </summary>
@@ -92,12 +110,14 @@ namespace Noob.D2CMSApi.Models.Responses.System
         /// </summary>
         /// <value>The updated at.</value>
         [JsonProperty("updated_at")]
-        public virtual String UpdatedAt { get; set; }
+        public virtual string UpdatedAt { get; set; }
         /// <summary>
         /// 备注
         /// </summary>
         /// <value>The remark.</value>
         [JsonProperty("remark")]
         public virtual String Remark { get; set; }
+
+
     }
 }

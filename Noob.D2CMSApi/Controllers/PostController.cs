@@ -1,42 +1,45 @@
 ﻿// ***********************************************************************
 // Assembly         : Noob.D2CMSApi
 // Author           : Administrator
-// Created          : 2020-04-07
+// Created          : 2020-04-12
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-08
+// Last Modified On : 2020-04-12
 // ***********************************************************************
-// <copyright file="ConfigsController.cs" company="Noob.D2CMSApi">
+// <copyright file="PostController.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Noob.D2CMSApi.Entities;
-using Noob.D2CMSApi.EntityFrameworkCore;
-using Noob.D2CMSApi.Models.Querys;
-using Noob.D2CMSApi.Models.Responses;
-using Noob.D2CMSApi.Models.Results;
-using Noob.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Noob.D2CMSApi.Entities;
+using Noob.D2CMSApi.EntityFrameworkCore;
+using Noob.D2CMSApi.Models;
+using Noob.D2CMSApi.Models.Requests.System.Query;
+using Noob.D2CMSApi.Models.Responses;
+using Noob.Extensions;
 
 namespace Noob.D2CMSApi.Controllers
 {
+
     /// <summary>
-    /// Class ConfigsController.
+    /// Class PostController.
     /// Implements the <see cref="Noob.D2CMSApi.Controllers.OAuthControllerBase" />
     /// </summary>
     /// <seealso cref="Noob.D2CMSApi.Controllers.OAuthControllerBase" />
-    public class ConfigsController : OAuthControllerBase
+    public class PostController : OAuthControllerBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ConfigsController" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        public ConfigsController(D2CmsDbContext dbContext) : base(dbContext)
+        public PostController(D2CmsDbContext dbContext) : base(dbContext)
         {
         }
         /// <summary>
@@ -45,14 +48,14 @@ namespace Noob.D2CMSApi.Controllers
         /// <param name="initDatas">The initialize datas.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
-        public IActionResult Init(IEnumerable<ConfigsResult> initDatas)
+        public IActionResult Init(IEnumerable<PostModel> initDatas)
         {
             var response = new ResponseResult<bool>();
             if (initDatas.IsEmpty())
             {
                 return Ok(response.Error(ResponseCode.ERROR, "数据不能为空"));
             }
-            List<SysConfigs> insertDatas = new List<SysConfigs>();
+            List<SysPost> insertDatas = new List<SysPost>();
             initDatas.Each(a =>
             {
                 HandleRequestData(a, insertDatas);
@@ -60,13 +63,13 @@ namespace Noob.D2CMSApi.Controllers
             insertDatas = insertDatas.DistinctBy(p => new { p.Id }).OrderBy(a => a.Id).ToList();
             using (_dbContext)
             {
-                if (_dbContext.SysConfigs.Count(a => a.Id > 0) > 0)
+                if (_dbContext.SysPost.Count(a => a.Id > 0) > 0)
                 {
                     return Ok(response.Error(ResponseCode.ERROR, "数据已初始化"));
                 }
                 else
                 {
-                    _dbContext.SysConfigs.AddRange(insertDatas.ToArray());
+                    _dbContext.SysPost.AddRange(insertDatas.ToArray());
                     _dbContext.SaveChanges();
                     return Ok(response.Success("数据初始化成功", true));
                 }
@@ -78,7 +81,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <param name="item">The item.</param>
         /// <param name="list">The list.</param>
         [NonAction]
-        private void HandleRequestData(ConfigsResult item, List<SysConfigs> list)
+        private void HandleRequestData(PostModel item, List<SysPost> list)
         {
             if (item == null)
             {
@@ -87,35 +90,34 @@ namespace Noob.D2CMSApi.Controllers
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
                 cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
-                cfg.CreateMap<ConfigsResult, SysConfigs>();
+                cfg.CreateMap<PostModel, SysPost>();
             });
             //mapConfig.AssertConfigurationIsValid();
-            var result = item.MapTo<ConfigsResult, SysConfigs>(mapConfig);
+            var result = item.MapTo<PostModel, SysPost>(mapConfig);
             list.Add(result);
         }
 
-
         /// <summary>
-        /// Indexes the specified request.
+        /// Indexes the specified query model.
         /// </summary>
-        /// <param name="model">The request.</param>
+        /// <param name="model">The query model.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
-        public IActionResult Index(ConfigsQuery model)
+        public IActionResult Index(PostQuery model)
         {
-            var response = new ResponseResult<PaggingResult<ConfigsResult>>();
-            List<SysConfigs> allDataList = null;
+            var response = new ResponseResult<PaggingResult<PostModel>>();
+            List<SysPost> allDataList = null;
             using (_dbContext)
             {
-                allDataList = _dbContext.SysConfigs.ToList();
+                allDataList = _dbContext.SysPost.ToList();
             }
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
                 cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
-                cfg.CreateMap<SysConfigs, ConfigsResult>();
+                cfg.CreateMap<SysPost, PostModel>();
             });
-            var datas = allDataList.MapTo<SysConfigs, ConfigsResult>(mapConfig);
-            return Ok(response.Success("数据获取成功", new PaggingResult<ConfigsResult>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
+            var datas = allDataList.MapTo<SysPost, PostModel>(mapConfig);
+            return Ok(response.Success("数据获取成功", new PaggingResult<PostModel>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
         }
     }
 }

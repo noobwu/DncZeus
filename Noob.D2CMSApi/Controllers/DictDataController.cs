@@ -15,12 +15,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
+using Noob.D2CMSApi.Models.Results;
 using Noob.Extensions;
 namespace Noob.D2CMSApi.Controllers
 {
@@ -84,32 +86,23 @@ namespace Noob.D2CMSApi.Controllers
             {
                 return;
             }
-            list.Add(new SysDictData(item.Id)
-            {
-                DictCode = item.DictCode,
-                DictSort = item.DictSort,
-                DictLabel = item.DictLabel,
-                DictValue = item.DictValue,
-                DictType = item.DictType,
-                CssClass = item.CssClass,
-                ListClass = item.ListClass,
-                IsDefault = item.IsDefault,
-                Status = item.Status,
-                CreateBy = item.CreateBy,
-                CreatedAt = (int)item.CreatedAt?.UtcTimeToUnixTime(),
-                UpdateBy = item.UpdateBy,
-                UpdatedAt = (int)item.UpdatedAt.UtcTimeToUnixTime(),
-                Remark = item.Remark,
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
+                cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
+                cfg.CreateMap<DictDataResult, SysDictData>();
             });
+            //mapConfig.AssertConfigurationIsValid();
+            var result = item.MapTo<DictDataResult, SysDictData>(mapConfig);
+            list.Add(result);
         }
 
         /// <summary>
         /// Indexes the specified request.
         /// </summary>
-        /// <param name="request">The request.</param>
+        /// <param name="model">The request.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
-        public IActionResult Index(DictDataQueryRequest request)
+        public IActionResult Index(DictDataQuery model)
         {
             var response = new ResponseResult<PaggingResult<DictDataResult>>();
             List<SysDictData> allDataList = null;
@@ -117,26 +110,13 @@ namespace Noob.D2CMSApi.Controllers
             {
                 allDataList = _dbContext.SysDictData.ToList();
             }
-            var datas = from item in allDataList
-                        select new DictDataResult
-                        {
-                            Id = item.Id,
-                            DictCode = item.DictCode,
-                            DictSort = item.DictSort,
-                            DictLabel = item.DictLabel,
-                            DictValue = item.DictValue,
-                            DictType = item.DictType,
-                            CssClass = item.CssClass,
-                            ListClass = item.ListClass,
-                            IsDefault = item.IsDefault,
-                            Status = item.Status,
-                            CreateBy = item.CreateBy,
-                            CreatedAt = item.CreatedAt?.ToUtcDateTimeString(),
-                            UpdateBy = item.UpdateBy,
-                            UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
-                            Remark = item.Remark,
-                        };
-            return Ok(response.Success("数据获取成功", new PaggingResult<DictDataResult>(new Pagging(request.Page, request.PageSize, allDataList.Count), datas)));
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
+                cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
+                cfg.CreateMap<SysDictData, DictDataResult>();
+            });
+            var datas = allDataList.MapTo<SysDictData, DictDataResult>(mapConfig);
+            return Ok(response.Success("数据获取成功", new PaggingResult<DictDataResult>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
         }
     }
 }

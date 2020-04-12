@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
+using Noob.D2CMSApi.Models.Results;
 using Noob.D2CMSApi.OAuth;
 using Noob.D2CMSApi.OAuth.AuthContext;
 using Noob.Extensions;
@@ -52,57 +54,18 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="initDatas">The menus.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
-        public IActionResult Index(UserQueryRequest request)
-        {
-            var response = new ResponseResult<PaggingResult<UserResult>>();
-            List<SysUser> sysUsers = null;
-            using (_dbContext)
-            {
-                sysUsers = _dbContext.SysUser.ToList();
-            }
-            var users = from item in sysUsers select new UserResult {
-                Id = item.Id,
-                UserName = item.UserName,
-                UserType = item.UserType,
-                Email = item.Email,
-                Phone = item.Phone,
-                Phonenumber = item.Phonenumber,
-                Sex = item.Sex,
-                Avatar = item.Avatar,
-                Password = item.Password,
-                //Salt = item.Salt,
-                Status = item.Status,
-                DelFlag = item.DelFlag,
-                LoginIp = item.LoginIp,
-                LoginDate = item.LoginDate?.ToUtcDateTimeString(),
-                CreateBy = item.CreateBy,
-                CreatedAt = item.CreatedAt?.ToUtcDateTimeString(),
-                UpdateBy = item.UpdateBy,
-                UpdatedAt = item.UpdatedAt?.ToUtcDateTimeString(),
-                DeletedAt = item.DeletedAt?.ToString(DateTimeExtensions.UtcDateTimeFormat),
-                Remark = item.Remark,
-
-            };
-            return Ok(response.Success("数据获取成功",new PaggingResult<UserResult>(new Pagging(request.Page,request.PageSize,sysUsers.Count), users)));
-        }
-        /// <summary>
-        /// Logins the specified login request.
-        /// </summary>
-        /// <param name="list">The menus.</param>
-        /// <returns>IActionResult.</returns>
-        [HttpPost]
-        public IActionResult Init(IEnumerable<UserResult> list)
+        public IActionResult Init(IEnumerable<UserResult> initDatas)
         {
             var response = new ResponseResult<bool>();
-            if (list.IsEmpty())
+            if (initDatas.IsEmpty())
             {
                 return Ok(response.Error(ResponseCode.ERROR, "数据不能为空"));
             }
             List<SysUser> insertList = new List<SysUser>();
-            list.Each(a =>
+            initDatas.Each(a =>
             {
                 HandleData(a, insertList);
             });
@@ -117,7 +80,7 @@ namespace Noob.D2CMSApi.Controllers
                 {
                     _dbContext.SysUser.AddRange(insertList.ToArray());
                     _dbContext.SaveChanges();
-                    return Ok(response.Success("数据初始化成功",true));
+                    return Ok(response.Success("数据初始化成功", true));
                 }
             }
         }
@@ -133,38 +96,46 @@ namespace Noob.D2CMSApi.Controllers
             {
                 return;
             }
-            list.Add(new SysUser(item.Id)
-            {
-                LoginName = item.UserName,
-                UserName = item.UserName,
-                UserType = item.UserType,
-                Email = item.Email,
-                Phone = item.Phone,
-                Phonenumber = item.Phonenumber,
-                Sex = item.Sex,
-                Avatar = item.Avatar,
-                Password = item.Password,
-                //Salt = item.Salt,
-                Status = item.Status,
-                DelFlag = item.DelFlag,
-                LoginIp = item.LoginIp,
-                LoginDate = (int)item.LoginDate.UtcTimeToUnixTime(),
-                CreateBy = item.CreateBy,
-                CreatedAt = (int)item.CreatedAt.UtcTimeToUnixTime(),
-                UpdateBy = item.UpdateBy,
-                UpdatedAt = (int)item.UpdatedAt.UtcTimeToUnixTime(),
-                DeletedAt = item.DeletedAt.UtcTimeToNullableDateTime(),
-                Remark = item.Remark,
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
+                cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
+                cfg.CreateMap<UserResult, SysUser>();
             });
+            //mapConfig.AssertConfigurationIsValid();
+            var result = item.MapTo<UserResult, SysUser>(mapConfig);
+            list.Add(result);
         }
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="model"></param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        public IActionResult Index(UserQuery model)
+        {
+            var response = new ResponseResult<PaggingResult<UserResult>>();
+            List<SysUser> allDataList = null;
+            using (_dbContext)
+            {
+                allDataList = _dbContext.SysUser.ToList();
+            }
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
+                cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
+                cfg.CreateMap<SysUser, UserResult>();
+            });
+            var datas = allDataList.MapTo<SysUser, UserResult>(mapConfig);
+            return Ok(response.Success("数据获取成功",new PaggingResult<UserResult>(new Pagging(model.Page,model.PageSize,allDataList.Count), datas)));
+        }
+
+        /// <summary>
+        /// Logins the specified login request.
+        /// </summary>
+        /// <param name="model"></param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Login(LoginRequest request)
+        public IActionResult Login(LoginModel model)
         {
             var response = new ResponseResult<LoginResult>();
             //if (!ModelState.IsValid)
@@ -174,12 +145,12 @@ namespace Noob.D2CMSApi.Controllers
             SysUser user;
             using (_dbContext)
             {
-                user = _dbContext.SysUser.FirstOrDefault(x => x.UserName == request.UserName);
+                user = _dbContext.SysUser.FirstOrDefault(x => x.UserName == model.UserName);
                 if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
                 {
                     return Ok(response.Error(ResponseCode.USER_NOT_EXIST, "用户不存在"));
                 }
-                if (user.Password?.ToLower() != (request.Password + user.Salt).ToMD5Hash())
+                if (user.Password?.ToLower() != (model.Password + user.Salt).ToMD5Hash())
                 {
                     return Ok(response.Error(ResponseCode.USER_NOT_EXIST, "密码错误"));
                 }

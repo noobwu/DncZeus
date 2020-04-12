@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
 // Assembly         : Noob.D2CMSApi
 // Author           : Administrator
-// Created          : 2020-04-06
+// Created          : 2020-04-07
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-06
+// Last Modified On : 2020-04-07
 // ***********************************************************************
-// <copyright file="UserQueryRequest.cs" company="Noob.D2CMSApi">
+// <copyright file="RoleQueryRequest.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
@@ -20,24 +20,24 @@ using System.Threading.Tasks;
 namespace Noob.D2CMSApi.Models.Requests
 {
     /// <summary>
-    /// Class UserRequest.
-    /// Implements the <see cref="Noob.D2CMSApi.Models.Requests.PaggingRequest" />
+    /// Class RoleQuery.
+    /// Implements the <see cref="Noob.D2CMSApi.Models.PaggingBase" />
     /// </summary>
-    /// <seealso cref="Noob.D2CMSApi.Models.Requests.PaggingRequest" />
-    public class UserQueryRequest:PaggingRequest
+    /// <seealso cref="Noob.D2CMSApi.Models.PaggingBase" />
+    public class RoleQuery:PaggingBase
     {
         /// <summary>
-        /// user_name
+        /// role_name
         /// </summary>
-        /// <value>The name of the user.</value>
-        [JsonProperty("user_name")]
-        public string UserName { get; set; }
+        /// <value>The name of the role.</value>
+        [JsonProperty("role_name")]
+        public string RoleName { get; set; }
         /// <summary>
-        /// phone
+        /// role_key
         /// </summary>
-        /// <value>The phone.</value>
-        [JsonProperty("phone")]
-        public string Phone { get; set; }
+        /// <value>The role key.</value>
+        [JsonProperty("role_key")]
+        public string RoleKey { get; set; }
         /// <summary>
         /// status
         /// </summary>
@@ -56,11 +56,5 @@ namespace Noob.D2CMSApi.Models.Requests
         /// <value>The end time.</value>
         [JsonProperty("end_time")]
         public string EndTime { get; set; }
-        /// <summary>
-        /// dept_id
-        /// </summary>
-        /// <value>The dept identifier.</value>
-        [JsonProperty("dept_id")]
-        public string DeptId { get; set; }
     }
 }

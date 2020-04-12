@@ -15,11 +15,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models.Responses;
+using Noob.D2CMSApi.Models.Results;
 using Noob.Extensions;
 namespace Noob.D2CMSApi.Controllers
 {
@@ -80,23 +82,14 @@ namespace Noob.D2CMSApi.Controllers
             {
                 return;
             }
-            list.Add(new SysDept(item.Id)
-            {
-                ParentId = item.ParentId,
-                Ancestors = item.Ancestors,
-                DeptName = item.DeptName,
-                OrderNum = item.OrderNum,
-                Leader = item.Leader,
-                Phone = item.Phone,
-                Email = item.Email,
-                Status = item.Status,
-                DelFlag = item.DelFlag,
-                CreateBy = item.CreateBy,
-                CreatedAt = (int)item.CreatedAt?.UtcTimeToUnixTime(),
-                UpdateBy = item.UpdateBy,
-                UpdatedAt = (int)item.UpdatedAt?.UtcTimeToUnixTime(),
-                Remark = item.Remark,
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
+                cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
+                cfg.CreateMap<DeptResult, SysDept>();
             });
+            //mapConfig.AssertConfigurationIsValid();
+            var result = item.MapTo<DeptResult, SysDept>(mapConfig);
+            list.Add(result);
             if (item.ChildrenList.IsAny())
             {
                 item.ChildrenList.Each(a =>
