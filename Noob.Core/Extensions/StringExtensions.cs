@@ -4,7 +4,7 @@
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-05
+// Last Modified On : 2020-04-06
 // ***********************************************************************
 // <copyright file="StringExtensions.cs" company="Noob.Core">
 //     Copyright (c) . All rights reserved.
@@ -33,13 +33,11 @@ namespace Noob.Extensions
         /// <param name="from">From.</param>
         /// <param name="to">To.</param>
         /// <returns>System.String.</returns>
-        /// <exception cref="Exception">
-        /// Parameter: '{source}' is not valid integer (in base {@from}).
+        /// <exception cref="Exception">Parameter: '{source}' is not valid integer (in base {@from}).
         /// or
         /// Parameter: '{source}' is not valid integer (in base {@from}).
         /// or
-        /// Parameter: '{source}' is not valid integer (in base {@from}).
-        /// </exception>
+        /// Parameter: '{source}' is not valid integer (in base {@from}).</exception>
         /// <exception cref="System.Exception">Parameter: '{source}' is not valid integer (in base {@from}).
         /// or
         /// Parameter: '{source}' is not valid integer (in base {@from}).
@@ -167,12 +165,12 @@ namespace Noob.Extensions
             return value.Length > startIndex ? value.Substring(startIndex) : string.Empty;
         }
         /// <summary>
-        /// 
+        /// To the specified default value.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="value"></param>
-        /// <param name="defaultValue"></param>
-        /// <returns></returns>
+        /// <param name="value">The value.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>T.</returns>
         public static T To<T>(this object value, T defaultValue = default(T))
         {
             try
@@ -189,8 +187,9 @@ namespace Noob.Extensions
         /// <summary>
         /// 将以“,”分割的字符串转为List
         /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id">The identifier.</param>
+        /// <returns>List&lt;T&gt;.</returns>
         public static List<T> ToList<T>(this string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -230,7 +229,7 @@ namespace Noob.Extensions
 
         }
         /// <summary>
-        /// Formats a string using the <paramref name="format"/> and <paramref name="args"/>.
+        /// Formats a string using the <paramref name="format" /> and <paramref name="args" />.
         /// </summary>
         /// <param name="format">The format.</param>
         /// <param name="args">The args.</param>
@@ -239,6 +238,16 @@ namespace Noob.Extensions
         {
             return string.Format(format, args);
         }
-      
+        /// <summary>
+        /// Withouts the bom.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.String.</returns>
+        public static string WithoutBom(this string value)
+        {
+            return value.Length > 0 && value[0] == 65279
+                ? value.Substring(1)
+                : value;
+        }
     }
 }

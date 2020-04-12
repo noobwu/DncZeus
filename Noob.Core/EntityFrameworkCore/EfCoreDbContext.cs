@@ -1,4 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// ***********************************************************************
+// Assembly         : Noob.Core
+// Author           : Administrator
+// Created          : 2020-04-05
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-05
+// ***********************************************************************
+// <copyright file="EfCoreDbContext.cs" company="Noob.Core">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +27,13 @@ namespace Noob.EntityFrameworkCore
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
     public class EfCoreDbContext : DbContext
     {
+        /// <summary>
+        /// The configuration assemblies
+        /// </summary>
         Assembly[] configAssemblies;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EfCoreDbContext"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreDbContext" /> class.
         /// </summary>
         /// <param name="options">The options.</param>
         /// <param name="configAssemblies">The configuration assemblies.</param>

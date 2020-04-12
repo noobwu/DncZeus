@@ -1,4 +1,17 @@
-﻿using AutoMapper;
+﻿// ***********************************************************************
+// Assembly         : Noob.Core
+// Author           : Administrator
+// Created          : 2020-04-08
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-11
+// ***********************************************************************
+// <copyright file="AutoMapExtensions.cs" company="Noob.Core">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using AutoMapper;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
@@ -14,13 +27,13 @@ namespace Noob.Extensions
     public static class AutoMapExtensions
     {
         /// <summary>
-        ///使用AutoMapper将从源对象到现有目标对象的映射
-        ///在调用此方法之前，对象之间必须有映射。
+        /// 使用AutoMapper将从源对象到现有目标对象的映射
+        /// 在调用此方法之前，对象之间必须有映射。
         /// </summary>
         /// <typeparam name="TSource">Source type</typeparam>
         /// <typeparam name="TDestination">Destination type</typeparam>
         /// <param name="source">Source object</param>
-        /// <returns></returns>
+        /// <returns>TDestination.</returns>
         public static TDestination MapTo<TSource, TDestination>(this TSource source)
         {
             if (source == null)
@@ -33,13 +46,13 @@ namespace Noob.Extensions
         }
 
         /// <summary>
-        ///使用AutoMapper将从源对象到现有目标对象的映射
+        /// 使用AutoMapper将从源对象到现有目标对象的映射
         /// </summary>
         /// <typeparam name="TSource">Source type</typeparam>
         /// <typeparam name="TDestination">Destination type</typeparam>
         /// <param name="source">Source object</param>
-        /// <param name="config"></param>
-        /// <returns></returns>
+        /// <param name="config">The configuration.</param>
+        /// <returns>TDestination.</returns>
         public static TDestination MapTo<TSource, TDestination>(this TSource source, MapperConfiguration config)
         {
             if (source == null)
@@ -68,12 +81,12 @@ namespace Noob.Extensions
         }
 
         /// <summary>
-        ///使用AutoMapper将从源对象到现有目标对象的映射
+        /// 使用AutoMapper将从源对象到现有目标对象的映射
         /// </summary>
         /// <typeparam name="TSource">Source type</typeparam>
         /// <typeparam name="TDestination">Destination type</typeparam>
         /// <param name="source">Source object</param>
-        /// <returns></returns>
+        /// <returns>TDestination.</returns>
         public static TDestination AutoMapTo<TSource, TDestination>(this TSource source)
         {
             if (source == null)
@@ -179,7 +192,9 @@ namespace Noob.Extensions
     /// <summary>
     /// Class NullableUtcTimeTypeConverter.
     /// Implements the <see cref="AutoMapper.ITypeConverter{System.String, System.DateTime?}" />
+    /// Implements the <see cref="AutoMapper.ITypeConverter{System.DateTime, System.DateTime}" />
     /// </summary>
+    /// <seealso cref="AutoMapper.ITypeConverter{System.DateTime, System.DateTime}" />
     /// <seealso cref="AutoMapper.ITypeConverter{System.String, System.DateTime?}" />
     public class UtcTimeTypeConverter : ITypeConverter<DateTime, DateTime>
     {

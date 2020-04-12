@@ -2,9 +2,9 @@
 // Assembly         : Noob.Core
 // Author           : Administrator
 // Created          : 04-05-2020
-//https://stackoverflow.com/questions/26957519/ef-core-mapping-entitytypeconfiguration
+//
 // Last Modified By : Administrator
-// Last Modified On : 04-05-2020
+// Last Modified On : 2020-04-05
 // ***********************************************************************
 // <copyright file="EntityMappingConfiguration.cs" company="Noob.Core">
 //     Copyright (c) . All rights reserved.
