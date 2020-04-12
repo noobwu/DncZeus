@@ -127,7 +127,36 @@ namespace Noob.D2CMSApi.Controllers
             var datas = allDataList.MapTo<SysUser, UserResult>(mapConfig);
             return Ok(response.Success("数据获取成功",new PaggingResult<UserResult>(new Pagging(model.Page,model.PageSize,allDataList.Count), datas)));
         }
-
+        /// <summary>
+        /// Updates the specified identifier.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        public IActionResult Update(int id)
+        {
+            var response = new ResponseResult<UserResult>();
+            if (id < 1)
+            {
+                return Ok(response.Error(ResponseCode.INVALID_PARAMS, "该用户不存在"));
+            }
+            SysUser model = null;
+            using (_dbContext)
+            {
+                model = _dbContext.SysUser.FirstOrDefault(a=>a.Id==id);
+            }
+            if (model == null)
+            {
+                return Ok(response.Error(ResponseCode.USER_NOT_EXIST, "该用户不存在"));
+            }
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
+                cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
+                cfg.CreateMap<SysUser, UserResult>();
+            });
+            var data = model.MapTo<SysUser, UserResult>(mapConfig);
+            return Ok(response.Success("数据获取成功", data));
+        }
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
