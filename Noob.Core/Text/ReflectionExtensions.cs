@@ -15,7 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Noob.Extensions
+namespace Noob
 {
     /// <summary>
     /// Class ReflectionExtensions.

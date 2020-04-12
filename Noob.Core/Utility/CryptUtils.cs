@@ -408,7 +408,191 @@ namespace Noob
             }
         }
     }
+    /// <summary>
+    /// Class HashUtils.
+    /// </summary>
+    public static class HashUtils
+    {
+        /// <summary>
+        /// Gets the hash algorithm.
+        /// </summary>
+        /// <param name="hashAlgorithm">The hash algorithm.</param>
+        /// <returns>HashAlgorithm.</returns>
+        /// <exception cref="NotSupportedException"></exception>
+        public static HashAlgorithm GetHashAlgorithm(string hashAlgorithm)
+        {
+            switch (hashAlgorithm)
+            {
+                case "SHA1":
+                    return SHA1.Create();
+                case "SHA256":
+                    return SHA256.Create();
+                case "SHA512":
+                    return SHA512.Create();
+                default:
+                    throw new NotSupportedException(hashAlgorithm);
+            }
+        }
+    }
+    /// <summary>
+    /// Class AesUtils.
+    /// </summary>
+    public static class AesUtils
+    {
+        /// <summary>
+        /// The key size
+        /// </summary>
+        public const int KeySize = 256;
+        /// <summary>
+        /// The key size bytes
+        /// </summary>
+        public const int KeySizeBytes = 256 / 8;
+        /// <summary>
+        /// The block size
+        /// </summary>
+        public const int BlockSize = 128;
+        /// <summary>
+        /// The block size bytes
+        /// </summary>
+        public const int BlockSizeBytes = 128 / 8;
 
+        /// <summary>
+        /// Creates the symmetric algorithm.
+        /// </summary>
+        /// <returns>SymmetricAlgorithm.</returns>
+        public static SymmetricAlgorithm CreateSymmetricAlgorithm()
+        {
+            var aes = Aes.Create();
+            aes.KeySize = KeySize;
+            aes.BlockSize = BlockSize;
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+            return aes;
+        }
+
+        /// <summary>
+        /// Creates the key.
+        /// </summary>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] CreateKey()
+        {
+            using (var aes = CreateSymmetricAlgorithm())
+            {
+                return aes.Key;
+            }
+        }
+
+        /// <summary>
+        /// Creates the iv.
+        /// </summary>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] CreateIv()
+        {
+            using (var aes = CreateSymmetricAlgorithm())
+            {
+                return aes.IV;
+            }
+        }
+
+        /// <summary>
+        /// Creates the key and iv.
+        /// </summary>
+        /// <param name="cryptKey">The crypt key.</param>
+        /// <param name="iv">The iv.</param>
+        public static void CreateKeyAndIv(out byte[] cryptKey, out byte[] iv)
+        {
+            using (var aes = CreateSymmetricAlgorithm())
+            {
+                cryptKey = aes.Key;
+                iv = aes.IV;
+            }
+        }
+
+        /// <summary>
+        /// Creates the crypt authentication keys and iv.
+        /// </summary>
+        /// <param name="cryptKey">The crypt key.</param>
+        /// <param name="authKey">The authentication key.</param>
+        /// <param name="iv">The iv.</param>
+        public static void CreateCryptAuthKeysAndIv(out byte[] cryptKey, out byte[] authKey, out byte[] iv)
+        {
+            using (var aes = CreateSymmetricAlgorithm())
+            {
+                cryptKey = aes.Key;
+                iv = aes.IV;
+            }
+            using (var aes = CreateSymmetricAlgorithm())
+            {
+                authKey = aes.Key;
+            }
+        }
+
+        /// <summary>
+        /// Encrypts the specified text.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="cryptKey">The crypt key.</param>
+        /// <param name="iv">The iv.</param>
+        /// <returns>System.String.</returns>
+        public static string Encrypt(string text, byte[] cryptKey, byte[] iv)
+        {
+            var encBytes = Encrypt(text.ToUtf8Bytes(), cryptKey, iv);
+            return Convert.ToBase64String(encBytes);
+        }
+
+        /// <summary>
+        /// Encrypts the specified bytes to encrypt.
+        /// </summary>
+        /// <param name="bytesToEncrypt">The bytes to encrypt.</param>
+        /// <param name="cryptKey">The crypt key.</param>
+        /// <param name="iv">The iv.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] Encrypt(byte[] bytesToEncrypt, byte[] cryptKey, byte[] iv)
+        {
+            using (var aes = CreateSymmetricAlgorithm())
+            using (var encrypter = aes.CreateEncryptor(cryptKey, iv))
+            using (var cipherStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream(cipherStream, encrypter, CryptoStreamMode.Write))
+                using (var binaryWriter = new BinaryWriter(cryptoStream))
+                {
+                    binaryWriter.Write(bytesToEncrypt);
+                }
+                return cipherStream.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Decrypts the specified encrypted base64.
+        /// </summary>
+        /// <param name="encryptedBase64">The encrypted base64.</param>
+        /// <param name="cryptKey">The crypt key.</param>
+        /// <param name="iv">The iv.</param>
+        /// <returns>System.String.</returns>
+        public static string Decrypt(string encryptedBase64, byte[] cryptKey, byte[] iv)
+        {
+            var bytes = Decrypt(Convert.FromBase64String(encryptedBase64), cryptKey, iv);
+            return bytes.FromUtf8Bytes();
+        }
+
+        /// <summary>
+        /// Decrypts the specified encrypted bytes.
+        /// </summary>
+        /// <param name="encryptedBytes">The encrypted bytes.</param>
+        /// <param name="cryptKey">The crypt key.</param>
+        /// <param name="iv">The iv.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] Decrypt(byte[] encryptedBytes, byte[] cryptKey, byte[] iv)
+        {
+            using (var aes = CreateSymmetricAlgorithm())
+            using (var decryptor = aes.CreateDecryptor(cryptKey, iv))
+            using (var ms = MemoryStreamFactory.GetStream(encryptedBytes))
+            using (var cryptStream = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+            {
+                return cryptStream.ReadFully();
+            }
+        }
+    }
     /// <summary>
     /// Class PlatformRsaUtils.
     /// </summary>
@@ -493,6 +677,14 @@ namespace Noob
             return rsa.SignData(bytes, ToHashAlgorithmName(hashAlgorithm), RSASignaturePadding.Pkcs1);
         }
 
+        /// <summary>
+        /// Verifies the data.
+        /// </summary>
+        /// <param name="rsa">The RSA.</param>
+        /// <param name="bytes">The bytes.</param>
+        /// <param name="signature">The signature.</param>
+        /// <param name="hashAlgorithm">The hash algorithm.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool VerifyData(this RSA rsa, byte[] bytes, byte[] signature, string hashAlgorithm)
         {
             return rsa.VerifyData(bytes, signature, ToHashAlgorithmName(hashAlgorithm), RSASignaturePadding.Pkcs1);

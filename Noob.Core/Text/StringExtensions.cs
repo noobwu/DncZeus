@@ -4,13 +4,14 @@
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-06
+// Last Modified On : 2020-04-12
 // ***********************************************************************
 // <copyright file="StringExtensions.cs" company="Noob.Core">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using Noob.Text.Support;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Noob.Extensions
+namespace Noob
 {
     /// <summary>
     /// Class StringExtensions.
@@ -237,6 +238,86 @@ namespace Noob.Extensions
         public static string Fmt(this string format, params object[] args)
         {
             return string.Format(format, args);
+        }
+        /// <summary>
+        /// Froms the UTF8 bytes.
+        /// </summary>
+        /// <param name="bytes">The bytes.</param>
+        /// <returns>System.String.</returns>
+        public static string FromUtf8Bytes(this byte[] bytes)
+        {
+            return bytes == null ? null
+                : bytes.Length > 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF
+                    ? Encoding.UTF8.GetString(bytes, 3, bytes.Length - 3)
+                    : Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+        }
+
+        /// <summary>
+        /// Converts to utf8bytes.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] ToUtf8Bytes(this string value)
+        {
+            return Encoding.UTF8.GetBytes(value);
+        }
+
+        /// <summary>
+        /// Converts to utf8bytes.
+        /// </summary>
+        /// <param name="intVal">The int value.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] ToUtf8Bytes(this int intVal)
+        {
+            return FastToUtf8Bytes(intVal.ToString());
+        }
+
+        /// <summary>
+        /// Converts to utf8bytes.
+        /// </summary>
+        /// <param name="longVal">The long value.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] ToUtf8Bytes(this long longVal)
+        {
+            return FastToUtf8Bytes(longVal.ToString());
+        }
+
+        /// <summary>
+        /// Converts to utf8bytes.
+        /// </summary>
+        /// <param name="ulongVal">The ulong value.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] ToUtf8Bytes(this ulong ulongVal)
+        {
+            return FastToUtf8Bytes(ulongVal.ToString());
+        }
+
+        /// <summary>
+        /// Converts to utf8bytes.
+        /// </summary>
+        /// <param name="doubleVal">The double value.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] ToUtf8Bytes(this double doubleVal)
+        {
+            var doubleStr = doubleVal.ToString(CultureInfo.InvariantCulture.NumberFormat);
+
+            if (doubleStr.IndexOf('E') != -1 || doubleStr.IndexOf('e') != -1)
+                doubleStr = DoubleConverter.ToExactString(doubleVal);
+
+            return FastToUtf8Bytes(doubleStr);
+        }
+        /// <summary>
+        /// Skip the encoding process for 'safe strings' 
+        /// </summary>
+        /// <param name="strVal"></param>
+        /// <returns></returns>
+        private static byte[] FastToUtf8Bytes(string strVal)
+        {
+            var bytes = new byte[strVal.Length];
+            for (var i = 0; i < strVal.Length; i++)
+                bytes[i] = (byte)strVal[i];
+
+            return bytes;
         }
         /// <summary>
         /// Withouts the bom.

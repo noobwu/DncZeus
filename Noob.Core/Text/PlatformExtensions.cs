@@ -18,7 +18,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace Noob.Extensions
+namespace Noob
 {
     /// <summary>
     /// Class PlatformExtensions.
