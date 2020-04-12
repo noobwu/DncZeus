@@ -130,20 +130,21 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Updates the specified identifier.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="model">The identifier.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
-        public IActionResult Update(int id)
+        public IActionResult Update(dynamic userModel)
         {
             var response = new ResponseResult<UserResult>();
-            if (id < 1)
+            if (userModel==null||userModel.id < 1)
             {
                 return Ok(response.Error(ResponseCode.INVALID_PARAMS, "该用户不存在"));
             }
+            int userId = userModel.id;
             SysUser model = null;
             using (_dbContext)
             {
-                model = _dbContext.SysUser.FirstOrDefault(a=>a.Id==id);
+                model = _dbContext.SysUser.FirstOrDefault(a=>a.Id== userId);
             }
             if (model == null)
             {
