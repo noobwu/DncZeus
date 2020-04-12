@@ -30,17 +30,17 @@ namespace Noob.D2CMSApi.Entities
         /// </summary>
         /// <param name="id">The identifier.</param>
     	public SysUser(int id) : base(id) {}
-
         /// <summary>
         /// 登录账号
         /// </summary>
-        /// <value>The name of the login.</value>
-        public virtual string LoginName { get;set;}
+        /// <value>The name of the user.</value>
+        public virtual string UserName { get; set; }
         /// <summary>
         /// 用户昵称
         /// </summary>
-        /// <value>The name of the user.</value>
-        public virtual string UserName { get;set;}
+        /// <value>The name of the login.</value>
+        public virtual string Nickname { get;set;}
+ 
         /// <summary>
         /// 用户类型（1系统用户）
         /// </summary>

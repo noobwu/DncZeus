@@ -34,11 +34,17 @@ namespace Noob.D2CMSApi.Models
         [JsonProperty("id")]
         public virtual int Id { get; set; }
         /// <summary>
-        /// 用户昵称
+        /// 登录账户
         /// </summary>
         /// <value>The name of the user.</value>
         [JsonProperty("user_name")]
         public virtual string UserName { get; set; }
+        /// <summary>
+        /// 用户昵称
+        /// </summary>
+        /// <value>The name of the user.</value>
+        [JsonProperty("nickname")]
+        public virtual string Nickname { get; set; }
         /// <summary>
         /// 用户类型（1系统用户）
         /// </summary>

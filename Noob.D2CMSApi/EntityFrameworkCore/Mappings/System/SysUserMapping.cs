@@ -37,8 +37,8 @@ namespace Noob.D2CMSApi.Entities
             //builder.Property(e => e.Id).UseIdentityColumn();
             //builder.Property(t => t.Id).UseHiLo();
             builder.Property(t => t.Id).HasColumnName("id");
-            builder.Property(t => t.LoginName).HasColumnName("login_name").IsRequired().HasMaxLength(30);
             builder.Property(t => t.UserName).HasColumnName("user_name").IsRequired().HasMaxLength(30);
+            builder.Property(t => t.Nickname).HasColumnName("nickname").IsRequired().HasMaxLength(30);
             builder.Property(t => t.UserType).HasColumnName("user_type");
             builder.Property(t => t.Email).HasColumnName("email").HasMaxLength(50);
             builder.Property(t => t.Phone).HasColumnName("phone").HasMaxLength(12);

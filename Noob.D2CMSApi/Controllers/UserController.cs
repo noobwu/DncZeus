@@ -128,9 +128,9 @@ namespace Noob.D2CMSApi.Controllers
             return Ok(response.Success("数据获取成功",new PaggingResult<UserResult>(new Pagging(model.Page,model.PageSize,allDataList.Count), datas)));
         }
         /// <summary>
-        /// Updates the specified identifier.
+        /// Updates the specified user model.
         /// </summary>
-        /// <param name="model">The identifier.</param>
+        /// <param name="userModel">The user model.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
         public IActionResult Update(dynamic userModel)
@@ -188,9 +188,9 @@ namespace Noob.D2CMSApi.Controllers
             var claimsIdentity = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.PrimarySid,user.Id.ToString()),
-                    new Claim(ClaimTypes.NameIdentifier, user.LoginName??string.Empty),
+                    new Claim(ClaimTypes.NameIdentifier, user.UserName??string.Empty),
                     new Claim(ClaimTypes.Email, user.Email??string.Empty),
-                    new Claim(ClaimTypes.Name, user.UserName??string.Empty),
+                    new Claim(ClaimTypes.Name, user.Nickname??string.Empty),
                     new Claim(ClaimTypes.Role,user.UserType.ToString()),
                     new Claim("Avatar",user.Avatar??string.Empty),
                 });
@@ -198,10 +198,10 @@ namespace Noob.D2CMSApi.Controllers
 
             return Ok(response.Success("登录成功", new LoginResult()
             {
-                Nickname = user.UserName,
+                Nickname = user.Nickname,
                 Token = token,
                 UserId = user.Id,
-                UserName = user.LoginName
+                UserName = user.UserName
             }));
         }
         /// <summary>
@@ -223,13 +223,13 @@ namespace Noob.D2CMSApi.Controllers
             {
                 user = new SysUser(0)
                 {
-                    LoginName = "D2Cms"
+                    UserName = "D2Cms"
                 };
             }
             return Ok(response.Success("登录成功", new CheckTokenResult()
             {
                 UserId = user.Id,
-                UserName = user.LoginName
+                UserName = user.UserName
             }));
         }
 
