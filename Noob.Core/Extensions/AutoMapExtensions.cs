@@ -20,9 +20,8 @@ namespace Noob.Extensions
         /// <typeparam name="TSource">Source type</typeparam>
         /// <typeparam name="TDestination">Destination type</typeparam>
         /// <param name="source">Source object</param>
-        /// <param name="destination">Destination object</param>
         /// <returns></returns>
-        public static TDestination MapTo<TSource, TDestination>(this TSource source, TDestination destination)
+        public static TDestination MapTo<TSource, TDestination>(this TSource source)
         {
             if (source == null)
             {
@@ -30,7 +29,7 @@ namespace Noob.Extensions
             }
             var config = new MapperConfiguration(cfg => cfg.CreateMap<TSource, TDestination>());
             var mapper = config.CreateMapper();
-            return mapper.Map(source, destination);
+            return mapper.Map<TDestination>(source);
         }
 
         /// <summary>

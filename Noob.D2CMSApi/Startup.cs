@@ -37,6 +37,8 @@ using Noob.D2CMSApi.OAuth;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Noob.D2CMSApi.OAuth.AuthContext;
+using Newtonsoft.Json.Serialization;
+using FluentValidation.AspNetCore;
 
 namespace Noob.D2CMSApi
 {
@@ -103,7 +105,26 @@ namespace Noob.D2CMSApi
             services.Configure<WebEncoderOptions>(options =>
                 options.TextEncoderSettings = new TextEncoderSettings(UnicodeRanges.BasicLatin, UnicodeRanges.CjkUnifiedIdeographs)
             );
-            services.AddControllers().AddNewtonsoftJson();
+            //add basic MVC feature
+            var mvcBuilder = services.AddControllers();
+            mvcBuilder.AddNewtonsoftJson();
+            //serializes JSON with camel case names by default, use this code to avoid it
+            //mvcBuilder.AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+            //add fluent validation
+            mvcBuilder.AddFluentValidation(configuration =>
+            {
+                //register all available validators from Nop assemblies
+                //var assemblies = mvcBuilder.PartManager.ApplicationParts
+                //    .OfType<AssemblyPart>()
+                //    .Where(part => part.Name.StartsWith("Nop", StringComparison.InvariantCultureIgnoreCase))
+                //    .Select(part => part.Assembly);
+                //configuration.RegisterValidatorsFromAssemblies(assemblies);
+
+                //implicit/automatic validation of child properties
+                configuration.ImplicitlyValidateChildProperties = true;
+            });
+
 
             string dbType = Configuration.GetValue<string>("DbType");
             services.AddDbContext<D2CmsDbContext>(options =>

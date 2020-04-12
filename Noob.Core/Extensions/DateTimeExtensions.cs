@@ -441,7 +441,7 @@ namespace Noob.Extensions
             {
                 return DateTime.ParseExact(dateTimeStr, UtcDateTimeFormat, CultureInfo.InvariantCulture);
             }
-            catch (Exception ex)
+            catch 
             {
 
                 return UnixEpochDateTimeUtc;
