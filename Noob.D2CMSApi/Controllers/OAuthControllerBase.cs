@@ -43,5 +43,28 @@ namespace Noob.D2CMSApi.Controllers
         {
             _dbContext = dbContext;
         }
+        /// <summary>
+        /// 获取错误信息
+        /// </summary>
+        /// <returns></returns>
+        protected IEnumerable<string> GetErrorsFromModelState()
+        {
+            if (ModelState.IsValid) return default(IEnumerable<string>);
+            var errors = from state in ModelState.Values
+                         from error in state.Errors
+                         where !string.IsNullOrEmpty(error.ErrorMessage)
+                         select error.ErrorMessage;
+            return errors;
+
+        }
+
+        /// <summary>
+        /// 获取错误信息
+        /// </summary>
+        /// <returns></returns>
+        protected string GetErrorMsgFromModelState()
+        {
+            return string.Join(",", GetErrorsFromModelState());
+        }
     }
 }

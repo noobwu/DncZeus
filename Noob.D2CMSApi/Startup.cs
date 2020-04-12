@@ -39,6 +39,9 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Noob.D2CMSApi.OAuth.AuthContext;
 using Newtonsoft.Json.Serialization;
 using FluentValidation.AspNetCore;
+using Noob.Validators;
+using Noob.D2CMSApi.Validators;
+using Noob.D2CMSApi.Models.Responses;
 
 namespace Noob.D2CMSApi
 {
@@ -111,6 +114,17 @@ namespace Noob.D2CMSApi
             //serializes JSON with camel case names by default, use this code to avoid it
             //mvcBuilder.AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
+            mvcBuilder.ConfigureApiBehaviorOptions(options =>
+             {
+                 options.InvalidModelStateResponseFactory = c =>
+                 {
+                     var errors = string.Join('\n', c.ModelState.Values.Where(v => v.Errors.Count > 0)
+                       .SelectMany(v => v.Errors)
+                       .Select(v => v.ErrorMessage));
+                     var response = new ResponseResult<object>();
+                     return new OkObjectResult(response.Error(ResponseCode.INVALID_PARAMS,errors));
+                 };
+             });
             //add fluent validation
             mvcBuilder.AddFluentValidation(configuration =>
             {
@@ -120,6 +134,8 @@ namespace Noob.D2CMSApi
                 //    .Where(part => part.Name.StartsWith("Nop", StringComparison.InvariantCultureIgnoreCase))
                 //    .Select(part => part.Assembly);
                 //configuration.RegisterValidatorsFromAssemblies(assemblies);
+
+               configuration.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>();
 
                 //implicit/automatic validation of child properties
                 configuration.ImplicitlyValidateChildProperties = true;
