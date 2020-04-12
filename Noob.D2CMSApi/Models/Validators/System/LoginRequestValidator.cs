@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.Validators;
-namespace Noob.D2CMSApi.Validators
+namespace Noob.D2CMSApi.Models.Validators
 {
 
     /// <summary>

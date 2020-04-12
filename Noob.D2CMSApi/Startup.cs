@@ -11,15 +11,8 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text.Encodings.Web;
-using System.Text.Unicode;
-using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,15 +26,17 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.WebEncoders;
 using Microsoft.OpenApi.Models;
-using Noob.D2CMSApi.OAuth;
 using Noob.D2CMSApi.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
-using Noob.D2CMSApi.OAuth.AuthContext;
-using Newtonsoft.Json.Serialization;
-using FluentValidation.AspNetCore;
-using Noob.Validators;
-using Noob.D2CMSApi.Validators;
 using Noob.D2CMSApi.Models.Responses;
+using Noob.D2CMSApi.OAuth;
+using Noob.D2CMSApi.OAuth.AuthContext;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace Noob.D2CMSApi
 {
@@ -136,9 +131,13 @@ namespace Noob.D2CMSApi
                 //    .Select(part => part.Assembly);
                 //configuration.RegisterValidatorsFromAssemblies(assemblies);
 
-               //configuration.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>();
+                configuration.RegisterValidatorsFromAssemblies(new Assembly[] { 
+                    Assembly.GetExecutingAssembly()
+                });
 
-               configuration.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
+                //configuration.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>();
+
+               //configuration.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
 
                 //implicit/automatic validation of child properties
                 configuration.ImplicitlyValidateChildProperties = true;

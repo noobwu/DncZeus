@@ -167,10 +167,10 @@ namespace Noob.D2CMSApi.Controllers
         public IActionResult Login(LoginRequest request)
         {
             var response = new ResponseResult<LoginResult>();
-            if (!ModelState.IsValid)
-            {
-                return Ok(response.Error(ResponseCode.INVALID_PARAMS, GetErrorMsgFromModelState()));
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return Ok(response.Error(ResponseCode.INVALID_PARAMS, GetErrorMsgFromModelState()));
+            //}
             SysUser user;
             using (_dbContext)
             {
