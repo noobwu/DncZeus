@@ -116,6 +116,7 @@ namespace Noob.D2CMSApi
 
             mvcBuilder.ConfigureApiBehaviorOptions(options =>
              {
+                 //模型验证自定义返回格式
                  options.InvalidModelStateResponseFactory = c =>
                  {
                      var errors = string.Join('\n', c.ModelState.Values.Where(v => v.Errors.Count > 0)
@@ -135,7 +136,9 @@ namespace Noob.D2CMSApi
                 //    .Select(part => part.Assembly);
                 //configuration.RegisterValidatorsFromAssemblies(assemblies);
 
-               configuration.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>();
+               //configuration.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>();
+
+               configuration.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
 
                 //implicit/automatic validation of child properties
                 configuration.ImplicitlyValidateChildProperties = true;
