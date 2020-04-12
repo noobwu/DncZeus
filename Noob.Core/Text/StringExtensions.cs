@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using Noob.Text;
 using Noob.Text.Support;
 using System;
 using System.Collections;
@@ -329,6 +330,33 @@ namespace Noob
             return value.Length > 0 && value[0] == 65279
                 ? value.Substring(1)
                 : value;
+        }
+        /// <summary>
+        /// Converts to md5hash.
+        /// </summary>
+        /// <param name="input">The input.</param>
+        /// <param name="encoding">The encoding.</param>
+        /// <returns>System.String.</returns>
+        public static string ToMD5Hash(this string input, Encoding encoding = null)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+            encoding = encoding ?? Encoding.UTF8;
+            // copied/pasted by adamfowleruk
+            // step 1, calculate MD5 hash from input
+            System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = encoding.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+
+            // step 2, convert byte array to hex string
+            var sb = StringBuilderCache.Allocate();
+            foreach (byte b in hash)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+            return StringBuilderCache.ReturnAndFree(sb).ToLower(); // The RFC requires the hex values are lowercase
         }
     }
 }

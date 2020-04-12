@@ -160,11 +160,11 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
-        /// <param name="loginRequest">The login request.</param>
+        /// <param name="request"></param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Login(LoginRequest loginRequest)
+        public IActionResult Login(LoginRequest request)
         {
             var response = new ResponseResult<LoginResult>();
             if (!ModelState.IsValid)
@@ -174,10 +174,14 @@ namespace Noob.D2CMSApi.Controllers
             SysUser user;
             using (_dbContext)
             {
-                user = _dbContext.SysUser.FirstOrDefault(x => x.UserName == loginRequest.UserName);
+                user = _dbContext.SysUser.FirstOrDefault(x => x.UserName == request.UserName);
                 if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
                 {
-                    return Ok(response.Error((int)ResponseCode.USER_NOT_EXIST, "用户不存在"));
+                    return Ok(response.Error(ResponseCode.USER_NOT_EXIST, "用户不存在"));
+                }
+                if (user.Password?.ToLower() != (request.Password + user.Salt).ToMD5Hash())
+                {
+                    return Ok(response.Error(ResponseCode.USER_NOT_EXIST, "密码错误"));
                 }
             }
             var claimsIdentity = new ClaimsIdentity(new Claim[]

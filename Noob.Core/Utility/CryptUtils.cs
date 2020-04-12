@@ -593,6 +593,150 @@ namespace Noob
             }
         }
     }
+    /*
+ * Original Source:
+ * This work (Modern Encryption of a String C#, by James Tuley), 
+ * identified by James Tuley, is free of known copyright restrictions.
+ * https://gist.github.com/4336842
+ * http://creativecommons.org/publicdomain/mark/1.0/ 
+ */
+    /// <summary>
+    /// Class HmacUtils.
+    /// </summary>
+    public static class HmacUtils
+    {
+        /// <summary>
+        /// The key size
+        /// </summary>
+        public const int KeySize = 256;
+        /// <summary>
+        /// The key size bytes
+        /// </summary>
+        public const int KeySizeBytes = 256 / 8;
+
+        /// <summary>
+        /// Creates the hash algorithm.
+        /// </summary>
+        /// <param name="authKey">The authentication key.</param>
+        /// <returns>HMAC.</returns>
+        public static HMAC CreateHashAlgorithm(byte[] authKey)
+        {
+            return new HMACSHA256(authKey);
+        }
+
+        /// <summary>
+        /// Authenticates the specified encrypted bytes.
+        /// </summary>
+        /// <param name="encryptedBytes">The encrypted bytes.</param>
+        /// <param name="authKey">The authentication key.</param>
+        /// <param name="iv">The iv.</param>
+        /// <returns>System.Byte[].</returns>
+        public static byte[] Authenticate(byte[] encryptedBytes, byte[] authKey, byte[] iv)
+        {
+            using (var hmac = CreateHashAlgorithm(authKey))
+            using (var ms = MemoryStreamFactory.GetStream())
+            {
+                using (var writer = new BinaryWriter(ms))
+                {
+                    //Prepend IV
+                    writer.Write(iv);
+                    //Write Ciphertext
+                    writer.Write(encryptedBytes);
+                    writer.Flush();
+
+                    //Authenticate all data
+                    var tag = hmac.ComputeHash(ms.GetBuffer(), 0, (int)ms.Length);
+                    //Postpend tag
+                    writer.Write(tag);
+
+                    return ms.ToArray();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Verifies the specified authentication encrypted bytes.
+        /// </summary>
+        /// <param name="authEncryptedBytes">The authentication encrypted bytes.</param>
+        /// <param name="authKey">The authentication key.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="ArgumentException">
+        /// AuthKey needs to be {KeySize} bits - authKey
+        /// or
+        /// Encrypted Message Required! - authEncryptedBytes
+        /// </exception>
+        public static bool Verify(byte[] authEncryptedBytes, byte[] authKey)
+        {
+            if (authKey == null || authKey.Length != KeySizeBytes)
+                throw new ArgumentException($"AuthKey needs to be {KeySize} bits", nameof(authKey));
+
+            if (authEncryptedBytes == null || authEncryptedBytes.Length == 0)
+                throw new ArgumentException("Encrypted Message Required!", nameof(authEncryptedBytes));
+
+            using (var hmac = CreateHashAlgorithm(authKey))
+            {
+                var sentTag = new byte[KeySizeBytes];
+                //Calculate Tag
+                var calcTag = hmac.ComputeHash(authEncryptedBytes, 0, authEncryptedBytes.Length - sentTag.Length);
+                const int ivLength = AesUtils.BlockSizeBytes;
+
+                //return false if message length is too small
+                if (authEncryptedBytes.Length < sentTag.Length + ivLength)
+                    return false;
+
+                //Grab Sent Tag
+                Buffer.BlockCopy(authEncryptedBytes, authEncryptedBytes.Length - sentTag.Length, sentTag, 0, sentTag.Length);
+
+                //Compare Tag with constant time comparison
+                var compare = 0;
+                for (var i = 0; i < sentTag.Length; i++)
+                    compare |= sentTag[i] ^ calcTag[i];
+
+                //return false if message doesn't authenticate
+                if (compare != 0)
+                    return false;
+            }
+
+            return true; //Haz Success!
+        }
+
+        /// <summary>
+        /// Decrypts the authenticated.
+        /// </summary>
+        /// <param name="authEncryptedBytes">The authentication encrypted bytes.</param>
+        /// <param name="cryptKey">The crypt key.</param>
+        /// <returns>System.Byte[].</returns>
+        /// <exception cref="ArgumentException">CryptKey needs to be {KeySize} bits - cryptKey</exception>
+        public static byte[] DecryptAuthenticated(byte[] authEncryptedBytes, byte[] cryptKey)
+        {
+            if (cryptKey == null || cryptKey.Length != KeySizeBytes)
+                throw new ArgumentException($"CryptKey needs to be {KeySize} bits", nameof(cryptKey));
+
+            //Grab IV from message
+            var iv = new byte[AesUtils.BlockSizeBytes];
+            Buffer.BlockCopy(authEncryptedBytes, 0, iv, 0, iv.Length);
+
+            using (var aes = AesUtils.CreateSymmetricAlgorithm())
+            {
+                using (var decrypter = aes.CreateDecryptor(cryptKey, iv))
+                using (var decryptedStream = new MemoryStream())
+                {
+                    using (var decrypterStream = new CryptoStream(decryptedStream, decrypter, CryptoStreamMode.Write))
+                    using (var writer = new BinaryWriter(decrypterStream))
+                    {
+                        //Decrypt Cipher Text from Message
+                        writer.Write(
+                            authEncryptedBytes,
+                            iv.Length,
+                            authEncryptedBytes.Length - iv.Length - KeySizeBytes);
+                    }
+
+                    return decryptedStream.ToArray();
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Class PlatformRsaUtils.
     /// </summary>
