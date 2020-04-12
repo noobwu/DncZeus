@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-06
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-08
+// ***********************************************************************
+// <copyright file="DeptController.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +31,7 @@ namespace Noob.D2CMSApi.Controllers
     public class DeptController : OAuthControllerBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MenuController"/> class.
+        /// Initializes a new instance of the <see cref="MenuController" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public DeptController(D2CmsDbContext dbContext) : base(dbContext) { }

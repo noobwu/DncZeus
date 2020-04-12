@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-05
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-05
+// ***********************************************************************
+// <copyright file="SysDictTypeMapping.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -6,13 +19,16 @@ namespace Noob.D2CMSApi.Entities
 {
     /// <summary>
     /// 字典类型表
+    /// Implements the <see cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysDictType}" />
     /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysDictType}" />
     [Serializable]
     public class SysDictTypeMapping : IEntityTypeConfiguration<SysDictType>
     {
         /// <summary>
         /// 字典类型表
         /// </summary>
+        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<SysDictType> builder)
         {
             builder.ToTable("sys_dict_type");

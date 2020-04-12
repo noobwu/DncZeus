@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-05
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-06
+// ***********************************************************************
+// <copyright file="SysUserMapping.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -5,14 +18,17 @@ using Noob.D2CMSApi.Entities;
 namespace Noob.D2CMSApi.Entities
 {
     /// <summary>
-    /// 用户信息表
+    /// 用户信息
+    /// Implements the <see cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysUser}" />
     /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysUser}" />
     [Serializable]
     public class SysUserMapping : IEntityTypeConfiguration<SysUser>
     {
         /// <summary>
         /// 用户信息表
         /// </summary>
+        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<SysUser> builder)
         {
             builder.ToTable("sys_user");

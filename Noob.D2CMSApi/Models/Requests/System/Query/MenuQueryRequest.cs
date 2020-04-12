@@ -28,8 +28,9 @@ namespace Noob.D2CMSApi.Models.Requests
     {
 
         /// <summary>
-        ///menu_name
+        /// menu_name
         /// </summary>
+        /// <value>The name of the menu.</value>
         [JsonProperty("menu_name")]
         public string MenuName { get; set; }
         /// <summary>

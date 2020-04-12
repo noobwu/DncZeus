@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-05
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-05
+// ***********************************************************************
+// <copyright file="SysArticleMapping.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -6,13 +19,16 @@ namespace Noob.D2CMSApi.Entities
 {
     /// <summary>
     /// 文章表
+    /// Implements the <see cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysArticle}" />
     /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysArticle}" />
     [Serializable]
     public class SysArticleMapping : IEntityTypeConfiguration<SysArticle>
     {
         /// <summary>
         /// 文章表
         /// </summary>
+        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<SysArticle> builder)
         {
             builder.ToTable("sys_article");

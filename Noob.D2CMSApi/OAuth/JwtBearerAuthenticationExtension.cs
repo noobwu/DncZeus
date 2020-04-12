@@ -4,7 +4,7 @@
 // Created          : 04-04-2020
 //
 // Last Modified By : Administrator
-// Last Modified On : 04-04-2020
+// Last Modified On : 2020-04-07
 // ***********************************************************************
 // <copyright file="JwtBearerAuthenticationExtension.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.

@@ -1,14 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-12
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-12
+// ***********************************************************************
+// <copyright file="LoginResult.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Newtonsoft.Json;
 using System;
 namespace Noob.D2CMSApi.Models.Responses
 {
     /// <summary>
     /// Class LoginResult.
-    /// Implements the <see cref="Noob.D2CMSApi.Models.Responses.ResultBase" />
+    /// Implements the <see cref="Noob.D2CMSApi.Models.ModelBase" />
     /// </summary>
-    /// <seealso cref="Noob.D2CMSApi.Models.Responses.ResultBase" />
+    /// <seealso cref="Noob.D2CMSApi.Models.ModelBase" />
+
     [Serializable]
-    public class LoginResult : ResultBase
+    public class LoginResult : ModelBase
     {
         /// <summary>
         /// Gets or sets the nickname.

@@ -1,12 +1,12 @@
 ﻿// ***********************************************************************
-// Assembly         : 
+// Assembly         : Noob.D2CMSApi
 // Author           : Administrator
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-05
+// Last Modified On : 2020-04-12
 // ***********************************************************************
-// <copyright file="LoginRequest.cs" company="">
+// <copyright file="LoginRequest.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
 // </copyright>
 // <summary></summary>

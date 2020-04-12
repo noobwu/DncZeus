@@ -4,7 +4,7 @@
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-05
+// Last Modified On : 2020-04-06
 // ***********************************************************************
 // <copyright file="ResponseBase.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -448,7 +448,7 @@ namespace Noob.D2CMSApi.Models.Responses
 				return DateTime.Now.ToString(DateTimeExtensions.DateTimeFormatTicksUtcOffset);
 			}
 		
-		} 
+		}
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResponseBase{T}" /> class.
 		/// </summary>

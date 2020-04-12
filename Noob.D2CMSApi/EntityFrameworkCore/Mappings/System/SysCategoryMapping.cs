@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-05
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-05
+// ***********************************************************************
+// <copyright file="SysCategoryMapping.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -6,13 +19,16 @@ namespace Noob.D2CMSApi.Entities
 {
     /// <summary>
     /// 分类表
+    /// Implements the <see cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysCategory}" />
     /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysCategory}" />
     [Serializable]
     public class SysCategoryMapping : IEntityTypeConfiguration<SysCategory>
     {
         /// <summary>
         /// 分类表
         /// </summary>
+        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<SysCategory> builder)
         {
             builder.ToTable("sys_category");

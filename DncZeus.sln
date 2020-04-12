@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noob.D2CMSApi", "Noob.D2CMS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noob.Core", "Noob.Core\Noob.Core.csproj", "{EB010E93-EAA6-4D97-80E2-9E7DDEA6455E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Noob.NUnitTests", "Noob.NUnitTests\Noob.NUnitTests.csproj", "{0FB22991-85C1-4D4A-9CA9-83C95331407C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Noob.NUnitTests", "Noob.NUnitTests\Noob.NUnitTests.csproj", "{0FB22991-85C1-4D4A-9CA9-83C95331407C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86EBEE6F-D6FD-4102-AAE2-523F039D8FC3}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

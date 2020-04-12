@@ -4,7 +4,7 @@
 // Created          : 2020-04-06
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-06
+// Last Modified On : 2020-04-07
 // ***********************************************************************
 // <copyright file="DictDataController.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -32,7 +32,7 @@ namespace Noob.D2CMSApi.Controllers
     public class DictDataController : OAuthControllerBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DictDataController"/> class.
+        /// Initializes a new instance of the <see cref="DictDataController" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public DictDataController(D2CmsDbContext dbContext) : base(dbContext)
@@ -42,7 +42,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
-        /// <param name="initDatas"></param>
+        /// <param name="initDatas">The initialize datas.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
         public IActionResult Init(IEnumerable<DictDataResult> initDatas)

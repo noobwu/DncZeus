@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : Noob.D2CMSApi
+// Author           : Administrator
+// Created          : 2020-04-05
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-05
+// ***********************************************************************
+// <copyright file="SysDeptMapping.cs" company="Noob.D2CMSApi">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -6,13 +19,16 @@ namespace Noob.D2CMSApi.Entities
 {
     /// <summary>
     /// 部门表
+    /// Implements the <see cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysDept}" />
     /// </summary>
+    /// <seealso cref="Microsoft.EntityFrameworkCore.IEntityTypeConfiguration{Noob.D2CMSApi.Entities.SysDept}" />
     [Serializable]
     public class SysDeptMapping : IEntityTypeConfiguration<SysDept>
     {
         /// <summary>
         /// 部门表
         /// </summary>
+        /// <param name="builder">The builder.</param>
         public void Configure(EntityTypeBuilder<SysDept> builder)
         {
             builder.ToTable("sys_dept");

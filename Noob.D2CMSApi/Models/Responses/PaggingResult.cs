@@ -4,7 +4,7 @@
 // Created          : 2020-04-06
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-06
+// Last Modified On : 2020-04-12
 // ***********************************************************************
 // <copyright file="PaggingResult.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -24,7 +24,7 @@ namespace Noob.D2CMSApi.Models.Responses
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class PaggingResult<T>  where T : ResultBase
+    public class PaggingResult<T>  where T : ModelBase
     {
         /// <summary>
         /// Gets or sets the page.
@@ -40,7 +40,7 @@ namespace Noob.D2CMSApi.Models.Responses
         [JsonProperty("list")]
         public IEnumerable<T> List { get;private set; }
         /// <summary>
-        /// Initializes a new instance of the <see cref="PaggingResult{T}"/> class.
+        /// Initializes a new instance of the <see cref="PaggingResult{T}" /> class.
         /// </summary>
         /// <param name="page">The page.</param>
         /// <param name="list">The list.</param>

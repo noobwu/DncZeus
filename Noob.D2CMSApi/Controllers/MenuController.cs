@@ -4,7 +4,7 @@
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-05
+// Last Modified On : 2020-04-06
 // ***********************************************************************
 // <copyright file="MenuController.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -30,12 +30,14 @@ namespace Noob.D2CMSApi.Controllers
     /// <summary>
     /// Class MenuController.
     /// Implements the <see cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    /// Implements the <see cref="Noob.D2CMSApi.Controllers.OAuthControllerBase" />
     /// </summary>
+    /// <seealso cref="Noob.D2CMSApi.Controllers.OAuthControllerBase" />
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     public class MenuController : OAuthControllerBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MenuController"/> class.
+        /// Initializes a new instance of the <see cref="MenuController" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public MenuController(D2CmsDbContext dbContext) : base(dbContext) { }
@@ -111,6 +113,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Gets the list.
         /// </summary>
+        /// <param name="request">The request.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost("/api/menu/menus")]
         public IActionResult Index(MenuQueryRequest request)

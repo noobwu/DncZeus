@@ -4,7 +4,7 @@
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-05
+// Last Modified On : 2020-04-12
 // ***********************************************************************
 // <copyright file="MenuResult.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -21,11 +21,11 @@ namespace Noob.D2CMSApi.Models.Responses
 {
     /// <summary>
     /// Class MenuResult.
-    /// Implements the <see cref="Noob.D2CMSApi.Models.Responses.ResultBase" />
+    /// Implements the <see cref="Noob.D2CMSApi.Models.ModelBase" />
     /// </summary>
-    /// <seealso cref="Noob.D2CMSApi.Models.Responses.ResultBase" />
+    /// <seealso cref="Noob.D2CMSApi.Models.ModelBase" />
     [Serializable]
-    public class MenuResult : ResultBase
+    public class MenuResult : ModelBase
     {
         /// <summary>
         /// 菜单ID

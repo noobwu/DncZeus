@@ -4,7 +4,7 @@
 // Created          : 2020-04-07
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-07
+// Last Modified On : 2020-04-08
 // ***********************************************************************
 // <copyright file="ConfigsController.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -34,7 +34,7 @@ namespace Noob.D2CMSApi.Controllers
     public class ConfigsController : OAuthControllerBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigsController"/> class.
+        /// Initializes a new instance of the <see cref="ConfigsController" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public ConfigsController(D2CmsDbContext dbContext) : base(dbContext)
@@ -43,7 +43,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// Logins the specified login request.
         /// </summary>
-        /// <param name="initDatas"></param>
+        /// <param name="initDatas">The initialize datas.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost]
         public IActionResult Init(IEnumerable<ConfigsResult> initDatas)

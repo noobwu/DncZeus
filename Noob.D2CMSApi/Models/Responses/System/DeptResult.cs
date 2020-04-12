@@ -4,7 +4,7 @@
 // Created          : 2020-04-06
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-06
+// Last Modified On : 2020-04-12
 // ***********************************************************************
 // <copyright file="DeptResult.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -21,10 +21,10 @@ namespace Noob.D2CMSApi.Models.Responses
 {
     /// <summary>
     /// Class DeptResult.
-    /// Implements the <see cref="Noob.D2CMSApi.Models.Responses.ResultBase" />
+    /// Implements the <see cref="Noob.D2CMSApi.Models.ModelBase" />
     /// </summary>
-    /// <seealso cref="Noob.D2CMSApi.Models.Responses.ResultBase" />
-    public class DeptResult  : ResultBase
+    /// <seealso cref="Noob.D2CMSApi.Models.ModelBase" />
+    public class DeptResult  : ModelBase
     {
         /// <summary>
         /// 部门id

@@ -4,7 +4,7 @@
 // Created          : 2020-04-06
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-06
+// Last Modified On : 2020-04-12
 // ***********************************************************************
 // <copyright file="OAuthControllerBase.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -36,7 +36,7 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         protected readonly D2CmsDbContext _dbContext;
         /// <summary>
-        /// Initializes a new instance of the <see cref="OAuthControllerBase"/> class.
+        /// Initializes a new instance of the <see cref="OAuthControllerBase" /> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         public OAuthControllerBase(D2CmsDbContext dbContext)
@@ -46,7 +46,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// 获取错误信息
         /// </summary>
-        /// <returns></returns>
+        /// <returns>IEnumerable&lt;System.String&gt;.</returns>
         protected IEnumerable<string> GetErrorsFromModelState()
         {
             if (ModelState.IsValid) return default(IEnumerable<string>);
@@ -61,7 +61,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <summary>
         /// 获取错误信息
         /// </summary>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         protected string GetErrorMsgFromModelState()
         {
             return string.Join(",", GetErrorsFromModelState());
