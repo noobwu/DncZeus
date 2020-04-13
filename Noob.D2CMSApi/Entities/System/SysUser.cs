@@ -53,8 +53,8 @@ namespace Noob.D2CMSApi.Entities
             UpdatedAt = user.UpdatedAt;
             DeletedAt = user.DeletedAt;
             Remark = user.Remark;
-            PostId = postId;
-            RoleId = roleId;
+            UserPost = postId;
+            UserRole = roleId;
 
         }
         /// <summary>
@@ -168,12 +168,12 @@ namespace Noob.D2CMSApi.Entities
         /// 岗位Id
         /// </summary>
         /// <value>The user post.</value>
-        public virtual int PostId { get; set; }
+        public virtual int UserPost { get; set; }
         /// <summary>
         /// 角色Id
         /// </summary>
         /// <value>The user role.</value>
-        public virtual int RoleId { get; set; }
+        public virtual int UserRole { get; set; }
 
         /*
 

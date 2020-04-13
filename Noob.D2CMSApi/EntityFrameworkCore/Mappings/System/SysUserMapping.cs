@@ -58,8 +58,8 @@ namespace Noob.D2CMSApi.Entities
             builder.Property(t => t.DeletedAt).HasColumnName("deleted_at");
             builder.Property(t => t.Remark).HasColumnName("remark").HasMaxLength(500);
 
-            builder.Ignore(t => t.PostId);
-            builder.Ignore(t => t.RoleId);
+            builder.Ignore(t => t.UserPost);
+            builder.Ignore(t => t.UserRole);
 
             //builder.HasOne(a => a.UserPost).WithOne(b => b.User).HasForeignKey<SysUserPost>(c => c.UserId);
 
