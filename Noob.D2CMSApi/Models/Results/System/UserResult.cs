@@ -29,17 +29,17 @@ namespace Noob.D2CMSApi.Models.Results
     public class UserResult : UserModel
     {
         /// <summary>
-        /// Gets or sets the user post.
+        /// 岗位Id
         /// </summary>
         /// <value>The user post.</value>
         [JsonProperty("user_post")]
-        public virtual string UserPost { get; set; }
+        public virtual int UserPost { get; set; }
         /// <summary>
-        /// Gets or sets the user role.
+        /// 角色Id
         /// </summary>
         /// <value>The user role.</value>
         [JsonProperty("user_role")]
-        public virtual string UserRole { get; set; }
+        public virtual int UserRole { get; set; }
         /// <summary>
         /// Creates new password.
         /// </summary>

@@ -156,6 +156,8 @@ namespace Noob.D2CMSApi.Controllers
                 cfg.CreateMap<SysUser, UserResult>();
             });
             var data = model.MapTo<SysUser, UserResult>(mapConfig);
+            data.UserPost = model.PostId;
+            data.UserRole = model.RoleId;
             return Ok(response.Success("数据获取成功", data));
         }
         /// <summary>

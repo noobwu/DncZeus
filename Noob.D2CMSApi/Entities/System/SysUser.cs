@@ -132,6 +132,17 @@ namespace Noob.D2CMSApi.Entities
         /// <value>The remark.</value>
         public virtual string Remark { get;set;}
 
+        /// <summary>
+        /// 岗位Id
+        /// </summary>
+        /// <value>The remark.</value>
+        public virtual int PostId { get; set; }
+
+        /// <summary>
+        /// 角色Id
+        /// </summary>
+        /// <value>The remark.</value>
+        public virtual int RoleId { get; set; }
 
         /// <summary>
         /// 获取主键的属性名称
