@@ -26,6 +26,38 @@ namespace Noob.D2CMSApi.Entities
     public class SysUser:Entity<int>
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="SysUser"/> class.
+        /// </summary>
+        /// <param name="user">The user.</param>
+        /// <param name="postId">The post identifier.</param>
+        /// <param name="roleId">The role identifier.</param>
+        public SysUser(SysUser user,int postId,int roleId) : this(user.Id) {
+            Id = user.Id;
+            Nickname = user.Nickname;
+            UserName = user.UserName;
+            UserType = user.UserType;
+            Email = user.Email;
+            Phone = user.Phone;
+            Phonenumber = user.Phonenumber;
+            Sex = user.Sex;
+            Avatar = user.Avatar;
+            Password = user.Password;
+            Salt = user.Salt;
+            Status = user.Status;
+            DelFlag = user.DelFlag;
+            LoginIp = user.LoginIp;
+            LoginDate = user.LoginDate;
+            CreateBy = user.CreateBy;
+            CreatedAt = user.CreatedAt;
+            UpdateBy = user.UpdateBy;
+            UpdatedAt = user.UpdatedAt;
+            DeletedAt = user.DeletedAt;
+            Remark = user.Remark;
+            PostId = postId;
+            RoleId = roleId;
+
+        }
+        /// <summary>
         /// 用户ID
         /// </summary>
         /// <param name="id">The identifier.</param>
@@ -135,14 +167,29 @@ namespace Noob.D2CMSApi.Entities
         /// <summary>
         /// 岗位Id
         /// </summary>
-        /// <value>The remark.</value>
+        /// <value>The user post.</value>
         public virtual int PostId { get; set; }
-
         /// <summary>
         /// 角色Id
         /// </summary>
-        /// <value>The remark.</value>
+        /// <value>The user role.</value>
         public virtual int RoleId { get; set; }
+
+        /*
+
+        /// <summary>
+        /// 用户岗位
+        /// </summary>
+        /// <value>The remark.</value>
+        public virtual SysUserPost UserPost { get; set; }
+
+        /// <summary>
+        /// 用户角色
+        /// </summary>
+        /// <value>The remark.</value>
+        public virtual SysUserRole UserRole { get; set; }
+
+       */
 
         /// <summary>
         /// 获取主键的属性名称

@@ -117,7 +117,11 @@ namespace Noob.D2CMSApi.Controllers
             List<SysUser> allDataList = null;
             using (_dbContext)
             {
-                allDataList = _dbContext.SysUser.ToList();
+                //allDataList = _dbContext.SysUser.ToList();
+                allDataList =(from user in _dbContext.SysUser
+                            join userPost in _dbContext.SysUserPost on user.Id equals userPost.UserId
+                            join userRole in _dbContext.SysUserRole on user.Id equals userRole.RoleId
+                            select  new SysUser(user,userPost.PostId,userRole.RoleId)).ToList();
             }
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
@@ -144,7 +148,12 @@ namespace Noob.D2CMSApi.Controllers
             SysUser model = null;
             using (_dbContext)
             {
-                model = _dbContext.SysUser.FirstOrDefault(a=>a.Id== userId);
+                //model = _dbContext.SysUser.FirstOrDefault(a=>a.Id== userId);
+                model = (from user in _dbContext.SysUser
+                         join userPost in _dbContext.SysUserPost on user.Id equals userPost.UserId
+                         join userRole in _dbContext.SysUserRole on user.Id equals userRole.RoleId
+                         where user.Id == userId
+                         select new SysUser(user, userPost.PostId, userRole.RoleId)).FirstOrDefault();
             }
             if (model == null)
             {
@@ -156,8 +165,6 @@ namespace Noob.D2CMSApi.Controllers
                 cfg.CreateMap<SysUser, UserResult>();
             });
             var data = model.MapTo<SysUser, UserResult>(mapConfig);
-            data.UserPost = model.PostId;
-            data.UserRole = model.RoleId;
             return Ok(response.Success("数据获取成功", data));
         }
         /// <summary>

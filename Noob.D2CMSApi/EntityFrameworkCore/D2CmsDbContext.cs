@@ -77,5 +77,16 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
         /// </summary>
         /// <value>The system post.</value>
         public DbSet<SysPost> SysPost { get; set; }
+
+        /// <summary>
+        /// Gets or sets the system user post.
+        /// </summary>
+        /// <value>The system user post.</value>
+        public DbSet<SysUserPost> SysUserPost { get; set; }
+        /// <summary>
+        /// Gets or sets the system user role.
+        /// </summary>
+        /// <value>The system user role.</value>
+        public DbSet<SysUserRole> SysUserRole { get; set; }
     }
 }

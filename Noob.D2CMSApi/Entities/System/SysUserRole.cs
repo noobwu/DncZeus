@@ -42,7 +42,13 @@ namespace Noob.D2CMSApi.Entities
         /// <value>The role identifier.</value>
         public virtual int RoleId { get;set;}
 
-
+         /*
+        /// <summary>
+        /// 用户信息
+        /// </summary>
+        /// <value>The post identifier.</value>
+        public virtual SysUser User { get; set; }
+        */
 
         /// <summary>
         /// 获取主键的属性名称

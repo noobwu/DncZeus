@@ -58,7 +58,12 @@ namespace Noob.D2CMSApi.Entities
             builder.Property(t => t.DeletedAt).HasColumnName("deleted_at");
             builder.Property(t => t.Remark).HasColumnName("remark").HasMaxLength(500);
 
-            //builder.HasOne<SysUser>().WithOne().HasForeignKey<SysUserPost>(p => p.UserId);
+            builder.Ignore(t => t.PostId);
+            builder.Ignore(t => t.RoleId);
+
+            //builder.HasOne(a => a.UserPost).WithOne(b => b.User).HasForeignKey<SysUserPost>(c => c.UserId);
+
+            //builder.HasOne(a => a.UserRole).WithOne(b => b.User).HasForeignKey<SysUserRole>(c => c.UserId);
 
             //builder.HasOne<SysUser>().WithOne().HasForeignKey<SysUserRole>(r => r.UserId);
             //针对“一对一”关系的设置
