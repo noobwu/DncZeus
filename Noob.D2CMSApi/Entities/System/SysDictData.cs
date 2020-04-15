@@ -70,12 +70,12 @@ namespace Noob.D2CMSApi.Entities
         /// 是否默认（Y是 N否）
         /// </summary>
         /// <value>The is default.</value>
-        public virtual string IsDefault { get;set;}
+        public virtual byte IsDefault { get;set;}
         /// <summary>
         /// 状态（0正常 1停用）
         /// </summary>
         /// <value>The status.</value>
-        public virtual string Status { get;set;}
+        public virtual byte Status { get;set;}
         /// <summary>
         /// 创建者
         /// </summary>

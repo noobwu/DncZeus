@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Noob.D2CMSApi.Models.Results
+namespace Noob.D2CMSApi.Models
 {
     /// <summary>
     /// 字典数据表
@@ -25,7 +25,7 @@ namespace Noob.D2CMSApi.Models.Results
     /// </summary>
     /// <seealso cref="Noob.D2CMSApi.Models.ModelBase" />
     [Serializable]
-    public class DictDataResult : ModelBase
+    public class DictDataModel : ModelBase
     {
         /// <summary>
         /// Gets or sets the identifier.
@@ -80,13 +80,13 @@ namespace Noob.D2CMSApi.Models.Results
         /// </summary>
         /// <value>The is default.</value>
         [JsonProperty("is_default")]
-        public virtual String IsDefault { get; set; }
+        public virtual byte IsDefault { get; set; }
         /// <summary>
         /// 状态（0正常 1停用）
         /// </summary>
         /// <value>The status.</value>
         [JsonProperty("status")]
-        public virtual String Status { get; set; }
+        public virtual byte Status { get; set; }
         /// <summary>
         /// 创建者
         /// </summary>

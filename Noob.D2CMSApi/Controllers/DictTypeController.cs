@@ -1,17 +1,4 @@
-﻿// ***********************************************************************
-// Assembly         : Noob.D2CMSApi
-// Author           : Administrator
-// Created          : 2020-04-06
-//
-// Last Modified By : Administrator
-// Last Modified On : 2020-04-07
-// ***********************************************************************
-// <copyright file="DictDataController.cs" company="Noob.D2CMSApi">
-//     Copyright (c) . All rights reserved.
-// </copyright>
-// <summary></summary>
-// ***********************************************************************
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,23 +8,25 @@ using Microsoft.AspNetCore.Mvc;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models;
-using Noob.D2CMSApi.Models.Requests;
+using Noob.D2CMSApi.Models.Querys;
 using Noob.D2CMSApi.Models.Responses;
 using Noob.Extensions;
+
 namespace Noob.D2CMSApi.Controllers
 {
+
     /// <summary>
-    /// Class DictDataController.
+    /// Class DictController.
     /// Implements the <see cref="Noob.D2CMSApi.Controllers.OAuthControllerBase" />
     /// </summary>
     /// <seealso cref="Noob.D2CMSApi.Controllers.OAuthControllerBase" />
-    public class DictDataController : OAuthControllerBase
+    public class DictTypeController : OAuthControllerBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DictDataController" /> class.
+        /// Initializes a new instance of the <see cref="DictTypeController"/> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
-        public DictDataController(D2CmsDbContext dbContext) : base(dbContext)
+        public DictTypeController(D2CmsDbContext dbContext) : base(dbContext)
         {
         }
         /// <summary>
@@ -45,15 +34,15 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <param name="initDatas">The initialize datas.</param>
         /// <returns>IActionResult.</returns>
-        [HttpPost]
-        public IActionResult Init(IEnumerable<DictDataModel> initDatas)
+        [HttpPost("/api/dict/init")]
+        public IActionResult Init(IEnumerable<DictTypeModel> initDatas)
         {
             var response = new ResponseResult<bool>();
             if (initDatas.IsEmpty())
             {
                 return Ok(response.Error(ResponseCode.ERROR, "数据不能为空"));
             }
-            List<SysDictData> insertDatas = new List<SysDictData>();
+            List<SysDictType> insertDatas = new List<SysDictType>();
             initDatas.Each(a =>
             {
                 HandleRequestData(a, insertDatas);
@@ -61,13 +50,13 @@ namespace Noob.D2CMSApi.Controllers
             insertDatas = insertDatas.DistinctBy(p => new { p.Id }).OrderBy(a => a.Id).ToList();
             using (_dbContext)
             {
-                if (_dbContext.SysDictData.Count(a => a.Id > 0) > 0)
+                if (_dbContext.SysDictType.Count(a => a.Id > 0) > 0)
                 {
                     return Ok(response.Error(ResponseCode.ERROR, "数据已初始化"));
                 }
                 else
                 {
-                    _dbContext.SysDictData.AddRange(insertDatas.ToArray());
+                    _dbContext.SysDictType.AddRange(insertDatas.ToArray());
                     _dbContext.SaveChanges();
                     return Ok(response.Success("数据初始化成功", true));
                 }
@@ -79,7 +68,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <param name="item">The item.</param>
         /// <param name="list">The list.</param>
         [NonAction]
-        private void HandleRequestData(DictDataModel item, List<SysDictData> list)
+        private void HandleRequestData(DictTypeModel item, List<SysDictType> list)
         {
             if (item == null)
             {
@@ -88,10 +77,10 @@ namespace Noob.D2CMSApi.Controllers
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<string, int?>().ConvertUsing(new IntUtcTimeTypeConverter());
                 cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
-                cfg.CreateMap<DictDataModel, SysDictData>();
+                cfg.CreateMap<DictTypeModel, SysDictData>();
             });
             //mapConfig.AssertConfigurationIsValid();
-            var result = item.MapTo<DictDataModel, SysDictData>(mapConfig);
+            var result = item.MapTo<DictTypeModel, SysDictType>(mapConfig);
             list.Add(result);
         }
 
@@ -100,22 +89,22 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <param name="model">The request.</param>
         /// <returns>IActionResult.</returns>
-        [HttpPost]
-        public IActionResult Index(DictDataQuery model)
+        [HttpPost("/api/dict/index")]
+        public IActionResult Index(DictTypeQuery model)
         {
-            var response = new ResponseResult<PaggingResult<DictDataModel>>();
-            List<SysDictData> allDataList = null;
+            var response = new ResponseResult<PaggingResult<DictTypeModel>>();
+            List<SysDictType> allDataList = null;
             using (_dbContext)
             {
-                allDataList = _dbContext.SysDictData.ToList();
+                allDataList = _dbContext.SysDictType.ToList();
             }
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
                 cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
-                cfg.CreateMap<SysDictData, DictDataModel>();
+                cfg.CreateMap<SysDictType, DictTypeModel>();
             });
-            var datas = allDataList.MapTo<SysDictData, DictDataModel>(mapConfig);
-            return Ok(response.Success("数据获取成功", new PaggingResult<DictDataModel>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
+            var datas = allDataList.MapTo<SysDictType, DictTypeModel>(mapConfig);
+            return Ok(response.Success("数据获取成功", new PaggingResult<DictTypeModel>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
         }
     }
 }

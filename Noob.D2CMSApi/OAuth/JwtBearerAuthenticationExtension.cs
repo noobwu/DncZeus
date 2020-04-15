@@ -14,12 +14,16 @@
 
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Noob.D2CMSApi.Models.Responses;
+using Noob.Extensions;
 
 namespace Noob.D2CMSApi.OAuth
 {
@@ -56,6 +60,28 @@ namespace Noob.D2CMSApi.OAuth
                 };
                 x.Events = new JwtBearerEvents
                 {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.HttpContext.Request.Path.HasValue && 
+                        (context.HttpContext.Request.Path.Value.IndexOf("api/menu/find_all_menu") > -1||
+                        context.HttpContext.Request.Path.Value.IndexOf("api/user/check_token") > -1
+                        ))
+                        {
+                            return Task.CompletedTask;
+                        }
+                        string strUtcTime = DateTime.Now.ToString(DateTimeExtensions.DateTimeFormatTicksUtcOffset);
+                        string strJson = @"{""code"":50008,""data"":null,""msg"":""无效的token"",""time_stamp"":"""+strUtcTime+@"""}";
+                        context.NoResult();
+                        context.Response.StatusCode = (int)HttpStatusCode.OK;
+                        context.Response.ContentType = "application/json";
+                        context.Response.WriteAsync(strJson).Wait();
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        context.HandleResponse();
+                        return Task.CompletedTask;
+                    },
                     // ...
                     OnMessageReceived = context =>
                     {

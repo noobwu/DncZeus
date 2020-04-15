@@ -55,6 +55,11 @@ namespace Noob.D2CMSApi.EntityFrameworkCore
         /// <value>The system dept.</value>
         public DbSet<SysDept> SysDept { get; set; }
         /// <summary>
+        /// 字典类型
+        /// </summary>
+        /// <value>The system dictionary data.</value>
+        public DbSet<SysDictType> SysDictType { get; set; }
+        /// <summary>
         /// 字典数据管理
         /// </summary>
         /// <value>The system dictionary data.</value>

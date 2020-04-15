@@ -230,9 +230,9 @@ namespace Noob.D2CMSApi.Controllers
             }
             if (user == null || (user.DelFlag.HasValue && user.DelFlag.Value == 1))
             {
-                user = new SysUser(0)
-                {
-                    UserName = "D2Cms"
+                //return Ok(response.Error(50014, "token过期"));
+                user = new SysUser(0) { 
+                    UserName="D2CmsAdmin"
                 };
             }
             return Ok(response.Success("登录成功", new CheckTokenResult()
