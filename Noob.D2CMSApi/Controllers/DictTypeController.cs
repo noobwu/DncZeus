@@ -106,5 +106,38 @@ namespace Noob.D2CMSApi.Controllers
             var datas = allDataList.MapTo<SysDictType, DictTypeModel>(mapConfig);
             return Ok(response.Success("数据获取成功", new PaggingResult<DictTypeModel>(new Pagging(model.Page, model.PageSize, allDataList.Count), datas)));
         }
+
+        /// <summary>
+        /// Updates the specified user model.
+        /// </summary>
+        /// <param name="dynamicModel">The user model.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPost]
+        [HttpPost("/api/dict/update")]
+        public IActionResult Update(dynamic dynamicModel)
+        {
+            var response = new ResponseResult<DictTypeModel>();
+            if (dynamicModel == null || dynamicModel.id < 1)
+            {
+                return Ok(response.Error(ResponseCode.INVALID_PARAMS, "该数据不存在"));
+            }
+            int id = dynamicModel.id;
+            SysDictType model = null;
+            using (_dbContext)
+            {
+                model = _dbContext.SysDictType.SingleOrDefault(a=>a.Id== id);
+            }
+            if (model == null)
+            {
+                return Ok(response.Error(ResponseCode.ERROR_CODE__DB__NO_ROW, "该数据不存在"));
+            }
+            var mapConfig = new MapperConfiguration(cfg => {
+                cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
+                cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
+                cfg.CreateMap<SysDictType, DictTypeModel>();
+            });
+            var data = model.MapTo<SysDictType, DictTypeModel>(mapConfig);
+            return Ok(response.Success("数据获取成功", data));
+        }
     }
 }
