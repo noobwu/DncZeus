@@ -144,12 +144,42 @@ namespace Noob.Extensions
             return source.Value.ToUtcDateTimeString();
         }
     }
+
+
+    /// <summary>
+    /// Class IntUtcTimeTypeConverter.
+    /// Implements the <see cref="AutoMapper.ITypeConverter{System.String, System.Int32}" />
+    /// </summary>
+    /// <seealso cref="AutoMapper.ITypeConverter{System.String, System.Int32}" />
+    public class IntUtcTimeTypeConverter : ITypeConverter<string, int>
+    {
+
+        /// <summary>
+        /// Performs conversion from source to destination type
+        /// </summary>
+        /// <param name="source">Source object</param>
+        /// <param name="destination">Destination object</param>
+        /// <param name="context">Resolution context</param>
+        /// <returns>Destination object</returns>
+        public int Convert(string source, int destination, ResolutionContext context)
+        {
+            try
+            {
+                return (int)(source?.UtcTimeToUnixTime());
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
+
+        }
+    }
     /// <summary>
     /// Class IntUtcTimeTypeConverter.
     /// Implements the <see cref="AutoMapper.ITypeConverter{System.String, System.Int32?}" />
     /// </summary>
     /// <seealso cref="AutoMapper.ITypeConverter{System.String, System.Int32?}" />
-    public class IntUtcTimeTypeConverter : ITypeConverter<string, int?>
+    public class NullableIntUtcTimeTypeConverter : ITypeConverter<string, int?>
     {
 
         /// <summary>
@@ -161,7 +191,15 @@ namespace Noob.Extensions
         /// <returns>Destination object</returns>
         public int?  Convert(string source, int? destination, ResolutionContext context)
         {
-            return (int)(source?.UtcTimeToUnixTime());
+            try
+            {
+                return (int)(source?.UtcTimeToUnixTime());
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+          
         }
     }
     /// <summary>
