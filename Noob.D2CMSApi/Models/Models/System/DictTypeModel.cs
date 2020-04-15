@@ -31,7 +31,7 @@ namespace Noob.D2CMSApi.Models
         /// 状态(1:正常,2:停用)
         /// </summary>
         [JsonProperty("status")]
-        public virtual byte? Status { get; set; }
+        public virtual byte Status { get; set; }
         /// <summary>
         /// 创建者
         /// </summary>
@@ -41,7 +41,7 @@ namespace Noob.D2CMSApi.Models
         /// 创建时间
         /// </summary>
         [JsonProperty("created_at")]
-        public virtual int? CreatedAt { get; set; }
+        public virtual string CreatedAt { get; set; }
         /// <summary>
         /// 更新者
         /// </summary>
@@ -51,7 +51,7 @@ namespace Noob.D2CMSApi.Models
         /// 更新时间
         /// </summary>
         [JsonProperty("updated_at")]
-        public virtual int? UpdatedAt { get; set; }
+        public virtual string UpdatedAt { get; set; }
         /// <summary>
         /// 备注
         /// </summary>

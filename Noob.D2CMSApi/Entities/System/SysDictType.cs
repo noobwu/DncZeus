@@ -24,10 +24,10 @@ namespace Noob.D2CMSApi.Entities
     public class SysDictType : Entity<int>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SysDictType"/> class.
+        /// 
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        public SysDictType(int id) : base(id) { }
+    	public SysDictType(int id) : base(id) { }
+
         /// <summary>
         /// 字典名称
         /// </summary>
@@ -37,9 +37,9 @@ namespace Noob.D2CMSApi.Entities
         /// </summary>
         public virtual string DictType { get; set; }
         /// <summary>
-        /// 状态（0正常 1停用）
+        /// 状态(1:正常,2:停用)
         /// </summary>
-        public virtual string Status { get; set; }
+        public virtual byte Status { get; set; }
         /// <summary>
         /// 创建者
         /// </summary>
@@ -60,6 +60,7 @@ namespace Noob.D2CMSApi.Entities
         /// 备注
         /// </summary>
         public virtual string Remark { get; set; }
+
 
 
         /// <summary>

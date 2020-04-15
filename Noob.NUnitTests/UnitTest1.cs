@@ -17,11 +17,12 @@ namespace Noob.NUnitTests
         {
             CultureInfo provider = CultureInfo.InvariantCulture;
             //https://docs.microsoft.com/zh-cn/dotnet/api/system.datetime.parseexact?view=netframework-4.8
-            string dateString = "2019-12-22T18:12:10+08:00";
-            string format = "yyyy-MM-ddTHH:mm:ss+08:00";
+            //string dateString = "2019-12-22T18:12:10+08:00";
+            string dateString = "2019-11-23T21:47:24+08:00";
+            string format = "yyyy-MM-ddTHH:mm:sszzz";
 
-            DateTime utcDateTime = DateTime.ParseExact("2019-12-22T18:12:10+08:00",
-                                 "yyyy-MM-ddTHH:mm:ss+08:00",
+            DateTime utcDateTime = DateTime.ParseExact("2019-11-23T21:47:24+08:00",
+                                format,
                                 provider);
             try
             {
