@@ -18,11 +18,6 @@ namespace Noob.D2CMSApi.Models
         [JsonProperty("id")]
         public virtual int Id { get; set; }
         /// <summary>
-        /// 字典主键
-        /// </summary>
-        [JsonProperty("dict_id")]
-        public virtual int DictId { get; set; }
-        /// <summary>
         /// 字典名称
         /// </summary>
         [JsonProperty("dict_name")]

@@ -28,11 +28,6 @@ namespace Noob.D2CMSApi.Entities
         /// </summary>
         /// <param name="id">The identifier.</param>
         public SysDictType(int id) : base(id) { }
-
-        /// <summary>
-        /// 字典主键
-        /// </summary>
-        public virtual int DictId { get; set; }
         /// <summary>
         /// 字典名称
         /// </summary>
