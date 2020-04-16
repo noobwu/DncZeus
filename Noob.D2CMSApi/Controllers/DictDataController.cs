@@ -23,6 +23,7 @@ using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models;
 using Noob.D2CMSApi.Models.Requests;
 using Noob.D2CMSApi.Models.Responses;
+using Noob.Expressions;
 using Noob.Extensions;
 namespace Noob.D2CMSApi.Controllers
 {
@@ -105,9 +106,26 @@ namespace Noob.D2CMSApi.Controllers
         {
             var response = new ResponseResult<PaggingResult<DictDataModel>>();
             List<SysDictData> allDataList = null;
+            var predicate= PredicateBuilder.True<SysDictData>();
+            if (model.DictTypeId > 0)
+            {
+                predicate = predicate.And(a=>a.DictTypeId==model.DictTypeId);
+            }
+            if (!string.IsNullOrEmpty(model.DictLabel))
+            {
+                predicate = predicate.And(a => a.DictLabel == model.DictLabel);
+            }
+            if (!string.IsNullOrEmpty(model.DictValue))
+            {
+                predicate = predicate.And(a => a.DictValue == model.DictValue);
+            }
+            if (model.Status>0)
+            {
+                predicate = predicate.And(a => a.Status == model.Status);
+            }
             using (_dbContext)
             {
-                allDataList = _dbContext.SysDictData.ToList();
+                allDataList = _dbContext.SysDictData.Where(predicate).ToList();
             }
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());

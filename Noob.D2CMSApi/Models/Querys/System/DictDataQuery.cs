@@ -26,11 +26,26 @@ namespace Noob.D2CMSApi.Models.Requests
     /// <seealso cref="Noob.D2CMSApi.Models.PaggingBase" />
     public class DictDataQuery : PaggingBase
     {
+
         /// <summary>
-        /// Gets or sets the type of the dictionary.
+        ///字典类型Id
         /// </summary>
-        /// <value>The type of the dictionary.</value>
-        [JsonProperty("dict_type")]
-        public string DictType { get; set; }
+        [JsonProperty("dict_id")]
+        public int DictTypeId { get; set; }
+        /// <summary>
+        ///字典标签
+        /// </summary>
+        [JsonProperty("dict_label")]
+        public string DictLabel { get; set; }
+        /// <summary>
+        ///字典值
+        /// </summary>
+        [JsonProperty("dict_value")]
+        public string DictValue { get; set; }
+        /// <summary>
+        ///  状态
+        /// </summary>
+        [JsonProperty("status")]
+        public byte Status { get; set; }
     }
 }

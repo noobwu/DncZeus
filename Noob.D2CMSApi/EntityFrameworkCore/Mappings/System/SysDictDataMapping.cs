@@ -34,7 +34,7 @@ namespace Noob.D2CMSApi.Entities
             builder.ToTable("sys_dict_data");
             builder.HasKey(t => t.Id);
             builder.Property(t => t.Id).HasColumnName("id"); ;
-            builder.Property(t => t.DictCode).HasColumnName("dict_code").IsRequired();
+            builder.Property(t => t.DictTypeId).HasColumnName("dict_type_id").IsRequired();
             builder.Property(t => t.DictSort).HasColumnName("dict_sort");
             builder.Property(t => t.DictLabel).HasColumnName("dict_label").HasMaxLength(100);
             builder.Property(t => t.DictValue).HasColumnName("dict_value").HasMaxLength(100);

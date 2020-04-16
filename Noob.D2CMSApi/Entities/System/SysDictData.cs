@@ -32,10 +32,10 @@ namespace Noob.D2CMSApi.Entities
     	public SysDictData(int id) : base(id) {}
 
         /// <summary>
-        /// ID
+        /// 字典类型Id
         /// </summary>
         /// <value>The dictionary code.</value>
-        public virtual int DictCode { get;set;}
+        public virtual int DictTypeId { get;set;}
         /// <summary>
         /// 字典排序
         /// </summary>

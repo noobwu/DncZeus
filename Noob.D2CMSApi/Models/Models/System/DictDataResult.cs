@@ -34,11 +34,11 @@ namespace Noob.D2CMSApi.Models
         [JsonProperty("id")]
         public virtual int Id { get; set; }
         /// <summary>
-        /// ID
+        /// 字典类型Id
         /// </summary>
         /// <value>The dictionary code.</value>
-        [JsonProperty("dict_code")]
-        public virtual int DictCode { get; set; }
+        [JsonProperty("dict_id")]
+        public virtual int DictTypeId { get; set; }
         /// <summary>
         /// 字典排序
         /// </summary>
