@@ -28,6 +28,11 @@ namespace Noob.D2CMSApi.Models.Requests
     {
 
         /// <summary>
+        ///字典类型
+        /// </summary>
+        [JsonProperty("dict_type")]
+        public string DictType { get; set; }
+        /// <summary>
         ///字典类型Id
         /// </summary>
         [JsonProperty("dict_id")]

@@ -107,6 +107,10 @@ namespace Noob.D2CMSApi.Controllers
             var response = new ResponseResult<PaggingResult<DictDataModel>>();
             List<SysDictData> allDataList = null;
             var predicate= PredicateBuilder.True<SysDictData>();
+            if (!string.IsNullOrEmpty(model.DictType))
+            {
+                predicate = predicate.And(a => a.DictType == model.DictType);
+            }
             if (model.DictTypeId > 0)
             {
                 predicate = predicate.And(a=>a.DictTypeId==model.DictTypeId);
