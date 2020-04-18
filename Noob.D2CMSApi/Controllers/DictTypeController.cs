@@ -12,6 +12,7 @@ using Noob.D2CMSApi.Models;
 using Noob.D2CMSApi.Models.Querys;
 using Noob.D2CMSApi.Models.Responses;
 using Noob.Extensions;
+using Z.EntityFramework.Plus;
 
 namespace Noob.D2CMSApi.Controllers
 {
@@ -173,9 +174,10 @@ namespace Noob.D2CMSApi.Controllers
                 int result = _dbContext.SaveChanges();
                 if (result > 0)
                 {
-                    return Ok(response.Success("数据更新成功",true));
+                    return Ok(response.Success("数据更新成功", true));
                 }
-                else {
+                else
+                {
                     return Ok(response.Error(ResponseCode.ERROR, "数据更新失败"));
                 }
             }
@@ -219,6 +221,42 @@ namespace Noob.D2CMSApi.Controllers
                     return Ok(response.Error(ResponseCode.ERROR, "数据提交失败"));
                 }
             }
+        }
+
+        /// <summary>
+        /// Deletes the specified dynamic model.
+        /// </summary>
+        /// <param name="dynamicModel">The dynamic model.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpDelete("/api/dict/delete")]
+        public IActionResult Delete(dynamic dynamicModel)
+        {
+            var response = new ResponseResult<bool>();
+            if (dynamicModel == null || dynamicModel.id < 1)
+            {
+                return Ok(response.Error(ResponseCode.INVALID_PARAMS, "该数据不存在"));
+            }
+            int id = dynamicModel.id;
+            using (_dbContext)
+            {
+                var entity = _dbContext.SysDictType.SingleOrDefault(a=>a.Id==id);
+                if (entity == null)
+                {
+                    return Ok(response.Error(ResponseCode.INVALID_PARAMS, "该数据不存在"));
+                }
+                _dbContext.SysDictType.Remove(entity);
+                int result = _dbContext.SaveChanges();
+                if (result > 0)
+                {
+                    return Ok(response.Success("数据提交成功", true));
+                }
+                else
+                {
+                    return Ok(response.Error(ResponseCode.ERROR, "数据提交失败"));
+                }
+                //int result= _dbContext.Set<SysDictType>().Where(a=>a.Id==id).Delete();
+            }
+               
         }
     }
 }
