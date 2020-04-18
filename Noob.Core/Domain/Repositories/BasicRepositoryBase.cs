@@ -38,7 +38,7 @@ namespace Noob.Domain.Repositories
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="BasicRepositoryBase{TEntity}"/> class.
+        /// Initializes a new instance of the <see cref="BasicRepositoryBase{TEntity}" /> class.
         /// </summary>
         protected BasicRepositoryBase()
         {
@@ -98,6 +98,66 @@ namespace Noob.Domain.Repositories
         protected virtual CancellationToken GetCancellationToken(CancellationToken preferredValue = default)
         {
             return CancellationTokenProvider.FallbackToProvider(preferredValue);
+        }
+    }
+    /// <summary>
+    /// Class BasicRepositoryBase.
+    /// Implements the <see cref="Noob.Domain.Repositories.BasicRepositoryBase{TEntity}" />
+    /// Implements the <see cref="Noob.Domain.Repositories.IBasicRepository{TEntity, TKey}" />
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the t entity.</typeparam>
+    /// <typeparam name="TKey">The type of the t key.</typeparam>
+    /// <seealso cref="Noob.Domain.Repositories.BasicRepositoryBase{TEntity}" />
+    /// <seealso cref="Noob.Domain.Repositories.IBasicRepository{TEntity, TKey}" />
+    public abstract class BasicRepositoryBase<TEntity, TKey> : BasicRepositoryBase<TEntity>, IBasicRepository<TEntity, TKey>
+      where TEntity : class, IEntity<TKey>
+    {
+        /// <summary>
+        /// get as an asynchronous operation.
+        /// </summary>
+        /// <param name="id">Primary key of the entity to get</param>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Entity</returns>
+        /// <exception cref="Noob.Domain.Entities.EntityNotFoundException"></exception>
+        public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
+        {
+            var entity = await FindAsync(id, includeDetails, cancellationToken);
+
+            if (entity == null)
+            {
+                throw new EntityNotFoundException(typeof(TEntity), id);
+            }
+
+            return entity;
+        }
+
+        /// <summary>
+        /// Gets an entity with given primary key or null if not found.
+        /// </summary>
+        /// <param name="id">Primary key of the entity to get</param>
+        /// <param name="includeDetails">Set true to include all children of this entity</param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Entity or null</returns>
+        public abstract Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// delete as an asynchronous operation.
+        /// </summary>
+        /// <param name="id">Primary key of the entity</param>
+        /// <param name="autoSave">Set true to automatically save changes to database.
+        /// This is useful for ORMs / database APIs those only save changes with an explicit method call, but you need to immediately save changes to the database.</param>
+        /// <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> to observe while waiting for the task to complete.</param>
+        /// <returns>Task.</returns>
+        public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var entity = await FindAsync(id, cancellationToken: cancellationToken);
+            if (entity == null)
+            {
+                return;
+            }
+
+            await DeleteAsync(entity, autoSave, cancellationToken);
         }
     }
 }
