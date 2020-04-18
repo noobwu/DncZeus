@@ -129,7 +129,9 @@ namespace Noob.D2CMSApi.Controllers
             }
             using (_dbContext)
             {
-                allDataList = _dbContext.SysDictData.Where(predicate).ToList();
+                allDataList = (from dict in _dbContext.SysDictData
+                         join dictType in _dbContext.SysDictType on dict.DictTypeId equals dictType.Id
+                          select new SysDictData(dict, dictType.DictValueType)).Where(predicate).ToList();
             }
             var mapConfig = new MapperConfiguration(cfg => {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
@@ -156,7 +158,10 @@ namespace Noob.D2CMSApi.Controllers
             SysDictData model = null;
             using (_dbContext)
             {
-                model = _dbContext.SysDictData.SingleOrDefault(a => a.Id == id);
+                (from dict in _dbContext.SysDictData
+                 join dictType in _dbContext.SysDictType on dict.DictTypeId equals dictType.Id
+                 where dict.Id == id
+                 select new SysDictData(dict, dictType.DictValueType)).FirstOrDefault();
             }
             if (model == null)
             {

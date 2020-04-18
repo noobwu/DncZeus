@@ -28,8 +28,32 @@ namespace Noob.D2CMSApi.Entities
         /// <summary>
         /// 字典数据
         /// </summary>
-        public SysDictData(int id) : base(id) { }
+        public SysDictData(SysDictData dict,byte dictValueType) : this(dict.Id) {
+            DictTypeId = dict.DictTypeId;
+            DictSort = dict.DictSort;
+            DictLabel = dict.DictLabel;
+            DictValue = dict.DictValue;
+            DictNumber = dict.DictNumber;
+            DictType = dict.DictType;
+            DictValueType = dict.DictValueType;
+            CssClass = dict.CssClass;
+            ListClass = dict.ListClass;
+            IsDefault = dict.IsDefault;
+            Status = dict.Status;
+            CreateBy = dict.CreateBy;
+            CreatedAt = dict.CreatedAt;
+            UpdateBy = dict.UpdateBy;
+            UpdatedAt = dict.UpdatedAt;
+            Remark = dict.Remark;
 
+            DictValueType = dictValueType;
+        }
+        /// <summary>
+        /// 字典数据
+        /// </summary>
+        public SysDictData(int id) : base(id)
+        {
+        }
         /// <summary>
         /// 字典类型Id
         /// </summary>
@@ -54,10 +78,7 @@ namespace Noob.D2CMSApi.Entities
         /// 字典类型
         /// </summary>
         public virtual string DictType { get; set; }
-        /// <summary>
-        /// 字典值类型
-        /// </summary>
-        public virtual byte DictValueType { get; set; }
+
         /// <summary>
         /// 字典值类型
         /// </summary>
@@ -95,7 +116,10 @@ namespace Noob.D2CMSApi.Entities
         /// </summary>
         public virtual string Remark { get; set; }
 
-
+        /// <summary>
+        /// 字典值类型
+        /// </summary>
+        public virtual byte DictValueType { get; set; }
         /// <summary>
         /// 获取主键的属性名称
         /// </summary>

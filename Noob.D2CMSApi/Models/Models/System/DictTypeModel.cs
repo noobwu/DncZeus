@@ -28,6 +28,11 @@ namespace Noob.D2CMSApi.Models
         [JsonProperty("dict_type")]
         public virtual string DictType { get; set; }
         /// <summary>
+        /// 字典值类型
+        /// </summary>
+        [JsonProperty("dict_value_type")]
+        public virtual byte DictValueType { get; set; }
+        /// <summary>
         /// 状态(1:正常,2:停用)
         /// </summary>
         [JsonProperty("status")]

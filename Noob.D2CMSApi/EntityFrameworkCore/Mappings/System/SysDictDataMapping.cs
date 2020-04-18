@@ -40,7 +40,6 @@ namespace Noob.D2CMSApi.Entities
             builder.Property(t => t.DictValue).HasColumnName("dict_value").IsRequired().HasMaxLength(100);
             builder.Property(t => t.DictNumber).HasColumnName("dict_number").IsRequired();
             builder.Property(t => t.DictType).HasColumnName("dict_type").HasMaxLength(100);
-            builder.Property(t => t.DictValueType).HasColumnName("dict_value_type").IsRequired();
             builder.Property(t => t.CssClass).HasColumnName("css_class").HasMaxLength(100);
             builder.Property(t => t.ListClass).HasColumnName("list_class").HasMaxLength(100);
             builder.Property(t => t.IsDefault).HasColumnName("is_default").IsRequired();
@@ -50,6 +49,8 @@ namespace Noob.D2CMSApi.Entities
             builder.Property(t => t.UpdateBy).HasColumnName("update_by").HasMaxLength(64);
             builder.Property(t => t.UpdatedAt).HasColumnName("updated_at");
             builder.Property(t => t.Remark).HasColumnName("remark").HasMaxLength(500);
+
+            builder.Ignore(t => t.DictValueType);
         }
     }
 }

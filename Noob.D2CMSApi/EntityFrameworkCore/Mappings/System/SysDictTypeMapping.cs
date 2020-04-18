@@ -35,6 +35,7 @@ namespace Noob.D2CMSApi.Entities
             builder.Property(t => t.Id).HasColumnName("id"); ;
             builder.Property(t => t.DictName).HasColumnName("dict_name").IsRequired().HasMaxLength(100);
             builder.Property(t => t.DictType).HasColumnName("dict_type").IsRequired().HasMaxLength(100);
+            builder.Property(t => t.DictValueType).HasColumnName("dict_value_type").IsRequired();
             builder.Property(t => t.Status).HasColumnName("status").IsRequired();
             builder.Property(t => t.CreateBy).HasColumnName("create_by").HasMaxLength(64);
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");

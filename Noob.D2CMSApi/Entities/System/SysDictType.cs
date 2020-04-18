@@ -37,6 +37,10 @@ namespace Noob.D2CMSApi.Entities
         /// </summary>
         public virtual string DictType { get; set; }
         /// <summary>
+        /// 字典值类型
+        /// </summary>
+        public virtual byte DictValueType { get; set; }
+        /// <summary>
         /// 状态(1:正常,2:停用)
         /// </summary>
         public virtual byte Status { get; set; }
