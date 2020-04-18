@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Noob.D2CMSApi.Entities;
 using Noob.D2CMSApi.EntityFrameworkCore;
 using Noob.D2CMSApi.Models;
@@ -74,7 +75,8 @@ namespace Noob.D2CMSApi.Controllers
             {
                 return;
             }
-            var mapConfig = new MapperConfiguration(cfg => {
+            var mapConfig = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<string, int?>().ConvertUsing(new NullableIntUtcTimeTypeConverter());
                 cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
                 cfg.CreateMap<DictTypeModel, SysDictType>();
@@ -98,7 +100,8 @@ namespace Noob.D2CMSApi.Controllers
             {
                 allDataList = _dbContext.SysDictType.ToList();
             }
-            var mapConfig = new MapperConfiguration(cfg => {
+            var mapConfig = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
                 cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
                 cfg.CreateMap<SysDictType, DictTypeModel>();
@@ -113,7 +116,7 @@ namespace Noob.D2CMSApi.Controllers
         /// <param name="dynamicModel">The user model.</param>
         /// <returns>IActionResult.</returns>
         [HttpPost("/api/dict/update")]
-        public IActionResult Update(dynamic dynamicModel)
+        public IActionResult Get(dynamic dynamicModel)
         {
             var response = new ResponseResult<DictTypeModel>();
             if (dynamicModel == null || dynamicModel.id < 1)
@@ -124,19 +127,98 @@ namespace Noob.D2CMSApi.Controllers
             SysDictType model = null;
             using (_dbContext)
             {
-                model = _dbContext.SysDictType.SingleOrDefault(a=>a.Id== id);
+                model = _dbContext.SysDictType.SingleOrDefault(a => a.Id == id);
             }
             if (model == null)
             {
                 return Ok(response.Error(ResponseCode.ERROR_CODE__DB__NO_ROW, "该数据不存在"));
             }
-            var mapConfig = new MapperConfiguration(cfg => {
+            var mapConfig = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
                 cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
                 cfg.CreateMap<SysDictType, DictTypeModel>();
             });
             var data = model.MapTo<SysDictType, DictTypeModel>(mapConfig);
             return Ok(response.Success("数据获取成功", data));
+        }
+        /// <summary>
+        /// Updates the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPut("/api/dict/update")]
+        public IActionResult Update(DictTypeModel model)
+        {
+            var response = new ResponseResult<bool>();
+            using (_dbContext)
+            {
+                if (_dbContext.SysDictType.Count(a => a.DictName == model.DictName && a.Id != model.Id) > 0)
+                {
+                    return Ok(response.Error(ResponseCode.ERROR, "该名称已存在"));
+                }
+                if (_dbContext.SysDictType.Count(a => a.DictType == model.DictType && a.Id != model.Id) > 0)
+                {
+                    return Ok(response.Error(ResponseCode.ERROR, "该标识已存在"));
+                }
+                var mapConfig = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<string, int?>().ConvertUsing(new NullableIntUtcTimeTypeConverter());
+                    cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
+                    cfg.CreateMap<DictTypeModel, SysDictType>();
+                });
+                //mapConfig.AssertConfigurationIsValid();
+                var entity = model.MapTo<DictTypeModel, SysDictType>(mapConfig);
+                _dbContext.Entry(entity).State = EntityState.Modified;
+                int result = _dbContext.SaveChanges();
+                if (result > 0)
+                {
+                    return Ok(response.Success("数据更新成功",true));
+                }
+                else {
+                    return Ok(response.Error(ResponseCode.ERROR, "数据更新失败"));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the specified model.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <returns>IActionResult.</returns>
+        [HttpPut("/api/dict/create")]
+        public IActionResult Create(DictTypeModel model)
+        {
+            var response = new ResponseResult<bool>();
+            using (_dbContext)
+            {
+                if (_dbContext.SysDictType.Count(a => a.DictName == model.DictName) > 0)
+                {
+                    return Ok(response.Error(ResponseCode.ERROR, "该名称已存在"));
+                }
+                if (_dbContext.SysDictType.Count(a => a.DictType == model.DictType) > 0)
+                {
+                    return Ok(response.Error(ResponseCode.ERROR, "该标识已存在"));
+                }
+                var mapConfig = new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<string, int?>().ConvertUsing(new NullableIntUtcTimeTypeConverter());
+                    cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
+                    cfg.CreateMap<DictTypeModel, SysDictType>();
+                });
+                //mapConfig.AssertConfigurationIsValid();
+                var entity = model.MapTo<DictTypeModel, SysDictType>(mapConfig);
+                _dbContext.Add(entity);
+                int result = _dbContext.SaveChanges();
+                if (result > 0)
+                {
+                    return Ok(response.Success("数据提交成功", true));
+                }
+                else
+                {
+                    return Ok(response.Error(ResponseCode.ERROR, "数据提交失败"));
+                }
+            }
         }
     }
 }
