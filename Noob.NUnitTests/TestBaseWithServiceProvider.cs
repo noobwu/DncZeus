@@ -26,7 +26,7 @@ namespace Noob
         /// Gets the service provider.
         /// </summary>
         /// <value>The service provider.</value>
-        protected abstract IServiceProvider ServiceProvider { get; }
+        protected IServiceProvider ServiceProvider { get; set; }
 
         /// <summary>
         /// Gets the service.
