@@ -86,7 +86,8 @@ namespace Noob.D2CMSApi.Controllers
             {
                 return;
             }
-            var mapConfig = new MapperConfiguration(cfg => {
+            var mapConfig = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<string, int?>().ConvertUsing(new NullableIntUtcTimeTypeConverter());
                 cfg.CreateMap<string, DateTime?>().ConvertUsing(new NullableUtcTimeTypeConverter());
                 cfg.CreateMap<DictDataModel, SysDictData>();
@@ -106,14 +107,10 @@ namespace Noob.D2CMSApi.Controllers
         {
             var response = new ResponseResult<PaggingResult<DictDataModel>>();
             List<SysDictData> allDataList = null;
-            var predicate= PredicateBuilder.True<SysDictData>();
-            if (!string.IsNullOrEmpty(model.DictType))
-            {
-                predicate = predicate.And(a => a.DictType == model.DictType);
-            }
+            var predicate = PredicateBuilder.True<SysDictData>();
             if (model.DictTypeId > 0)
             {
-                predicate = predicate.And(a=>a.DictTypeId==model.DictTypeId);
+                predicate = predicate.And(a => a.DictTypeId == model.DictTypeId);
             }
             if (!string.IsNullOrEmpty(model.DictLabel))
             {
@@ -123,17 +120,23 @@ namespace Noob.D2CMSApi.Controllers
             {
                 predicate = predicate.And(a => a.DictValue == model.DictValue);
             }
-            if (model.Status>0)
+            if (model.Status > 0)
             {
                 predicate = predicate.And(a => a.Status == model.Status);
             }
             using (_dbContext)
             {
                 allDataList = (from dict in _dbContext.SysDictData
-                         join dictType in _dbContext.SysDictType on dict.DictTypeId equals dictType.Id
-                          select new SysDictData(dict, dictType.DictValueType)).Where(predicate).ToList();
+                               join dictType in _dbContext.SysDictType on dict.DictTypeId equals dictType.Id
+                               where (model.DictTypeId > 0 ? dict.DictTypeId == model.DictTypeId : true)
+                               && (string.IsNullOrWhiteSpace(model.DictLabel) ? true : dict.DictLabel == model.DictLabel)
+                               && (string.IsNullOrWhiteSpace(model.DictValue) ? true : dict.DictValue == model.DictValue)
+                               &&(model.Status > 0 ? dict.Status == model.Status : true)
+                               && (string.IsNullOrWhiteSpace(model.DictType) ? true : dictType.DictType == model.DictType)
+                               select new SysDictData(dict, dictType.DictType, dictType.DictValueType)).ToList();
             }
-            var mapConfig = new MapperConfiguration(cfg => {
+            var mapConfig = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
                 cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
                 cfg.CreateMap<SysDictData, DictDataModel>();
@@ -161,13 +164,14 @@ namespace Noob.D2CMSApi.Controllers
                 (from dict in _dbContext.SysDictData
                  join dictType in _dbContext.SysDictType on dict.DictTypeId equals dictType.Id
                  where dict.Id == id
-                 select new SysDictData(dict, dictType.DictValueType)).FirstOrDefault();
+                 select new SysDictData(dict, dictType.DictType, dictType.DictValueType)).FirstOrDefault();
             }
             if (model == null)
             {
                 return Ok(response.Error(ResponseCode.ERROR_CODE__DB__NO_ROW, "该数据不存在"));
             }
-            var mapConfig = new MapperConfiguration(cfg => {
+            var mapConfig = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<int?, string>().ConvertUsing(new UtcStringTimeTypeConverter());
                 cfg.CreateMap<DateTime?, string>().ConvertUsing(new UtcDateTimeTypeConverter());
                 cfg.CreateMap<SysDictData, DictDataModel>();

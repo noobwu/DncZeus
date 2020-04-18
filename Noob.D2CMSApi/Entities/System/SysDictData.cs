@@ -28,7 +28,7 @@ namespace Noob.D2CMSApi.Entities
         /// <summary>
         /// 字典数据
         /// </summary>
-        public SysDictData(SysDictData dict,byte dictValueType) : this(dict.Id) {
+        public SysDictData(SysDictData dict, string dictType, byte dictValueType) : this(dict.Id) {
             DictTypeId = dict.DictTypeId;
             DictSort = dict.DictSort;
             DictLabel = dict.DictLabel;
@@ -46,7 +46,9 @@ namespace Noob.D2CMSApi.Entities
             UpdatedAt = dict.UpdatedAt;
             Remark = dict.Remark;
 
+            DictType = dictType;
             DictValueType = dictValueType;
+
         }
         /// <summary>
         /// 字典数据
@@ -74,10 +76,6 @@ namespace Noob.D2CMSApi.Entities
         /// 字典键值(数字)
         /// </summary>
         public virtual int DictNumber { get; set; }
-        /// <summary>
-        /// 字典类型
-        /// </summary>
-        public virtual string DictType { get; set; }
 
         /// <summary>
         /// 字典值类型
@@ -117,9 +115,15 @@ namespace Noob.D2CMSApi.Entities
         public virtual string Remark { get; set; }
 
         /// <summary>
+        /// 字典类型
+        /// </summary>
+        public virtual string DictType { get; set; }
+        /// <summary>
         /// 字典值类型
         /// </summary>
         public virtual byte DictValueType { get; set; }
+
+
         /// <summary>
         /// 获取主键的属性名称
         /// </summary>
