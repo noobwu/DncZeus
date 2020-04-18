@@ -189,7 +189,7 @@ namespace Noob.D2CMSApi.Controllers
                 {
                     return Ok(response.Error(ResponseCode.USER_NOT_EXIST, "用户不存在"));
                 }
-                if (user.Password?.ToLower() != (model.Password + user.Salt).ToMD5Hash())
+                if (user.Password?.ToLower() != (model.Password + user.Salt).ToMd5())
                 {
                     return Ok(response.Error(ResponseCode.USER_NOT_EXIST, "密码错误"));
                 }
