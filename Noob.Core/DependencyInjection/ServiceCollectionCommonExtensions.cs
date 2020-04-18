@@ -85,8 +85,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceProvider BuildServiceProviderFromFactory([NotNull] this IServiceCollection services)
 	    {
 		    Check.NotNull(services, nameof(services));
-
-		    foreach (var service in services)
+            //遍历已经注册的类型，找到之前注入的工厂类。
+            foreach (var service in services)
 		    {
 			    var factoryInterface = service.ImplementationInstance?.GetType()
 				    .GetTypeInfo()

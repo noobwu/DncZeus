@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using NUnit.Framework;
 using Noob.Modularity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 namespace Noob.Data
 {
     /// <summary>
@@ -92,6 +94,7 @@ namespace Noob.Data
                 options.ConnectionStrings.Default = DefaultConnString;
                 options.ConnectionStrings[Database1Name] = Database1ConnString;
             });
+            context.Services.TryAddTransient(typeof(IConnectionStringResolver), typeof(DefaultConnectionStringResolver));
         }
     }
 }

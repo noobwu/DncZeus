@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Noob.DependencyInjection;
 using Noob.Modularity;
 namespace Noob
 {
@@ -35,10 +36,15 @@ namespace Noob
         protected IntegratedTest()
         {
             var services = CreateServiceCollection();
+            services.TryAddObjectAccessor<IServiceProvider>();
 
             ServiceConfigurationContext = new ServiceConfigurationContext(services);
 
+            ConfigureServices(ServiceConfigurationContext);
+
             ServiceProvider = CreateServiceProvider(services);
+
+            ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
         }
         /// <summary>
         /// Configures the services.
