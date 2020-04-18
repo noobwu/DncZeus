@@ -167,7 +167,7 @@ namespace Noob.Extensions
             {
                 return (int)(source?.UtcTimeToUnixTime());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return 0;
             }
@@ -195,7 +195,7 @@ namespace Noob.Extensions
             {
                 return (int)(source?.UtcTimeToUnixTime());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
