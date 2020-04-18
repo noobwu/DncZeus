@@ -112,7 +112,6 @@ namespace Noob.D2CMSApi.Controllers
         /// </summary>
         /// <param name="dynamicModel">The user model.</param>
         /// <returns>IActionResult.</returns>
-        [HttpPost]
         [HttpPost("/api/dict/update")]
         public IActionResult Update(dynamic dynamicModel)
         {
