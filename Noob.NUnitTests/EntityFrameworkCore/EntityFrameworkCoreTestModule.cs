@@ -29,6 +29,7 @@ using Noob.TestApp.Testing;
 using Noob.Uow;
 using Noob.Uow.EntityFrameworkCore;
 using Noob.Modularity.PlugIns;
+using Noob.Threading;
 namespace Noob.EntityFrameworkCore
 {
     /// <summary>
@@ -98,17 +99,16 @@ namespace Noob.EntityFrameworkCore
             context.Services.TryAddTransient<IPersonRepository, PersonRepository>();
             context.Services.TryAddTransient<IEntityWithIntPkRepository, EntityWithIntPkRepository>();
             context.Services.TryAddTransient<TestDataBuilder>();
-
-            context.Services.TryAddTransient<TestDataBuilder>();
             #region Interceptor
             context.Services.AddAssembly(typeof(DefaultServiceScopeFactory).Assembly);
+            context.Services.AddAssembly(typeof(TestDataBuilder).Assembly);
             context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
             context.Services.AddTransient(typeof(AsyncDeterminationInterceptor<>));
             #endregion
 
         }
 
-  
+
         /// <summary>
         /// Creates the database and get connection.
         /// </summary>
@@ -127,6 +127,22 @@ namespace Noob.EntityFrameworkCore
             }
             return connection;
         }
-
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            SeedTestData(context);
+        }
+        /// <summary>
+        /// Seeds the test data.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<TestDataBuilder>()
+                    .BuildAsync());
+            }
+        }
     }
 }
