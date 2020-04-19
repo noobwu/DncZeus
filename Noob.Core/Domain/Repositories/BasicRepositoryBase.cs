@@ -18,18 +18,28 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Noob.DependencyInjection;
+using Noob.Uow;
 namespace Noob.Domain.Repositories
 {
     /// <summary>
     /// Class BasicRepositoryBase.
     /// Implements the <see cref="Noob.Domain.Repositories.IBasicRepository{TEntity}" />
+    /// Implements the <see cref="IServiceProviderAccessor" />
+    /// Implements the <see cref="IUnitOfWorkEnabled" />
+    /// Implements the <see cref="ITransientDependency" />
     /// </summary>
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Noob.Domain.Repositories.IBasicRepository{TEntity}" />
+    /// <seealso cref="IServiceProviderAccessor" />
+    /// <seealso cref="IUnitOfWorkEnabled" />
+    /// <seealso cref="ITransientDependency" />
     public abstract class BasicRepositoryBase<TEntity> :
-          IBasicRepository<TEntity>
-          where TEntity : class, IEntity
+        IBasicRepository<TEntity>,
+        IServiceProviderAccessor,
+        IUnitOfWorkEnabled,
+        ITransientDependency
+        where TEntity : class, IEntity
     {
         /// <summary>
         /// Gets the service provider.

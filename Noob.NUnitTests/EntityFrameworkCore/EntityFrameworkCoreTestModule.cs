@@ -54,6 +54,15 @@ namespace Noob.EntityFrameworkCore
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
 
+            context.Services.AddEfCoreDbContext<TestAppDbContext>(options =>
+            {
+                options.AddDefaultRepositories(true);
+                //options.ReplaceDbContext<IThirdDbContext>();
+                options.Entity<Person>(opt =>
+                {
+                    opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
+                });
+            });
             context.Services.AddMemoryCache();
             context.Services.TryAddTransient(DbContextOptionsFactory.Create<TestAppDbContext>);
 
