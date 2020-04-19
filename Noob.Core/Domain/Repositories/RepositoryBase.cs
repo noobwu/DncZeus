@@ -20,7 +20,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using Noob.Uow;
 namespace Noob.Domain.Repositories
 {
     /// <summary>
@@ -31,10 +31,10 @@ namespace Noob.Domain.Repositories
     /// <typeparam name="TEntity">The type of the t entity.</typeparam>
     /// <seealso cref="Noob.Domain.Repositories.BasicRepositoryBase{TEntity}" />
     /// <seealso cref="Noob.Domain.Repositories.IRepository{TEntity}" />
-    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>
+    public abstract class RepositoryBase<TEntity> : BasicRepositoryBase<TEntity>, IRepository<TEntity>, IUnitOfWorkManagerAccessor
        where TEntity : class, IEntity
     {
-
+        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
         /// <summary>
         /// Gets the type of the element(s) that are returned when the expression tree associated with this instance of <see cref="T:System.Linq.IQueryable" /> is executed.
         /// </summary>
