@@ -1,50 +1,62 @@
 ﻿// ***********************************************************************
 // Assembly         : Noob.NUnitTests
 // Author           : Administrator
-// Created          : 2020-04-18
+// Created          : 2019-10-19
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-18
+// Last Modified On : 2019-10-19
 // ***********************************************************************
 // <copyright file="IntegratedTest.cs" company="Noob.NUnitTests">
-//     Copyright (c) . All rights reserved.
+//     Copyright (c) Noob.com. All rights reserved.
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Noob.DependencyInjection;
 using Noob.Modularity;
+
+/// <summary>
+/// The TestApp namespace.
+/// </summary>
 namespace Noob
 {
+
     /// <summary>
     /// Class IntegratedTest.
-    /// Implements the <see cref="Noob.TestBaseWithServiceProvider" />
+    /// Implements the <see cref="Noob.TestApp.TestBaseWithServiceProvider" />
     /// Implements the <see cref="System.IDisposable" />
     /// </summary>
     /// <typeparam name="TStartupModule">The type of the t startup module.</typeparam>
-    /// <seealso cref="Noob.TestBaseWithServiceProvider" />
-    /// <seealso cref="System.IDisposable" />
+    /// <seealso cref="Noob.TestApp.TestBaseWithServiceProvider" />
+    /// <seealso cref="System.IDisposable" />isposable" /&gt;
+    /// <seealso cref="where" />
     public abstract class IntegratedTest<TStartupModule> : TestBaseWithServiceProvider, IDisposable
-       where TStartupModule : class
+        where TStartupModule : class
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="IntegratedTest{TStartupModule}" /> class.
+        /// Initializes a new instance of the <see cref="IntegratedTest" /> class.
         /// </summary>
         protected IntegratedTest()
         {
             var services = CreateServiceCollection();
-            services.TryAddObjectAccessor<IServiceProvider>();
 
+            BeforeAddApplication(services);
+
+            services.TryAddObjectAccessor<IServiceProvider>();
             ServiceConfigurationContext = new ServiceConfigurationContext(services);
+
+            AfterAddApplication(services);
+
+            var options = new ApplicationCreationOptions(ServiceConfigurationContext.Services);
+            SetApplicationCreationOptions(options);
 
             ConfigureServices(ServiceConfigurationContext);
 
             ServiceProvider = CreateServiceProvider(services);
-
             ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
+
+            OnApplicationInitialization();
         }
         /// <summary>
         /// Configures the services.
@@ -62,6 +74,38 @@ namespace Noob
         {
             return new ServiceCollection();
         }
+
+        /// <summary>
+        /// Called when [application initialization].
+        /// </summary>
+        public virtual void OnApplicationInitialization()
+        {
+
+        }
+        /// <summary>
+        /// Befores the add application.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        protected virtual void BeforeAddApplication(IServiceCollection services)
+        {
+
+        }
+        /// <summary>
+        /// Sets the abp application creation options.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        protected virtual void SetApplicationCreationOptions(ApplicationCreationOptions options)
+        {
+
+        }
+        /// <summary>
+        /// Afters the add application.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        protected virtual void AfterAddApplication(IServiceCollection services)
+        {
+
+        }
         /// <summary>
         /// Creates the service provider.
         /// </summary>
@@ -72,12 +116,13 @@ namespace Noob
             // 接管自带的 IoC Container。
             return services.BuildServiceProviderFromFactory();
         }
+
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public virtual void Dispose()
         {
-  
+
         }
 
         #region Module
@@ -116,5 +161,6 @@ namespace Noob
             ServiceConfigurationContext.Services.Configure(configureOptions);
         }
         #endregion        
+
     }
 }

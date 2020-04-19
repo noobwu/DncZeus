@@ -24,11 +24,6 @@ namespace Noob.TestApp.Domain
     /// <seealso cref="Noob.Domain.Entities.AggregateRoot{System.Guid}" />
     public class Person : AggregateRoot<Guid>
     {
-        /// <summary>
-        /// Gets or sets the tenant identifier.
-        /// </summary>
-        /// <value>The tenant identifier.</value>
-        public virtual Guid? TenantId { get; set; }
 
         /// <summary>
         /// Gets or sets the city identifier.
@@ -82,12 +77,11 @@ namespace Noob.TestApp.Domain
         /// <param name="age">The age.</param>
         /// <param name="tenantId">The tenant identifier.</param>
         /// <param name="cityId">The city identifier.</param>
-        public Person(Guid id, string name, int age, Guid? tenantId = null, Guid? cityId = null)
+        public Person(Guid id, string name, int age, Guid? cityId = null)
             : base(id)
         {
             Name = name;
             Age = age;
-            TenantId = tenantId;
             CityId = cityId;
 
             Phones = new Collection<Phone>();

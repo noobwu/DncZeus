@@ -13,9 +13,12 @@
 // ***********************************************************************
 using Noob.Domain.Repositories;
 using Noob.TestApp.Domain;
+using NUnit.Framework;
+using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Noob.TestApp.Testing
 {
@@ -44,6 +47,103 @@ namespace Noob.TestApp.Testing
         {
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
             CityRepository = GetRequiredService<ICityRepository>();
+        }
+
+        /// <summary>
+        /// get as an asynchronous operation.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public async Task GetAsync()
+        {
+            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            person.Name.ShouldBe("Douglas");
+            person.Phones.Count.ShouldBe(2);
+        }
+
+        /// <summary>
+        /// Defines the test method GetAsync_With_Predicate.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public async Task GetAsync_With_Predicate()
+        {
+            var person = await PersonRepository.GetAsync(p => p.Name == "Douglas");
+            person.Name.ShouldBe("Douglas");
+            person.Phones.Count.ShouldBe(2);
+        }
+
+        /// <summary>
+        /// Defines the test method FindAsync_Should_Return_Null_For_Not_Found_Entity.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity()
+        {
+            var person = await PersonRepository.FindAsync(Guid.NewGuid());
+            person.ShouldBeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method FindAsync_Should_Return_Null_For_Not_Found_Entity_With_Predicate.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public async Task FindAsync_Should_Return_Null_For_Not_Found_Entity_With_Predicate()
+        {
+            var randomName = Guid.NewGuid().ToString();
+            var person = await PersonRepository.FindAsync(p => p.Name == randomName);
+            person.ShouldBeNull();
+        }
+
+        /// <summary>
+        /// delete as an asynchronous operation.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public async Task DeleteAsync()
+        {
+            await PersonRepository.DeleteAsync(TestDataBuilder.UserDouglasId);
+
+            (await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId)).ShouldBeNull();
+        }
+
+        /// <summary>
+        /// Defines the test method Should_Access_To_Other_Collections_In_Same_Context_In_A_Custom_Method.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public async Task Should_Access_To_Other_Collections_In_Same_Context_In_A_Custom_Method()
+        {
+            var people = await CityRepository.GetPeopleInTheCityAsync("London");
+            people.Count.ShouldBeGreaterThan(0);
+        }
+
+        /// <summary>
+        /// Defines the test method Custom_Repository_Method.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public async Task Custom_Repository_Method()
+        {
+            var city = await CityRepository.FindByNameAsync("Istanbul");
+            city.ShouldNotBeNull();
+            city.Name.ShouldBe("Istanbul");
+        }
+
+        /// <summary>
+        /// insert as an asynchronous operation.
+        /// </summary>
+        /// <returns>Task.</returns>
+        [TestCase]
+        public virtual async Task InsertAsync()
+        {
+            var personId = Guid.NewGuid();
+
+            await PersonRepository.InsertAsync(new Person(personId, "Adam", 42));
+
+            var person = await PersonRepository.FindAsync(personId);
+            person.ShouldNotBeNull();
         }
     }
 }
