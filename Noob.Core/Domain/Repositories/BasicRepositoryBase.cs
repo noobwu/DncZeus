@@ -32,6 +32,11 @@ namespace Noob.Domain.Repositories
           where TEntity : class, IEntity
     {
         /// <summary>
+        /// Gets the service provider.
+        /// </summary>
+        /// <value>The service provider.</value>
+        public IServiceProvider ServiceProvider { get; set; }
+        /// <summary>
         /// Gets or sets the cancellation token provider.
         /// </summary>
         /// <value>The cancellation token provider.</value>

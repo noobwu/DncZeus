@@ -12,8 +12,13 @@
 // <summary></summary>
 // ***********************************************************************
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Noob.Domain.Entities;
+using Noob.Guids;
+using Noob.Reflection;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -28,6 +33,11 @@ namespace Noob.EntityFrameworkCore
     public class EfCoreDbContext : DbContext
     {
         /// <summary>
+        /// Gets or sets the unique identifier generator.
+        /// </summary>
+        /// <value>The unique identifier generator.</value>
+        public IGuidGenerator GuidGenerator { get; set; }
+        /// <summary>
         /// The configuration assemblies
         /// </summary>
         Assembly[] configAssemblies;
@@ -39,6 +49,7 @@ namespace Noob.EntityFrameworkCore
         /// <param name="configAssemblies">The configuration assemblies.</param>
         public EfCoreDbContext(DbContextOptions options, params Assembly[] configAssemblies) : base(options)
         {
+            GuidGenerator = SimpleGuidGenerator.Instance;
             this.configAssemblies = configAssemblies;
         }
         /// <summary>
@@ -64,5 +75,48 @@ namespace Noob.EntityFrameworkCore
             base.OnModelCreating(modelBuilder);
         }
 
+
+        /// <summary>
+        /// Checks the and set identifier.
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        protected virtual void CheckAndSetId(EntityEntry entry)
+        {
+            if (entry.Entity is IEntity<Guid> entityWithGuidId)
+            {
+                TrySetGuidId(entry, entityWithGuidId);
+            }
+        }
+        /// <summary>
+        /// Tries the set unique identifier identifier.
+        /// </summary>
+        /// <param name="entry">The entry.</param>
+        /// <param name="entity">The entity.</param>
+        protected virtual void TrySetGuidId(EntityEntry entry, IEntity<Guid> entity)
+        {
+            if (entity.Id != default)
+            {
+                return;
+            }
+
+            var idProperty = entry.Property("Id").Metadata.PropertyInfo;
+
+            //Check for DatabaseGeneratedAttribute
+            var dbGeneratedAttr = ReflectionHelper
+                .GetSingleAttributeOrDefault<DatabaseGeneratedAttribute>(
+                    idProperty
+                );
+
+            if (dbGeneratedAttr != null && dbGeneratedAttr.DatabaseGeneratedOption != DatabaseGeneratedOption.None)
+            {
+                return;
+            }
+
+            EntityHelper.TrySetId(
+                entity,
+                () => GuidGenerator.Create(),
+                true
+            );
+        }
     }
 }
