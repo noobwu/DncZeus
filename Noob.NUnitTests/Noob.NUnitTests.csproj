@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>Noob</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,6 +22,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Noob.Core\Noob.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="EntityFrameworkCore\Repositories\" />
   </ItemGroup>
 
 </Project>
