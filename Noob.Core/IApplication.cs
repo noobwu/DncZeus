@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
+using Noob.Modularity;
 namespace Noob
 {
     /// <summary>
@@ -22,7 +23,7 @@ namespace Noob
     /// Implements the <see cref="System.IDisposable" />
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public interface IApplication :  IDisposable
+    public interface IApplication : IModuleContainer, IDisposable
     {
         /// <summary>
         /// Type of the startup (entrance) module of the application.

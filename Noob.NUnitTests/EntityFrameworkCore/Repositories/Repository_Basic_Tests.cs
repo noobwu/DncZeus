@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Noob.Castle.DynamicProxy;
 using Noob.Data;
 using Noob.DependencyInjection;
 using Noob.EntityFrameworkCore.DependencyInjection;
@@ -88,6 +89,21 @@ namespace Noob.EntityFrameworkCore.Repositories
             context.Services.TryAddTransient<IEntityWithIntPkRepository, EntityWithIntPkRepository>();
             context.Services.TryAddTransient<TestDataBuilder>();
 
+            #region Interceptor
+            context.Services.AddAssembly(typeof(DefaultServiceScopeFactory).Assembly);
+            context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
+            context.Services.AddTransient(typeof(AsyncDeterminationInterceptor<>));
+            #endregion
+
+        }
+        /// <summary>
+        /// Sets the abp application creation options.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        protected override void SetApplicationCreationOptions(ApplicationCreationOptions options)
+        {
+            base.SetApplicationCreationOptions(options);
+            options.UseAutofac();
         }
         /// <summary>
         /// Creates the database and get connection.

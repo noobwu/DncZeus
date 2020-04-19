@@ -109,7 +109,7 @@ namespace Autofac.Builder
                 Type implementationType) 
             where TActivatorData : ReflectionActivatorData
         {
-            //Enable Property Injection only for types in an assembly containing an AbpModule
+            //Enable Property Injection only for types in an assembly containing an Module
             if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly))
             {
                 registrationBuilder = registrationBuilder.PropertiesAutowired();
