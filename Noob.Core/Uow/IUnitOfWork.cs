@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using JetBrains.Annotations;
 namespace Noob.Uow
 {
     /// <summary>
@@ -41,6 +42,70 @@ namespace Noob.Uow
         /// <value>The items.</value>
         Dictionary<string, object> Items { get; }
 
+        //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted
+        /// <summary>
+        /// Occurs when [failed].
+        /// </summary>
+        event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+
+        /// <summary>
+        /// Occurs when [disposed].
+        /// </summary>
+        event EventHandler<UnitOfWorkEventArgs> Disposed;
+
+        /// <summary>
+        /// Gets the options.
+        /// </summary>
+        /// <value>The options.</value>
+        IUnitOfWorkOptions Options { get; }
+
+        /// <summary>
+        /// Gets the outer.
+        /// </summary>
+        /// <value>The outer.</value>
+        IUnitOfWork Outer { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is reserved.
+        /// </summary>
+        /// <value><c>true</c> if this instance is reserved; otherwise, <c>false</c>.</value>
+        bool IsReserved { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is disposed.
+        /// </summary>
+        /// <value><c>true</c> if this instance is disposed; otherwise, <c>false</c>.</value>
+        bool IsDisposed { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is completed.
+        /// </summary>
+        /// <value><c>true</c> if this instance is completed; otherwise, <c>false</c>.</value>
+        bool IsCompleted { get; }
+
+        /// <summary>
+        /// Gets the name of the reservation.
+        /// </summary>
+        /// <value>The name of the reservation.</value>
+        string ReservationName { get; }
+
+        /// <summary>
+        /// Sets the outer.
+        /// </summary>
+        /// <param name="outer">The outer.</param>
+        void SetOuter([CanBeNull] IUnitOfWork outer);
+
+        /// <summary>
+        /// Initializes the specified options.
+        /// </summary>
+        /// <param name="options">The options.</param>
+        void Initialize([NotNull] UnitOfWorkOptions options);
+
+        /// <summary>
+        /// Reserves the specified reservation name.
+        /// </summary>
+        /// <param name="reservationName">Name of the reservation.</param>
+        void Reserve([NotNull] string reservationName);
 
         /// <summary>
         /// Saves the changes asynchronous.

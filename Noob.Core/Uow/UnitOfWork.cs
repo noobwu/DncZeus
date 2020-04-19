@@ -11,15 +11,14 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
-using JetBrains.Annotations;
-using Microsoft.Extensions.Options;
-using Noob.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Microsoft.Extensions.Options;
+using Noob.DependencyInjection;
 
 namespace Noob.Uow
 {
@@ -37,11 +36,24 @@ namespace Noob.Uow
         /// </summary>
         /// <value>The identifier.</value>
         public Guid Id { get; } = Guid.NewGuid();
+
         /// <summary>
         /// Gets the options.
         /// </summary>
         /// <value>The options.</value>
         public IUnitOfWorkOptions Options { get; private set; }
+
+        /// <summary>
+        /// Gets the outer.
+        /// </summary>
+        /// <value>The outer.</value>
+        public IUnitOfWork Outer { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is reserved.
+        /// </summary>
+        /// <value><c>true</c> if this instance is reserved; otherwise, <c>false</c>.</value>
+        public bool IsReserved { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this instance is disposed.
@@ -54,21 +66,41 @@ namespace Noob.Uow
         /// </summary>
         /// <value><c>true</c> if this instance is completed; otherwise, <c>false</c>.</value>
         public bool IsCompleted { get; private set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is reserved.
-        /// </summary>
-        /// <value><c>true</c> if this instance is reserved; otherwise, <c>false</c>.</value>
-        public bool IsReserved { get; set; }
+
         /// <summary>
         /// Gets or sets the name of the reservation.
         /// </summary>
         /// <value>The name of the reservation.</value>
         public string ReservationName { get; set; }
+
+        /// <summary>
+        /// Gets the completed handlers.
+        /// </summary>
+        /// <value>The completed handlers.</value>
+        protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
+
+        /// <summary>
+        /// Occurs when [failed].
+        /// </summary>
+        public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+        /// <summary>
+        /// Occurs when [disposed].
+        /// </summary>
+        public event EventHandler<UnitOfWorkEventArgs> Disposed;
+
         /// <summary>
         /// Gets the service provider.
         /// </summary>
         /// <value>The service provider.</value>
         public IServiceProvider ServiceProvider { get; }
+
+        /// <summary>
+        /// Gets the items.
+        /// </summary>
+        /// <value>The items.</value>
+        [NotNull]
+        public Dictionary<string, object> Items { get; }
+
         /// <summary>
         /// The database apis
         /// </summary>
@@ -78,16 +110,10 @@ namespace Noob.Uow
         /// </summary>
         private readonly Dictionary<string, ITransactionApi> _transactionApis;
         /// <summary>
-        /// Gets the completed handlers.
+        /// The default options
         /// </summary>
-        /// <value>The completed handlers.</value>
-        protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
-        /// <summary>
-        /// Gets the items.
-        /// </summary>
-        /// <value>The items.</value>
-        [NotNull]
-        public Dictionary<string, object> Items { get; }
+        private readonly UnitOfWorkDefaultOptions _defaultOptions;
+
         /// <summary>
         /// The exception
         /// </summary>
@@ -100,23 +126,12 @@ namespace Noob.Uow
         /// The is rolledback
         /// </summary>
         private bool _isRolledback;
-        /// <summary>
-        /// Occurs when [failed].
-        /// </summary>
-        public event EventHandler<UnitOfWorkFailedEventArgs> Failed;
-        /// <summary>
-        /// Occurs when [disposed].
-        /// </summary>
-        public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
-        /// <summary>
-        /// The default options
-        /// </summary>
-        private readonly UnitOfWorkDefaultOptions _defaultOptions;
         /// <summary>
         /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="options">The options.</param>
         public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkDefaultOptions> options)
         {
             ServiceProvider = serviceProvider;
@@ -124,7 +139,7 @@ namespace Noob.Uow
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
             _transactionApis = new Dictionary<string, ITransactionApi>();
-  
+
             Items = new Dictionary<string, object>();
         }
 
@@ -157,6 +172,32 @@ namespace Noob.Uow
             ReservationName = reservationName;
             IsReserved = true;
         }
+
+        /// <summary>
+        /// Sets the outer.
+        /// </summary>
+        /// <param name="outer">The outer.</param>
+        public virtual void SetOuter(IUnitOfWork outer)
+        {
+            Outer = outer;
+        }
+
+        /// <summary>
+        /// save changes as an asynchronous operation.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task.</returns>
+        public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var databaseApi in GetAllActiveDatabaseApis())
+            {
+                if (databaseApi is ISupportsSavingChanges)
+                {
+                    await (databaseApi as ISupportsSavingChanges).SaveChangesAsync(cancellationToken);
+                }
+            }
+        }
+
         /// <summary>
         /// Gets all active database apis.
         /// </summary>
@@ -174,21 +215,7 @@ namespace Noob.Uow
         {
             return _transactionApis.Values.ToImmutableList();
         }
-        /// <summary>
-        /// save changes as an asynchronous operation.
-        /// </summary>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task.</returns>
-        public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                if (databaseApi is ISupportsSavingChanges)
-                {
-                    await (databaseApi as ISupportsSavingChanges).SaveChangesAsync(cancellationToken);
-                }
-            }
-        }
+
         /// <summary>
         /// complete as an asynchronous operation.
         /// </summary>
@@ -343,6 +370,7 @@ namespace Noob.Uow
                 await handler.Invoke();
             }
         }
+
         /// <summary>
         /// Called when [failed].
         /// </summary>
@@ -497,7 +525,5 @@ namespace Noob.Uow
         {
             return $"[UnitOfWork {Id}]";
         }
-
-
     }
 }
