@@ -36,7 +36,7 @@ namespace Noob.EntityFrameworkCore.Repositories
     /// Implements the <see cref="Noob.TestApp.Testing.Repository_Basic_Tests{Noob.EntityFrameworkCore.Repositories.Repository_Basic_Tests}" />
     /// </summary>
     /// <seealso cref="Noob.TestApp.Testing.Repository_Basic_Tests{Noob.EntityFrameworkCore.Repositories.Repository_Basic_Tests}" />
-    public class Repository_Basic_Tests : Repository_Basic_Tests<Repository_Basic_Tests>
+    public class Repository_Basic_Tests : Repository_Basic_Tests<EntityFrameworkCoreModule>
     {
         /// <summary>
         /// Configures the services.
@@ -44,7 +44,7 @@ namespace Noob.EntityFrameworkCore.Repositories
         /// <param name="context">The context.</param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-           
+
             context.Services.AddMemoryCache();
             context.Services.TryAddTransient(DbContextOptionsFactory.Create<TestAppDbContext>);
 
@@ -56,7 +56,8 @@ namespace Noob.EntityFrameworkCore.Repositories
                     dbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
-            context.Services.AddDbContext<TestAppDbContext>(options => {
+            context.Services.AddDbContext<TestAppDbContext>(options =>
+            {
                 options.UseSqlite(sqliteConnection);
             });
             //context.Services.AddEfCoreDbContext<TestAppDbContext>(options =>
@@ -75,7 +76,7 @@ namespace Noob.EntityFrameworkCore.Repositories
             });
             Configure<UnitOfWorkDefaultOptions>(options =>
             {
-               
+
             });
             context.Services.TryAddTransient<IConnectionStringResolver, DefaultConnectionStringResolver>();
             context.Services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -89,6 +90,7 @@ namespace Noob.EntityFrameworkCore.Repositories
             context.Services.TryAddTransient<IEntityWithIntPkRepository, EntityWithIntPkRepository>();
             context.Services.TryAddTransient<TestDataBuilder>();
 
+            context.Services.TryAddTransient<TestDataBuilder>();
             #region Interceptor
             context.Services.AddAssembly(typeof(DefaultServiceScopeFactory).Assembly);
             context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);

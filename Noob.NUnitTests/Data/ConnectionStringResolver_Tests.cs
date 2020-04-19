@@ -24,7 +24,7 @@ namespace Noob.Data
     /// Implements the <see cref="Noob.IntegratedTest{Noob.Data.ConnectionStringResolver_Tests}" />
     /// </summary>
     /// <seealso cref="Noob.IntegratedTest{Noob.Data.ConnectionStringResolver_Tests}" />
-    public class ConnectionStringResolver_Tests : IntegratedTest<ConnectionStringResolver_Tests>
+    public class ConnectionStringResolver_Tests : IntegratedTest<DataModule>
     {
         /// <summary>
         /// The default connection string

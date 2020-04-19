@@ -33,7 +33,7 @@ namespace Noob.TestApp.Testing
     /// <typeparam name="TStartupModule">The type of the t startup module.</typeparam>
     /// <seealso cref="Noob.IntegratedTest{TStartupModule}" />
     public abstract class Repository_Basic_Tests<TStartupModule> : IntegratedTest<TStartupModule>
-          where TStartupModule : class
+          where TStartupModule : IModule
     {
         /// <summary>
         /// The person repository

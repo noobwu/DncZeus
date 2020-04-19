@@ -32,8 +32,13 @@ namespace Noob
     /// <seealso cref="System.IDisposable" />isposable" /&gt;
     /// <seealso cref="where" />
     public abstract class IntegratedTest<TStartupModule> : TestBaseWithServiceProvider, IDisposable
-        where TStartupModule : class
+        where TStartupModule : IModule
     {
+        /// <summary>
+        /// Gets the application.
+        /// </summary>
+        /// <value>The application.</value>
+        protected IApplication Application { get; }
         /// <summary>
         /// Initializes a new instance of the <see cref="IntegratedTest" /> class.
         /// </summary>
@@ -45,6 +50,9 @@ namespace Noob
 
             services.TryAddObjectAccessor<IServiceProvider>();
             ServiceConfigurationContext = new ServiceConfigurationContext(services);
+
+            var application = services.AddApplication<TStartupModule>(SetApplicationCreationOptions);
+            Application = application;
 
             AfterAddApplication(services);
 

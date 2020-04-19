@@ -45,7 +45,7 @@ namespace Noob.Modularity.PlugIns
                 }
                 catch (Exception ex)
                 {
-                    throw new AbpException("Could not get module types from assembly: " + assembly.FullName, ex);
+                    throw new Exception("Could not get module types from assembly: " + assembly.FullName, ex);
                 }
             }
 
