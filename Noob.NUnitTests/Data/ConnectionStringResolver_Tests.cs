@@ -16,7 +16,7 @@ using Shouldly;
 using NUnit.Framework;
 using Noob.Modularity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-
+using Noob.Testing;
 namespace Noob.Data
 {
     /// <summary>
@@ -24,7 +24,7 @@ namespace Noob.Data
     /// Implements the <see cref="Noob.IntegratedTest{Noob.Data.ConnectionStringResolver_Tests}" />
     /// </summary>
     /// <seealso cref="Noob.IntegratedTest{Noob.Data.ConnectionStringResolver_Tests}" />
-    public class ConnectionStringResolver_Tests : IntegratedTest<DataModule>
+    public class ConnectionStringResolver_Tests : IntegratedTest<ConnectionStringResolver_Tests.TestModule>
     {
         /// <summary>
         /// The default connection string
@@ -83,18 +83,23 @@ namespace Noob.Data
             _connectionStringResolver.Resolve(Database2Name).ShouldBe(DefaultConnString);
         }
 
-        /// <summary>
-        /// Configures the services.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public class TestModule : Module
         {
-            Configure<DbConnectionOptions>(options =>
+            /// <summary>
+            /// Configures the services.
+            /// </summary>
+            /// <param name="context">The context.</param>
+            public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                options.ConnectionStrings.Default = DefaultConnString;
-                options.ConnectionStrings[Database1Name] = Database1ConnString;
-            });
-            context.Services.TryAddTransient(typeof(IConnectionStringResolver), typeof(DefaultConnectionStringResolver));
+                Configure<DbConnectionOptions>(options =>
+                {
+                    options.ConnectionStrings.Default = DefaultConnString;
+                    options.ConnectionStrings[Database1Name] = Database1ConnString;
+                });
+                context.Services.TryAddTransient(typeof(IConnectionStringResolver), typeof(DefaultConnectionStringResolver));
+            }
         }
+
     }
+
 }

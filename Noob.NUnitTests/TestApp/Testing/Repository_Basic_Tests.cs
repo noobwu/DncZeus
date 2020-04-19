@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Noob.Threading;
 using Noob.Modularity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Noob.Testing;
 
 namespace Noob.TestApp.Testing
 {
@@ -153,14 +154,6 @@ namespace Noob.TestApp.Testing
 
             var person = await PersonRepository.FindAsync(personId);
             person.ShouldNotBeNull();
-        }
-        /// <summary>
-        /// Called when [application initialization].
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            //SeedTestData(context);
         }
         /// <summary>
         /// Seeds the test data.

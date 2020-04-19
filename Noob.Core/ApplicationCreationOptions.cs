@@ -48,6 +48,7 @@ namespace Noob
         public ApplicationCreationOptions([NotNull] IServiceCollection services)
         {
             Services = Check.NotNull(services, nameof(services));
+            PlugInSources = new PlugInSourceList();
             Configuration = new ConfigurationBuilderOptions();
         }
     }

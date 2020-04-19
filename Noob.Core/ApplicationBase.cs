@@ -81,7 +81,7 @@ namespace Noob
             services.AddCoreServices();
             services.AddAppCoreServices(this, options);
 
-            //Modules = LoadModules(services, options);
+            Modules = LoadModules(services, options);
         }
 
         /// <summary>

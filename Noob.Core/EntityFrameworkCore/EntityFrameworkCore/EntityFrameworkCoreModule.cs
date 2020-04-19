@@ -34,17 +34,17 @@ namespace Noob.EntityFrameworkCore
         /// <param name="context">The context.</param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<EfCoreDbContextOptions>(options =>
-            {
-                options.PreConfigure(dbContextConfigurationContext =>
-                {
-                    dbContextConfigurationContext.DbContextOptions
-                        .ConfigureWarnings(warnings =>
-                        {
-                            warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
-                        });
-                });
-            });
+            //Configure<EfCoreDbContextOptions>(options =>
+            //{
+            //    options.PreConfigure(dbContextConfigurationContext =>
+            //    {
+            //        dbContextConfigurationContext.DbContextOptions
+            //            .ConfigureWarnings(warnings =>
+            //            {
+            //                warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
+            //            });
+            //    });
+            //});
 
             //context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
         }
