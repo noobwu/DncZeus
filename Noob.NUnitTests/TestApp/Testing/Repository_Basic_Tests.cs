@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using Microsoft.Extensions.DependencyInjection;
 using Noob.Domain.Repositories;
 using Noob.TestApp.Domain;
 using NUnit.Framework;
@@ -19,6 +20,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Noob.Threading;
+using Noob.Modularity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Noob.TestApp.Testing
 {
@@ -144,6 +148,36 @@ namespace Noob.TestApp.Testing
 
             var person = await PersonRepository.FindAsync(personId);
             person.ShouldNotBeNull();
+        }
+        /// <summary>
+        /// Configures the services.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            base.ConfigureServices(context);
+            context.Services.TryAddTransient<TestDataBuilder>();
+        }
+        /// <summary>
+        /// Called when [application initialization].
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            SeedTestData(context);
+        }
+        /// <summary>
+        /// Seeds the test data.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        private static void SeedTestData(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                AsyncHelper.RunSync(() => scope.ServiceProvider
+                    .GetRequiredService<TestDataBuilder>()
+                    .BuildAsync());
+            }
         }
     }
 }

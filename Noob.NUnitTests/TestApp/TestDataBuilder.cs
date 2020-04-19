@@ -15,6 +15,7 @@ using System;
 using System.Threading.Tasks;
 using Noob.DependencyInjection;
 using Noob.Domain.Repositories;
+using Noob.Modularity;
 using Noob.TestApp.Domain;
 
 namespace Noob.TestApp
@@ -132,7 +133,7 @@ namespace Noob.TestApp
             await _personRepository.InsertAsync(person1);
             await _personRepository.InsertAsync(person2);
         }
-
+       
         /// <summary>
         /// Adds the entities with PKS.
         /// </summary>

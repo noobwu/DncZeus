@@ -56,7 +56,8 @@ namespace Noob
             ServiceProvider = CreateServiceProvider(services);
             ServiceProvider.GetRequiredService<ObjectAccessor<IServiceProvider>>().Value = ServiceProvider;
 
-            OnApplicationInitialization();
+            ApplicationInitializationContext appInitContext = new ApplicationInitializationContext(ServiceProvider);
+            OnApplicationInitialization(appInitContext);
         }
         /// <summary>
         /// Configures the services.
@@ -78,7 +79,7 @@ namespace Noob
         /// <summary>
         /// Called when [application initialization].
         /// </summary>
-        public virtual void OnApplicationInitialization()
+        public virtual void OnApplicationInitialization(ApplicationInitializationContext context)
         {
 
         }
