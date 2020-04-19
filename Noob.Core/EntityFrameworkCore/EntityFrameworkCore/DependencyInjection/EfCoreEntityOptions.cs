@@ -42,7 +42,7 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
     /// <summary>
     /// Class EntityOptions.
     /// </summary>
-    public class EntityOptions
+    public class EfCoreEntityOptions
     {
         /// <summary>
         /// The options
@@ -50,9 +50,9 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
         private readonly IDictionary<Type, object> _options;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityOptions" /> class.
+        /// Initializes a new instance of the <see cref="EfCoreEntityOptions" /> class.
         /// </summary>
-        public EntityOptions()
+        public EfCoreEntityOptions()
         {
             _options = new Dictionary<Type, object>();
         }
