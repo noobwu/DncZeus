@@ -4,7 +4,7 @@
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-05
+// Last Modified On : 2020-04-19
 // ***********************************************************************
 // <copyright file="EfCoreDbContext.cs" company="Noob.Core">
 //     Copyright (c) . All rights reserved.
@@ -28,9 +28,13 @@ namespace Noob.EntityFrameworkCore
     /// <summary>
     /// Class EfCoreDbContext.
     /// Implements the <see cref="Microsoft.EntityFrameworkCore.DbContext" />
+    /// Implements the <see cref="Noob.EntityFrameworkCore.IEfCoreDbContext" />
     /// </summary>
+    /// <typeparam name="TDbContext">The type of the t database context.</typeparam>
+    /// <seealso cref="Noob.EntityFrameworkCore.IEfCoreDbContext" />
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
-    public class EfCoreDbContext : DbContext
+    public class EfCoreDbContext<TDbContext> : DbContext,IEfCoreDbContext
+          where TDbContext : DbContext
     {
         /// <summary>
         /// Gets or sets the unique identifier generator.

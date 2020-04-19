@@ -26,7 +26,7 @@ namespace Noob.Uow.EntityFrameworkCore
     /// <seealso cref="Noob.Uow.IDatabaseApi" />
     /// <seealso cref="Noob.Uow.ISupportsSavingChanges" />
     public class EfCoreDatabaseApi<TDbContext> : IDatabaseApi, ISupportsSavingChanges
-        where TDbContext : EfCoreDbContext
+        where TDbContext : IEfCoreDbContext
     {
         /// <summary>
         /// Gets the database context.

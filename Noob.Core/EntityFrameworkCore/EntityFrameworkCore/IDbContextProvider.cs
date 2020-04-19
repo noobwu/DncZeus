@@ -19,7 +19,7 @@ namespace Noob.EntityFrameworkCore
     /// </summary>
     /// <typeparam name="TDbContext">The type of the t database context.</typeparam>
     public interface IDbContextProvider<out TDbContext>
-        where TDbContext : EfCoreDbContext
+        where TDbContext : IEfCoreDbContext
     {
         /// <summary>
         /// Gets the database context.

@@ -36,7 +36,7 @@ namespace Noob.Domain.Repositories.EntityFrameworkCore
     /// <seealso cref="Noob.Domain.Repositories.RepositoryBase{TEntity}" />
     /// <seealso cref="Noob.Domain.Repositories.EntityFrameworkCore.IEfCoreRepository{TEntity}" />
     public class EfCoreRepository<TDbContext,TEntity> : RepositoryBase<TEntity>, IEfCoreRepository<TEntity>
-        where TDbContext :EfCoreDbContext
+        where TDbContext :IEfCoreDbContext
         where TEntity : class, IEntity
     {
         /// <summary>
@@ -314,7 +314,7 @@ namespace Noob.Domain.Repositories.EntityFrameworkCore
     public class EfCoreRepository<TDbContext, TEntity, TKey> : EfCoreRepository<TDbContext,TEntity>, 
         IEfCoreRepository<TEntity, TKey>,
         ISupportsExplicitLoading<TEntity, TKey>
-        where TDbContext : EfCoreDbContext
+        where TDbContext : IEfCoreDbContext
         where TEntity : class, IEntity<TKey>
     {
 

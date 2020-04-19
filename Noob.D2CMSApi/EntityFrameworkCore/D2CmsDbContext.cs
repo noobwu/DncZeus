@@ -4,7 +4,7 @@
 // Created          : 2020-04-05
 //
 // Last Modified By : Administrator
-// Last Modified On : 2020-04-08
+// Last Modified On : 2020-04-19
 // ***********************************************************************
 // <copyright file="D2CmsDbContext.cs" company="Noob.D2CMSApi">
 //     Copyright (c) . All rights reserved.
@@ -23,13 +23,11 @@ using System.Threading.Tasks;
 namespace Noob.D2CMSApi.EntityFrameworkCore
 {
     /// <summary>
-    /// Class EfCoreDbContext.
-    /// Implements the <see cref="Microsoft.EntityFrameworkCore.DbContext" />
-    /// Implements the <see cref="Noob.EntityFrameworkCore.EfCoreDbContext" />
+    /// Class D2CmsDbContext.
+    /// Implements the <see cref="Noob.EntityFrameworkCore.EfCoreDbContext{Noob.D2CMSApi.EntityFrameworkCore.D2CmsDbContext}" />
     /// </summary>
-    /// <seealso cref="Noob.EntityFrameworkCore.EfCoreDbContext" />
-    /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
-    public class D2CmsDbContext : EfCoreDbContext
+    /// <seealso cref="Noob.EntityFrameworkCore.EfCoreDbContext{Noob.D2CMSApi.EntityFrameworkCore.D2CmsDbContext}" />
+    public class D2CmsDbContext : EfCoreDbContext<D2CmsDbContext>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="D2CmsDbContext" /> class.

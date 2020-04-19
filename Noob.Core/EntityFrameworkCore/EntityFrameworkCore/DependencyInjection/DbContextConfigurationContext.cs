@@ -88,7 +88,7 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
     /// <typeparam name="TDbContext">The type of the t database context.</typeparam>
     /// <seealso cref="Noob.EntityFrameworkCore.DependencyInjection.DbContextConfigurationContext" />
     public class DbContextConfigurationContext<TDbContext> : DbContextConfigurationContext
-        where TDbContext : EfCoreDbContext
+        where TDbContext : EfCoreDbContext<TDbContext>
     {
         /// <summary>
         /// Gets the database context options.

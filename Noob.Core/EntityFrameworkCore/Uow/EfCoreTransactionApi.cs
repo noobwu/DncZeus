@@ -39,23 +39,23 @@ namespace Noob.Uow.EntityFrameworkCore
         /// Gets the starter database context.
         /// </summary>
         /// <value>The starter database context.</value>
-        public EfCoreDbContext StarterDbContext { get; }
+        public IEfCoreDbContext StarterDbContext { get; }
         /// <summary>
         /// Gets the attended database contexts.
         /// </summary>
         /// <value>The attended database contexts.</value>
-        public List<EfCoreDbContext> AttendedDbContexts { get; }
+        public List<IEfCoreDbContext> AttendedDbContexts { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreTransactionApi"/> class.
         /// </summary>
         /// <param name="dbContextTransaction">The database context transaction.</param>
         /// <param name="starterDbContext">The starter database context.</param>
-        public EfCoreTransactionApi(IDbContextTransaction dbContextTransaction, EfCoreDbContext starterDbContext)
+        public EfCoreTransactionApi(IDbContextTransaction dbContextTransaction, IEfCoreDbContext starterDbContext)
         {
             DbContextTransaction = dbContextTransaction;
             StarterDbContext = starterDbContext;
-            AttendedDbContexts = new List<EfCoreDbContext>();
+            AttendedDbContexts = new List<IEfCoreDbContext>();
         }
 
         /// <summary>
