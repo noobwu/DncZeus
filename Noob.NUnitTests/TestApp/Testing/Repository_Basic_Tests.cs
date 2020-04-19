@@ -150,15 +150,6 @@ namespace Noob.TestApp.Testing
             person.ShouldNotBeNull();
         }
         /// <summary>
-        /// Configures the services.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            base.ConfigureServices(context);
-            context.Services.TryAddTransient<TestDataBuilder>();
-        }
-        /// <summary>
         /// Called when [application initialization].
         /// </summary>
         /// <param name="context">The context.</param>

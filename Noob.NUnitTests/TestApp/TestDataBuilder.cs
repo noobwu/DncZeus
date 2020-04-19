@@ -52,7 +52,7 @@ namespace Noob.TestApp
         /// <summary>
         /// The person repository
         /// </summary>
-        private readonly IBasicRepository<Person, Guid> _personRepository;
+        private readonly IPersonRepository _personRepository;
         /// <summary>
         /// The city repository
         /// </summary>
@@ -60,7 +60,7 @@ namespace Noob.TestApp
         /// <summary>
         /// The entity with int PKS repository
         /// </summary>
-        private readonly IRepository<EntityWithIntPk, int> _entityWithIntPksRepository;
+        private readonly IEntityWithIntPkRepository _entityWithIntPksRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestDataBuilder" /> class.
@@ -69,9 +69,9 @@ namespace Noob.TestApp
         /// <param name="cityRepository">The city repository.</param>
         /// <param name="entityWithIntPksRepository">The entity with int PKS repository.</param>
         public TestDataBuilder(
-            IBasicRepository<Person, Guid> personRepository,
+            IPersonRepository personRepository,
             ICityRepository cityRepository,
-            IRepository<EntityWithIntPk, int> entityWithIntPksRepository)
+            IEntityWithIntPkRepository entityWithIntPksRepository)
         {
             _personRepository = personRepository;
             _cityRepository = cityRepository;
