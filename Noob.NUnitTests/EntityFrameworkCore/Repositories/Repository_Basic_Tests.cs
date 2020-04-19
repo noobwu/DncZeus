@@ -17,11 +17,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Noob.Data;
+using Noob.DependencyInjection;
+using Noob.EntityFrameworkCore.DependencyInjection;
 using Noob.Modularity;
 using Noob.TestApp;
 using Noob.TestApp.Domain;
 using Noob.TestApp.EntityFrameworkCore;
 using Noob.TestApp.Testing;
+using Noob.Uow;
 using Noob.Uow.EntityFrameworkCore;
 
 namespace Noob.EntityFrameworkCore.Repositories
@@ -39,6 +43,10 @@ namespace Noob.EntityFrameworkCore.Repositories
         /// <param name="context">The context.</param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+           
+            context.Services.AddMemoryCache();
+            context.Services.TryAddTransient(DbContextOptionsFactory.Create<TestAppDbContext>);
+
             var sqliteConnection = CreateDatabaseAndGetConnection();
             Configure<EfCoreDbContextOptions>(options =>
             {
@@ -50,7 +58,6 @@ namespace Noob.EntityFrameworkCore.Repositories
             context.Services.AddDbContext<TestAppDbContext>(options => {
                 options.UseSqlite(sqliteConnection);
             });
-
             //context.Services.AddEfCoreDbContext<TestAppDbContext>(options =>
             //{
             //    options.AddDefaultRepositories(true);
@@ -61,7 +68,21 @@ namespace Noob.EntityFrameworkCore.Repositories
             //        opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
             //    });
             //});
-            context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(EfCoreDatabaseApi<>));
+            Configure<DbConnectionOptions>(options =>
+            {
+                options.ConnectionStrings.Default = sqliteConnection.ConnectionString;
+            });
+            Configure<UnitOfWorkDefaultOptions>(options =>
+            {
+               
+            });
+            context.Services.TryAddTransient<IConnectionStringResolver, DefaultConnectionStringResolver>();
+            context.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+            context.Services.AddSingleton<IAmbientUnitOfWork, AmbientUnitOfWork>();
+            context.Services.AddTransient<IHybridServiceScopeFactory, DefaultServiceScopeFactory>();
+            context.Services.AddSingleton<IUnitOfWorkManager, UnitOfWorkManager>();
+            context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
+
             context.Services.TryAddTransient<ICityRepository, CityRepository>();
             context.Services.TryAddTransient<IPersonRepository, PersonRepository>();
             context.Services.TryAddTransient<IEntityWithIntPkRepository, EntityWithIntPkRepository>();

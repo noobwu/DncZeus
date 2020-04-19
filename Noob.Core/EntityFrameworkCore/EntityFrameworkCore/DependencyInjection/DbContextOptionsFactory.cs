@@ -23,7 +23,7 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
     /// <summary>
     /// Class DbContextOptionsFactory.
     /// </summary>
-    internal static class DbContextOptionsFactory
+    public static class DbContextOptionsFactory
     {
         /// <summary>
         /// Creates the specified service provider.

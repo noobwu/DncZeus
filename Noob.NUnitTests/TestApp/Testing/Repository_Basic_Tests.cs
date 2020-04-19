@@ -49,6 +49,11 @@ namespace Noob.TestApp.Testing
         /// </summary>
         protected Repository_Basic_Tests()
         {
+            var testDataBuilder= GetRequiredService<TestDataBuilder>();
+            if (testDataBuilder != null)
+            {
+                testDataBuilder.BuildAsync().Wait();
+            }
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
             CityRepository = GetRequiredService<ICityRepository>();
         }
@@ -155,7 +160,7 @@ namespace Noob.TestApp.Testing
         /// <param name="context">The context.</param>
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            SeedTestData(context);
+            //SeedTestData(context);
         }
         /// <summary>
         /// Seeds the test data.
