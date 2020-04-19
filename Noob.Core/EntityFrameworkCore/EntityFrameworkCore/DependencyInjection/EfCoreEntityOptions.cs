@@ -23,14 +23,14 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
 /// </summary>
 /// <typeparam name="TEntity">The type of the t entity.</typeparam>
 {
-    public class EntityOptions<TEntity>
+    public class EfCoreEntityOptions<TEntity>
         where TEntity : IEntity
     {
         /// <summary>
         /// Gets the empty.
         /// </summary>
         /// <value>The empty.</value>
-        public static EntityOptions<TEntity> Empty { get; } = new EntityOptions<TEntity>();
+        public static EfCoreEntityOptions<TEntity> Empty { get; } = new EfCoreEntityOptions<TEntity>();
 
         /// <summary>
         /// Gets or sets the default with details function.
@@ -62,10 +62,10 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
         /// </summary>
         /// <typeparam name="TEntity">The type of the t entity.</typeparam>
         /// <returns>EntityOptions&lt;TEntity&gt;.</returns>
-        public EntityOptions<TEntity> GetOrNull<TEntity>()
+        public EfCoreEntityOptions<TEntity> GetOrNull<TEntity>()
             where TEntity : IEntity
         {
-            return _options.GetOrDefault(typeof(TEntity)) as EntityOptions<TEntity>;
+            return _options.GetOrDefault(typeof(TEntity)) as EfCoreEntityOptions<TEntity>;
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
         /// </summary>
         /// <typeparam name="TEntity">The type of the t entity.</typeparam>
         /// <param name="optionsAction">The options action.</param>
-        public void Entity<TEntity>([NotNull] Action<EntityOptions<TEntity>> optionsAction)
+        public void Entity<TEntity>([NotNull] Action<EfCoreEntityOptions<TEntity>> optionsAction)
             where TEntity : IEntity
         {
             Check.NotNull(optionsAction, nameof(optionsAction));
@@ -81,8 +81,8 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
             optionsAction(
                 _options.GetOrAdd(
                     typeof(TEntity),
-                    () => new EntityOptions<TEntity>()
-                ) as EntityOptions<TEntity>
+                    () => new EfCoreEntityOptions<TEntity>()
+                ) as EfCoreEntityOptions<TEntity>
             );
         }
     }

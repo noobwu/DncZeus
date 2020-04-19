@@ -62,12 +62,12 @@ namespace Noob.Domain.Repositories.EntityFrameworkCore
         /// Gets the entity options.
         /// </summary>
         /// <value>The entity options.</value>
-        protected virtual EntityOptions<TEntity> EntityOptions => _entityOptionsLazy.Value;
+        protected virtual EfCoreEntityOptions<TEntity> EntityOptions => _entityOptionsLazy.Value;
 
         /// <summary>
         /// The entity options lazy
         /// </summary>
-        private readonly Lazy<EntityOptions<TEntity>> _entityOptionsLazy;
+        private readonly Lazy<EfCoreEntityOptions<TEntity>> _entityOptionsLazy;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EfCoreRepository{TEntity}" /> class.
@@ -76,11 +76,11 @@ namespace Noob.Domain.Repositories.EntityFrameworkCore
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
-            _entityOptionsLazy = new Lazy<EntityOptions<TEntity>>(
+            _entityOptionsLazy = new Lazy<EfCoreEntityOptions<TEntity>>(
                 () => ServiceProvider
                           .GetRequiredService<IOptions<EntityOptions>>()
                           .Value
-                          .GetOrNull<TEntity>() ?? EntityOptions<TEntity>.Empty
+                          .GetOrNull<TEntity>() ?? EfCoreEntityOptions<TEntity>.Empty
             );
         }
 

@@ -27,13 +27,13 @@ namespace Noob.EntityFrameworkCore
         /// Gets or sets the default pre configure actions.
         /// </summary>
         /// <value>The default pre configure actions.</value>
-        internal List<Action<DbContextConfigurationContext>> DefaultPreConfigureActions { get; set; }
+        internal List<Action<EfCoreDbContextConfigurationContext>> DefaultPreConfigureActions { get; set; }
 
         /// <summary>
         /// Gets or sets the default configure action.
         /// </summary>
         /// <value>The default configure action.</value>
-        internal Action<DbContextConfigurationContext> DefaultConfigureAction { get; set; }
+        internal Action<EfCoreDbContextConfigurationContext> DefaultConfigureAction { get; set; }
 
         /// <summary>
         /// Gets or sets the pre configure actions.
@@ -52,7 +52,7 @@ namespace Noob.EntityFrameworkCore
         /// </summary>
         public EfCoreDbContextOptions()
         {
-            DefaultPreConfigureActions = new List<Action<DbContextConfigurationContext>>();
+            DefaultPreConfigureActions = new List<Action<EfCoreDbContextConfigurationContext>>();
             PreConfigureActions = new Dictionary<Type, List<object>>();
             ConfigureActions = new Dictionary<Type, object>();
         }
@@ -61,7 +61,7 @@ namespace Noob.EntityFrameworkCore
         /// Pres the configure.
         /// </summary>
         /// <param name="action">The action.</param>
-        public void PreConfigure([NotNull] Action<DbContextConfigurationContext> action)
+        public void PreConfigure([NotNull] Action<EfCoreDbContextConfigurationContext> action)
         {
             Check.NotNull(action, nameof(action));
 
@@ -72,7 +72,7 @@ namespace Noob.EntityFrameworkCore
         /// Configures the specified action.
         /// </summary>
         /// <param name="action">The action.</param>
-        public void Configure([NotNull] Action<DbContextConfigurationContext> action)
+        public void Configure([NotNull] Action<EfCoreDbContextConfigurationContext> action)
         {
             Check.NotNull(action, nameof(action));
 

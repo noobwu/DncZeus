@@ -26,7 +26,7 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
     /// Implements the <see cref="Noob.DependencyInjection.IServiceProviderAccessor" />
     /// </summary>
     /// <seealso cref="Noob.DependencyInjection.IServiceProviderAccessor" />
-    public class DbContextConfigurationContext : IServiceProviderAccessor
+    public class EfCoreDbContextConfigurationContext : IServiceProviderAccessor
     {
         /// <summary>
         /// Gets the service provider.
@@ -59,13 +59,13 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
         public DbContextOptionsBuilder DbContextOptions { get; protected set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DbContextConfigurationContext"/> class.
+        /// Initializes a new instance of the <see cref="EfCoreDbContextConfigurationContext"/> class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="connectionStringName">Name of the connection string.</param>
         /// <param name="existingConnection">The existing connection.</param>
-        public DbContextConfigurationContext(
+        public EfCoreDbContextConfigurationContext(
             [NotNull] string connectionString,
             [NotNull] IServiceProvider serviceProvider,
             [CanBeNull] string connectionStringName,
@@ -83,11 +83,11 @@ namespace Noob.EntityFrameworkCore.DependencyInjection
 
     /// <summary>
     /// Class DbContextConfigurationContext.
-    /// Implements the <see cref="Noob.EntityFrameworkCore.DependencyInjection.DbContextConfigurationContext" />
+    /// Implements the <see cref="Noob.EntityFrameworkCore.DependencyInjection.EfCoreDbContextConfigurationContext" />
     /// </summary>
     /// <typeparam name="TDbContext">The type of the t database context.</typeparam>
-    /// <seealso cref="Noob.EntityFrameworkCore.DependencyInjection.DbContextConfigurationContext" />
-    public class DbContextConfigurationContext<TDbContext> : DbContextConfigurationContext
+    /// <seealso cref="Noob.EntityFrameworkCore.DependencyInjection.EfCoreDbContextConfigurationContext" />
+    public class DbContextConfigurationContext<TDbContext> : EfCoreDbContextConfigurationContext
         where TDbContext : EfCoreDbContext<TDbContext>
     {
         /// <summary>
