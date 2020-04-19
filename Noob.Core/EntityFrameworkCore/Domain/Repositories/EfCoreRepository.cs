@@ -75,6 +75,7 @@ namespace Noob.Domain.Repositories.EntityFrameworkCore
         /// <param name="dbContextProvider">The database context provider.</param>
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
+            _dbContextProvider = dbContextProvider;
             _entityOptionsLazy = new Lazy<EntityOptions<TEntity>>(
                 () => ServiceProvider
                           .GetRequiredService<IOptions<EntityOptions>>()
