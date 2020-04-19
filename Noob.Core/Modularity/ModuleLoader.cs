@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : Noob.Core
+// Author           : Administrator
+// Created          : 2020-04-19
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-19
+// ***********************************************************************
+// <copyright file="ModuleLoader.cs" company="Noob.Core">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,8 +19,20 @@ using Noob.Modularity.PlugIns;
 
 namespace Noob.Modularity
 {
+    /// <summary>
+    /// Class ModuleLoader.
+    /// Implements the <see cref="Noob.Modularity.IModuleLoader" />
+    /// </summary>
+    /// <seealso cref="Noob.Modularity.IModuleLoader" />
     public class ModuleLoader : IModuleLoader
     {
+        /// <summary>
+        /// Loads the modules.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="startupModuleType">Type of the startup module.</param>
+        /// <param name="plugInSources">The plug in sources.</param>
+        /// <returns>IModuleDescriptor[].</returns>
         public IModuleDescriptor[] LoadModules(
             IServiceCollection services,
             Type startupModuleType,
@@ -25,6 +50,13 @@ namespace Noob.Modularity
             return modules.ToArray();
         }
 
+        /// <summary>
+        /// Gets the descriptors.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="startupModuleType">Type of the startup module.</param>
+        /// <param name="plugInSources">The plug in sources.</param>
+        /// <returns>List&lt;IModuleDescriptor&gt;.</returns>
         private List<IModuleDescriptor> GetDescriptors(
             IServiceCollection services, 
             Type startupModuleType,
@@ -38,6 +70,13 @@ namespace Noob.Modularity
             return modules.Cast<IModuleDescriptor>().ToList();
         }
 
+        /// <summary>
+        /// Fills the modules.
+        /// </summary>
+        /// <param name="modules">The modules.</param>
+        /// <param name="services">The services.</param>
+        /// <param name="startupModuleType">Type of the startup module.</param>
+        /// <param name="plugInSources">The plug in sources.</param>
         protected virtual void FillModules(
             List<ModuleDescriptor> modules,
             IServiceCollection services,
@@ -62,6 +101,10 @@ namespace Noob.Modularity
             }
         }
 
+        /// <summary>
+        /// Sets the dependencies.
+        /// </summary>
+        /// <param name="modules">The modules.</param>
         protected virtual void SetDependencies(List<ModuleDescriptor> modules)
         {
             foreach (var module in modules)
@@ -70,6 +113,12 @@ namespace Noob.Modularity
             }
         }
 
+        /// <summary>
+        /// Sorts the by dependency.
+        /// </summary>
+        /// <param name="modules">The modules.</param>
+        /// <param name="startupModuleType">Type of the startup module.</param>
+        /// <returns>List&lt;IModuleDescriptor&gt;.</returns>
         protected virtual List<IModuleDescriptor> SortByDependency(List<IModuleDescriptor> modules, Type startupModuleType)
         {
             var sortedModules = modules.SortByDependencies(m => m.Dependencies);
@@ -77,11 +126,24 @@ namespace Noob.Modularity
             return sortedModules;
         }
 
+        /// <summary>
+        /// Creates the module descriptor.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="moduleType">Type of the module.</param>
+        /// <param name="isLoadedAsPlugIn">if set to <c>true</c> [is loaded as plug in].</param>
+        /// <returns>ModuleDescriptor.</returns>
         protected virtual ModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType, bool isLoadedAsPlugIn = false)
         {
             return new ModuleDescriptor(moduleType, CreateAndRegisterModule(services, moduleType), isLoadedAsPlugIn);
         }
 
+        /// <summary>
+        /// Creates the and register module.
+        /// </summary>
+        /// <param name="services">The services.</param>
+        /// <param name="moduleType">Type of the module.</param>
+        /// <returns>IModule.</returns>
         protected virtual IModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)
         {
             var module = (IModule)Activator.CreateInstance(moduleType);
@@ -89,6 +151,11 @@ namespace Noob.Modularity
             return module;
         }
 
+        /// <summary>
+        /// Configures the services.
+        /// </summary>
+        /// <param name="modules">The modules.</param>
+        /// <param name="services">The services.</param>
         protected virtual void ConfigureServices(List<IModuleDescriptor> modules, IServiceCollection services)
         {
             var context = new ServiceConfigurationContext(services);
@@ -137,6 +204,12 @@ namespace Noob.Modularity
             }
         }
 
+        /// <summary>
+        /// Sets the dependencies.
+        /// </summary>
+        /// <param name="modules">The modules.</param>
+        /// <param name="module">The module.</param>
+        /// <exception cref="Exception">Could not find a depended module " + dependedModuleType.AssemblyQualifiedName + " for " + module.Type.AssemblyQualifiedName</exception>
         protected virtual void SetDependencies(List<ModuleDescriptor> modules, ModuleDescriptor module)
         {
             foreach (var dependedModuleType in ModuleHelper.FindDependedModuleTypes(module.Type))
@@ -144,7 +217,7 @@ namespace Noob.Modularity
                 var dependedModule = modules.FirstOrDefault(m => m.Type == dependedModuleType);
                 if (dependedModule == null)
                 {
-                    throw new AbpException("Could not find a depended module " + dependedModuleType.AssemblyQualifiedName + " for " + module.Type.AssemblyQualifiedName);
+                    throw new Exception("Could not find a depended module " + dependedModuleType.AssemblyQualifiedName + " for " + module.Type.AssemblyQualifiedName);
                 }
 
                 module.AddDependency(dependedModule);

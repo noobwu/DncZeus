@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Noob.DependencyInjection;
 using Noob.Modularity;
-
+using Noob.Internal;
 namespace Noob
 {
     public abstract class ApplicationBase : IApplication

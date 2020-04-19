@@ -14,7 +14,7 @@
 using JetBrains.Annotations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Noob.Modularity.PlugIns;
 namespace Noob
 {
     /// <summary>
@@ -28,7 +28,12 @@ namespace Noob
         /// <value>The services.</value>
         [NotNull]
         public IServiceCollection Services { get; }
-
+        /// <summary>
+        /// Gets the plug in sources.
+        /// </summary>
+        /// <value>The plug in sources.</value>
+        [NotNull]
+        public PlugInSourceList PlugInSources { get; }
         /// <summary>
         /// Gets the configuration.
         /// </summary>

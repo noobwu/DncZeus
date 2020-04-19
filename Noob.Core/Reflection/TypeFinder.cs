@@ -73,7 +73,7 @@ namespace Noob.Reflection
 
                     allTypes.AddRange(typesInThisAssembly.Where(type => type != null));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //TODO: Trigger a global event?
                 }
