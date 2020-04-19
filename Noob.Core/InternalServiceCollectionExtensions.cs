@@ -39,14 +39,14 @@ namespace Noob.Internal
         /// Adds the core abp services.
         /// </summary>
         /// <param name="services">The services.</param>
-        /// <param name="abpApplication">The abp application.</param>
+        /// <param name="aplication">The  application.</param>
         /// <param name="applicationCreationOptions">The application creation options.</param>
-        internal static void AddCoreAbpServices(this IServiceCollection services,
-            IApplication abpApplication, 
+        internal static void AddAppCoreServices(this IServiceCollection services,
+            IApplication aplication, 
             ApplicationCreationOptions applicationCreationOptions)
         {
             var moduleLoader = new ModuleLoader();
-            var assemblyFinder = new AssemblyFinder(abpApplication);
+            var assemblyFinder = new AssemblyFinder(aplication);
             var typeFinder = new TypeFinder(assemblyFinder);
 
             if (!services.IsAdded<IConfiguration>())

@@ -79,9 +79,9 @@ namespace Noob
             services.AddSingleton<IModuleContainer>(this);
 
             services.AddCoreServices();
-            services.AddCoreAbpServices(this, options);
+            services.AddAppCoreServices(this, options);
 
-            Modules = LoadModules(services, options);
+            //Modules = LoadModules(services, options);
         }
 
         /// <summary>
