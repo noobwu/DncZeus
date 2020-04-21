@@ -77,7 +77,7 @@ namespace Noob.Domain.Repositories.EntityFrameworkCore
         {
             _dbContextProvider = dbContextProvider;
             _entityOptionsLazy = new Lazy<EfCoreEntityOptions<TEntity>>(
-                () => ServiceProvider
+                () => ServiceProvider?
                           .GetRequiredService<IOptions<EfCoreEntityOptions>>()
                           .Value
                           .GetOrNull<TEntity>() ?? EfCoreEntityOptions<TEntity>.Empty
