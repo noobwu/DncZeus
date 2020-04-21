@@ -16,14 +16,14 @@ using System.Threading.Tasks;
 namespace Noob.DynamicProxy
 {
     /// <summary>
-    /// Class Interceptor.
+    /// 拦截器的默认抽象实现。
     /// Implements the <see cref="Noob.DynamicProxy.IInterceptor" />
     /// </summary>
     /// <seealso cref="Noob.DynamicProxy.IInterceptor" />
     public abstract class Interceptor : IInterceptor
     {
         /// <summary>
-        /// Intercepts the asynchronous.
+        /// 异步方法拦截。
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <returns>Task.</returns>

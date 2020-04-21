@@ -34,11 +34,12 @@ namespace Noob.DependencyInjection
         /// <param name="type">The type.</param>
         public override void AddType(IServiceCollection services, Type type)
         {
+            // 判断类型是否标注了 DisableConventionalRegistration 特性，如果有标注，则跳过。
             if (IsConventionalRegistrationDisabled(type))
             {
                 return;
             }
-
+            // 获得 Dependency 特性，如果没有则返回 null。
             var dependencyAttribute = GetDependencyAttributeOrNull(type);
             var lifeTime = GetLifeTimeOrNull(type, dependencyAttribute);
 
@@ -50,21 +51,25 @@ namespace Noob.DependencyInjection
             var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
 
             TriggerServiceExposing(services, type, serviceTypes);
-
+            // 获得等待注册的类型定义，类型的定义优先使用 ExposeServices 特性指定的类型，如果没有则使用
+            // 类型当中接口以 I 开始，后面为实现类型名称的接口。
             foreach (var serviceType in serviceTypes)
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
 
                 if (dependencyAttribute?.ReplaceServices == true)
                 {
+                    // 替换服务。
                     services.Replace(serviceDescriptor);
                 }
                 else if (dependencyAttribute?.TryRegister == true)
                 {
+                    // 注册服务。
                     services.TryAdd(serviceDescriptor);
                 }
                 else
                 {
+                    // 注册服务。
                     services.Add(serviceDescriptor);
                 }
             }

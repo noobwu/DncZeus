@@ -81,6 +81,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>IServiceCollection.</returns>
         public static IServiceCollection AddAssembly(this IServiceCollection services, Assembly assembly)
         {
+            //获得所有规约注册器，然后调用规约注册器的 AddAssmbly 方法注册类型。
             foreach (var registrar in services.GetConventionalRegistrars())
             {
                 registrar.AddAssembly(services, assembly);

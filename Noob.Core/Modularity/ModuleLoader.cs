@@ -180,6 +180,7 @@ namespace Noob.Modularity
             {
                 if (module.Instance is Module Module)
                 {
+                    //是否跳过服务的自动注册，默认为 false。
                     if (!Module.SkipAutoServiceRegistration)
                     {
                         services.AddAssembly(module.Type.Assembly);

@@ -20,12 +20,12 @@ using System.Threading.Tasks;
 namespace Noob.DynamicProxy
 {
     /// <summary>
-    /// Interface IInterceptor
+    /// 拦截器定义
     /// </summary>
     public interface IInterceptor
     {
         /// <summary>
-        /// Intercepts the asynchronous.
+        /// 异步方法拦截。
         /// </summary>
         /// <param name="invocation">The invocation.</param>
         /// <returns>Task.</returns>

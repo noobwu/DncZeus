@@ -34,6 +34,7 @@ namespace Noob.DependencyInjection
         /// <param name="assembly">The assembly.</param>
         public virtual void AddAssembly(IServiceCollection services, Assembly assembly)
         {
+            //获得程序集内的所有类型，过滤掉抽象类和泛型类型。
             var types = AssemblyHelper
                 .GetAllTypes(assembly)
                 .Where(
