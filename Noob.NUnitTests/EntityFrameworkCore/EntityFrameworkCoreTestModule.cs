@@ -30,6 +30,8 @@ using Noob.Uow;
 using Noob.Uow.EntityFrameworkCore;
 using Noob.Modularity.PlugIns;
 using Noob.Threading;
+using Noob.Linq;
+
 namespace Noob.EntityFrameworkCore
 {
     /// <summary>
@@ -109,10 +111,16 @@ namespace Noob.EntityFrameworkCore
             context.Services.TryAddTransient<IEntityWithIntPkRepository, EntityWithIntPkRepository>();
             context.Services.TryAddTransient<TestDataBuilder>();
             #region Interceptor
+            //CastleCoreModule
+            context.Services.AddTransient(typeof(AsyncDeterminationInterceptor<>));
+
+            context.Services.AddSingleton<IAsyncQueryableExecuter>(DefaultAsyncQueryableExecuter.Instance);
+            context.Services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
+            context.Services.AddSingleton(typeof(IAmbientScopeProvider<>), typeof(AmbientDataContextAmbientScopeProvider<>));
+
             context.Services.AddAssembly(typeof(DefaultServiceScopeFactory).Assembly);
             context.Services.AddAssembly(typeof(TestDataBuilder).Assembly);
             context.Services.OnRegistred(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
-            context.Services.AddTransient(typeof(AsyncDeterminationInterceptor<>));
             #endregion
 
         }

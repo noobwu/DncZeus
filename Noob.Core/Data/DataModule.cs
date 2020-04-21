@@ -26,6 +26,7 @@ namespace Noob.Data
     /// Implements the <see cref="Noob.Modularity.Module" />
     /// </summary>
     /// <seealso cref="Noob.Modularity.Module" />
+    [DependsOn(typeof(UnitOfWorkModule))]
     public class DataModule : Module
     {
         /// <summary>

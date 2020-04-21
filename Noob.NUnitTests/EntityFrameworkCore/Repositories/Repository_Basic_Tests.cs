@@ -37,7 +37,7 @@ namespace Noob.EntityFrameworkCore.Repositories
     /// Implements the <see cref="Noob.TestApp.Testing.Repository_Basic_Tests{Noob.EntityFrameworkCore.Repositories.Repository_Basic_Tests}" />
     /// </summary>
     /// <seealso cref="Noob.TestApp.Testing.Repository_Basic_Tests{Noob.EntityFrameworkCore.Repositories.Repository_Basic_Tests}" />
-    public class Repository_Basic_Tests : Repository_Basic_Tests<EntityFrameworkCoreModule>
+    public class Repository_Basic_Tests : Repository_Basic_Tests<EntityFrameworkCoreTestModule>
     {
 
         /// <summary>
