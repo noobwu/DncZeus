@@ -70,7 +70,7 @@ namespace Noob.D2CMSApi.Models.Responses
             PageNo = pageNo;
             PageSize = pageSize;
             TotalCount = totalCount;
-            TotalPage = TotalPage % pageSize == 0 ? TotalPage / pageSize : (TotalPage / pageSize) + 1;
+            TotalPage = totalCount % pageSize == 0 ? totalCount / pageSize : (totalCount / pageSize) + 1;
             if (PageNo == 1) IsFirstPage = true;
             if (PageNo == TotalPage) IsLastPage = true;
         }
