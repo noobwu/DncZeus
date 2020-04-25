@@ -50,11 +50,6 @@ namespace Noob.TestApp.Testing
         /// </summary>
         protected Repository_Basic_Tests()
         {
-            //var testDataBuilder= GetRequiredService<TestDataBuilder>();
-            //if (testDataBuilder != null)
-            //{
-            //    testDataBuilder.BuildAsync().Wait();
-            //}
             PersonRepository = GetRequiredService<IRepository<Person, Guid>>();
             CityRepository = GetRequiredService<ICityRepository>();
         }

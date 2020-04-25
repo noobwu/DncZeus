@@ -32,6 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns>IServiceCollection.</returns>
         public static IServiceCollection AddDefaultRepository(this IServiceCollection services, Type entityType, Type repositoryImplementationType)
         {
+            //注册复合主键实体所对应的仓储。
             //IReadOnlyBasicRepository<TEntity>
             var readOnlyBasicRepositoryInterface = typeof(IReadOnlyBasicRepository<>).MakeGenericType(entityType);
             if (readOnlyBasicRepositoryInterface.IsAssignableFrom(repositoryImplementationType))
@@ -59,7 +60,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 }
             }
-
+            //首先获得实体的主键类型，再进行注册。
             var primaryKeyType = EntityHelper.FindPrimaryKeyType(entityType);
             if (primaryKeyType != null)
             {

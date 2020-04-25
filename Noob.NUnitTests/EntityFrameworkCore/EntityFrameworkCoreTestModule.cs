@@ -31,6 +31,8 @@ using Noob.Uow.EntityFrameworkCore;
 using Noob.Modularity.PlugIns;
 using Noob.Threading;
 using Noob.Linq;
+using Noob.EntityFrameworkCore.TestApp.SecondContext;
+using Noob.EntityFrameworkCore.TestApp.ThirdDbContext;
 
 namespace Noob.EntityFrameworkCore
 {
@@ -55,7 +57,15 @@ namespace Noob.EntityFrameworkCore
         /// <param name="context">The context.</param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddEfCoreDbContext<SecondDbContext>(options =>
+            {
+                options.AddDefaultRepositories();
 
+            });
+            context.Services.AddEfCoreDbContext<ThirdDbContext>(options =>
+            {
+                options.AddDefaultRepositories<IThirdDbContext>();
+            });
             context.Services.AddEfCoreDbContext<TestAppDbContext>(options =>
             {
                 options.AddDefaultRepositories(true);
@@ -65,9 +75,6 @@ namespace Noob.EntityFrameworkCore
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
                 });
             });
-            context.Services.AddMemoryCache();
-            context.Services.TryAddTransient(DbContextOptionsFactory.Create<TestAppDbContext>);
-
             var sqliteConnection = CreateDatabaseAndGetConnection();
             Configure<EfCoreDbContextOptions>(options =>
             {
@@ -90,14 +97,6 @@ namespace Noob.EntityFrameworkCore
             //        opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
             //    });
             //});
-            Configure<DbConnectionOptions>(options =>
-            {
-                options.ConnectionStrings.Default = sqliteConnection.ConnectionString;
-            });
-            Configure<UnitOfWorkDefaultOptions>(options =>
-            {
-
-            });
 
             context.Services.TryAddTransient<IConnectionStringResolver, DefaultConnectionStringResolver>();
             context.Services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -106,9 +105,9 @@ namespace Noob.EntityFrameworkCore
             context.Services.AddSingleton<IUnitOfWorkManager, UnitOfWorkManager>();
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
 
-            context.Services.TryAddTransient<ICityRepository, CityRepository>();
-            context.Services.TryAddTransient<IPersonRepository, PersonRepository>();
-            context.Services.TryAddTransient<IEntityWithIntPkRepository, EntityWithIntPkRepository>();
+            //context.Services.TryAddTransient<ICityRepository, CityRepository>();
+            //context.Services.TryAddTransient<IPersonRepository, PersonRepository>();
+            //context.Services.TryAddTransient<IEntityWithIntPkRepository, EntityWithIntPkRepository>();
             context.Services.TryAddTransient<TestDataBuilder>();
             #region Interceptor
             //CastleCoreModule

@@ -46,11 +46,12 @@ namespace Noob.Domain.Repositories
         /// </summary>
         public virtual void AddRepositories()
         {
+            //遍历自定义仓储。
             foreach (var customRepository in Options.CustomRepositories)
             {
                 Options.Services.AddDefaultRepository(customRepository.Key, customRepository.Value);
             }
-
+            //是否注册 ABP vNext 生成的默认仓储。
             if (Options.RegisterDefaultRepositories)
             {
                 RegisterDefaultRepositories();
