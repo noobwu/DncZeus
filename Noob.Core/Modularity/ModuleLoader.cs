@@ -42,9 +42,13 @@ namespace Noob.Modularity
             Check.NotNull(startupModuleType, nameof(startupModuleType));
             Check.NotNull(plugInSources, nameof(plugInSources));
 
+            // 扫描模块类型，并构建模块描述对象集合。
             var modules = GetDescriptors(services, startupModuleType, plugInSources);
 
+            // 按照模块的依赖性重新排序。
             modules = SortByDependency(modules, startupModuleType);
+
+            // 调用模块的三个生命周期方法。
             ConfigureServices(modules, services);
 
             return modules.ToArray();

@@ -74,13 +74,15 @@ namespace Noob
 
             var options = new ApplicationCreationOptions(services);
             optionsAction?.Invoke(options);
-
+            // 当前的 Application 就是一个模块容器。
             services.AddSingleton<IApplication>(this);
             services.AddSingleton<IModuleContainer>(this);
 
             services.AddCoreServices();
+            // 注入模块加载类，以及模块的四个应用程序生命周期。
             services.AddAppCoreServices(this, options);
 
+            //遍历所有模块，并按照预加载、初始化、初始化完成的顺序执行其生命周期方法。
             Modules = LoadModules(services, options);
         }
 

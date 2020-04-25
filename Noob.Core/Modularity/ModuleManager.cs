@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : Noob.Core
+// Author           : Administrator
+// Created          : 2020-04-19
+//
+// Last Modified By : Administrator
+// Last Modified On : 2020-04-19
+// ***********************************************************************
+// <copyright file="ModuleManager.cs" company="Noob.Core">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,12 +21,35 @@ using Noob.DependencyInjection;
 
 namespace Noob.Modularity
 {
+    /// <summary>
+    /// Class ModuleManager.
+    /// Implements the <see cref="Noob.Modularity.IModuleManager" />
+    /// Implements the <see cref="Noob.DependencyInjection.ISingletonDependency" />
+    /// </summary>
+    /// <seealso cref="Noob.Modularity.IModuleManager" />
+    /// <seealso cref="Noob.DependencyInjection.ISingletonDependency" />
     public class ModuleManager : IModuleManager, ISingletonDependency
     {
+        /// <summary>
+        /// The module container
+        /// </summary>
         private readonly IModuleContainer _moduleContainer;
+        /// <summary>
+        /// The lifecycle contributors
+        /// </summary>
         private readonly IEnumerable<IModuleLifecycleContributor> _lifecycleContributors;
+        /// <summary>
+        /// The logger
+        /// </summary>
         private readonly ILogger<ModuleManager> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ModuleManager"/> class.
+        /// </summary>
+        /// <param name="moduleContainer">The module container.</param>
+        /// <param name="logger">The logger.</param>
+        /// <param name="options">The options.</param>
+        /// <param name="serviceProvider">The service provider.</param>
         public ModuleManager(
             IModuleContainer moduleContainer,
             ILogger<ModuleManager> logger,
@@ -30,6 +66,10 @@ namespace Noob.Modularity
                 .ToArray();
         }
 
+        /// <summary>
+        /// Initializes the modules.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public void InitializeModules(ApplicationInitializationContext context)
         {
             LogListOfModules();
@@ -45,6 +85,9 @@ namespace Noob.Modularity
             _logger.LogInformation("Initialized all ABP modules.");
         }
 
+        /// <summary>
+        /// Logs the list of modules.
+        /// </summary>
         private void LogListOfModules()
         {
             _logger.LogInformation("Loaded ABP modules:");
@@ -55,6 +98,10 @@ namespace Noob.Modularity
             }
         }
 
+        /// <summary>
+        /// Shutdowns the modules.
+        /// </summary>
+        /// <param name="context">The context.</param>
         public void ShutdownModules(ApplicationShutdownContext context)
         {
             var modules = _moduleContainer.Modules.Reverse().ToList();
