@@ -23,31 +23,31 @@ namespace Noob.Modularity
     public interface IModuleDescriptor
     {
         /// <summary>
-        /// Gets the type.
+        /// 模块的具体类型。
         /// </summary>
         /// <value>The type.</value>
         Type Type { get; }
 
         /// <summary>
-        /// Gets the assembly.
+        /// 模块所在的程序集。
         /// </summary>
         /// <value>The assembly.</value>
         Assembly Assembly { get; }
 
         /// <summary>
-        /// Gets the instance.
+        /// 模块的单例实例。
         /// </summary>
         /// <value>The instance.</value>
         IModule Instance { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this instance is loaded as plug in.
+        /// 是否是一个插件。
         /// </summary>
         /// <value><c>true</c> if this instance is loaded as plug in; otherwise, <c>false</c>.</value>
         bool IsLoadedAsPlugIn { get; }
 
         /// <summary>
-        /// Gets the dependencies.
+        /// 依赖的其他模块。
         /// </summary>
         /// <value>The dependencies.</value>
         IReadOnlyList<IModuleDescriptor> Dependencies { get; }

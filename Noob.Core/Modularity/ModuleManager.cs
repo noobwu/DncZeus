@@ -73,9 +73,10 @@ namespace Noob.Modularity
         public void InitializeModules(ApplicationInitializationContext context)
         {
             LogListOfModules();
-
+            // 遍历应用程序的几个生命周期。
             foreach (var Contributor in _lifecycleContributors)
             {
+                //遍历所有的模块，将模块实例传入具体的 Contributor，方便在其内部调用具体的生命周期方法。
                 foreach (var module in _moduleContainer.Modules)
                 {
                     Contributor.Initialize(context, module.Instance);

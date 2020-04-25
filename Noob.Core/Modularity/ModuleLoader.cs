@@ -111,6 +111,7 @@ namespace Noob.Modularity
         /// <param name="modules">The modules.</param>
         protected virtual void SetDependencies(List<ModuleDescriptor> modules)
         {
+            //遍历整个模块描述对象集合。
             foreach (var module in modules)
             {
                 SetDependencies(modules, module);
@@ -162,6 +163,7 @@ namespace Noob.Modularity
         /// <param name="services">The services.</param>
         protected virtual void ConfigureServices(List<IModuleDescriptor> modules, IServiceCollection services)
         {
+            //构造一个服务上下文，并将其添加到 IoC 容器当中。
             var context = new ServiceConfigurationContext(services);
             services.AddSingleton(context);
 
@@ -172,13 +174,13 @@ namespace Noob.Modularity
                     Module.ServiceConfigurationContext = context;
                 }
             }
-
+            //执行预加载方法 PreConfigureServices。
             //PreConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPreConfigureServices))
             {
                 ((IPreConfigureServices)module.Instance).PreConfigureServices(context);
             }
-
+            //执行初始化方法 ConfigureServices。
             //ConfigureServices
             foreach (var module in modules)
             {
@@ -193,13 +195,14 @@ namespace Noob.Modularity
 
                 module.Instance.ConfigureServices(context);
             }
-
+            //执行初始化完成方法 PostConfigureServices。
             //PostConfigureServices
             foreach (var module in modules.Where(m => m.Instance is IPostConfigureServices))
             {
                 ((IPostConfigureServices)module.Instance).PostConfigureServices(context);
             }
 
+            //将服务上下文置为 NULL。
             foreach (var module in modules)
             {
                 if (module.Instance is Module Module)
@@ -217,14 +220,16 @@ namespace Noob.Modularity
         /// <exception cref="Exception">Could not find a depended module " + dependedModuleType.AssemblyQualifiedName + " for " + module.Type.AssemblyQualifiedName</exception>
         protected virtual void SetDependencies(List<ModuleDescriptor> modules, ModuleDescriptor module)
         {
+            // 根据当前模块描述对象存储的 Type 类型，获得 DependsOn 标签依赖的类型。
             foreach (var dependedModuleType in ModuleHelper.FindDependedModuleTypes(module.Type))
             {
+                // 在模块描述对象中，按照 Type 类型搜索。
                 var dependedModule = modules.FirstOrDefault(m => m.Type == dependedModuleType);
                 if (dependedModule == null)
                 {
                     throw new Exception("Could not find a depended module " + dependedModuleType.AssemblyQualifiedName + " for " + module.Type.AssemblyQualifiedName);
                 }
-
+                //搜索到结果，则添加到当前模块描述对象的 Dependencies 属性。
                 module.AddDependency(dependedModule);
             }
         }
