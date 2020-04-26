@@ -33,6 +33,7 @@ using Noob.Threading;
 using Noob.Linq;
 using Noob.EntityFrameworkCore.TestApp.SecondContext;
 using Noob.EntityFrameworkCore.TestApp.ThirdDbContext;
+using Microsoft.Data.SqlClient;
 
 namespace Noob.EntityFrameworkCore
 {
@@ -125,22 +126,37 @@ namespace Noob.EntityFrameworkCore
         }
 
 
-        /// <summary>
-        /// Creates the database and get connection.
-        /// </summary>
-        /// <returns>SqliteConnection.</returns>
-        private static SqliteConnection CreateDatabaseAndGetConnection()
+        ///// <summary>
+        ///// Creates the database and get connection.
+        ///// </summary>
+        ///// <returns>SqliteConnection.</returns>
+        //private static SqliteConnection CreateDatabaseAndGetConnection()
+        //{
+        //    var connection = new SqliteConnection("Data Source=:memory:");
+        //    connection.Open();
+
+        //    using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
+        //    {
+        //        context.GetService<IRelationalDatabaseCreator>().CreateTables();
+        //        context.Database.ExecuteSqlRaw(
+        //            @"CREATE VIEW View_PersonView AS 
+        //              SELECT Name, CreationTime, Birthday, LastActive FROM People");
+        //    }
+        //    return connection;
+        //}
+        private static SqlConnection CreateDatabaseAndGetConnection()
         {
-            var connection = new SqliteConnection("Data Source=:memory:");
+            var connection = new SqlConnection("Server=.;Database=EfCoreTest2;User=sa;Password=123456;");
             connection.Open();
 
-            using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
+            using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlServer(connection).Options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
                 context.Database.ExecuteSqlRaw(
                     @"CREATE VIEW View_PersonView AS 
                       SELECT Name, CreationTime, Birthday, LastActive FROM People");
             }
+
             return connection;
         }
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
