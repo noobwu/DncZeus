@@ -14,6 +14,7 @@
 using System;
 using System.Collections.ObjectModel;
 using Noob.Domain.Entities;
+using Noob.Domain.Entities.Auditing;
 
 namespace Noob.TestApp.Domain
 {
@@ -22,7 +23,7 @@ namespace Noob.TestApp.Domain
     /// Implements the <see cref="Noob.Domain.Entities.AggregateRoot{System.Guid}" />
     /// </summary>
     /// <seealso cref="Noob.Domain.Entities.AggregateRoot{System.Guid}" />
-    public class Person : AggregateRoot<Guid>
+    public class Person : FullAuditedAggregateRoot<Guid>
     {
 
         /// <summary>
