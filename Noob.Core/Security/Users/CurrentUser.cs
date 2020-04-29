@@ -16,7 +16,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using Noob.DependencyInjection;
-using Noob.Security.Claims;
 
 namespace Noob.Users
 {
@@ -61,13 +60,13 @@ namespace Noob.Users
         /// <summary>
         /// The principal accessor
         /// </summary>
-        private readonly ICurrentPrincipalAccessor _principalAccessor;
+        private readonly Security.Claims.ICurrentPrincipalAccessor _principalAccessor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CurrentUser"/> class.
         /// </summary>
         /// <param name="principalAccessor">The principal accessor.</param>
-        public CurrentUser(ICurrentPrincipalAccessor principalAccessor)
+        public CurrentUser(Security.Claims.ICurrentPrincipalAccessor principalAccessor)
         {
             _principalAccessor = principalAccessor;
         }

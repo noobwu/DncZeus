@@ -15,8 +15,6 @@ using System.Linq;
 using System.Security.Claims;
 using JetBrains.Annotations;
 using Noob;
-using Noob.Security.Claims;
-
 namespace System.Security.Principal
 {
     /// <summary>
@@ -63,6 +61,44 @@ namespace System.Security.Principal
             }
 
             return Guid.Parse(userIdOrNull.Value);
+        }
+
+        /// <summary>
+        /// Finds the client identifier.
+        /// </summary>
+        /// <param name="principal">The principal.</param>
+        /// <returns>System.String.</returns>
+        public static string FindClientId([NotNull] this ClaimsPrincipal principal)
+        {
+            Check.NotNull(principal, nameof(principal));
+
+            var clientIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == Noob.Security.Claims.ClaimTypes.ClientId);
+            if (clientIdOrNull == null || clientIdOrNull.Value.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            return clientIdOrNull.Value;
+        }
+
+        /// <summary>
+        /// Finds the client identifier.
+        /// </summary>
+        /// <param name="identity">The identity.</param>
+        /// <returns>System.String.</returns>
+        public static string FindClientId([NotNull] this IIdentity identity)
+        {
+            Check.NotNull(identity, nameof(identity));
+
+            var claimsIdentity = identity as ClaimsIdentity;
+
+            var clientIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == Noob.Security.Claims.ClaimTypes.ClientId);
+            if (clientIdOrNull == null || clientIdOrNull.Value.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            return clientIdOrNull.Value;
         }
 
     }
