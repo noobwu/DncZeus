@@ -39,8 +39,7 @@ namespace Noob.Auditing
         public bool IsEnabled { get; set; }
 
         /// <summary>
-        /// The name of the application or service writing audit logs.
-        /// Default: null.
+        /// 审计日志的应用程序名称，默认值为 null，主要在构建 AuditingInfo 被使用。
         /// </summary>
         /// <value>The name of the application.</value>
         public string ApplicationName { get; set; }
@@ -59,26 +58,26 @@ namespace Noob.Auditing
         public bool AlwaysLogOnException { get; set; }
 
         /// <summary>
-        /// Gets the contributors.
+        /// 审计日志功能的协作者集合，默认添加了 AspNetCoreAuditLogContributor 实现。
         /// </summary>
         /// <value>The contributors.</value>
         public List<AuditLogContributor> Contributors { get; }
 
         /// <summary>
-        /// Gets the ignored types.
+        /// 默认的忽略类型，主要在序列化时使用。
         /// </summary>
         /// <value>The ignored types.</value>
         public List<Type> IgnoredTypes { get; }
 
         /// <summary>
-        /// Gets the entity history selectors.
+        /// 实体类型选择器。
         /// </summary>
         /// <value>The entity history selectors.</value>
         public IEntityHistorySelectorList EntityHistorySelectors { get; }
 
         //TODO: Move this to asp.net core layer or convert it to a more dynamic strategy?
         /// <summary>
-        /// Default: false.
+        /// 是否为 Get 请求记录审计日志，默认值 false。
         /// </summary>
         /// <value><c>true</c> if this instance is enabled for get requests; otherwise, <c>false</c>.</value>
         public bool IsEnabledForGetRequests { get; set; }

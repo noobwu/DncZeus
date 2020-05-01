@@ -22,6 +22,7 @@ using System.Reflection;
 using System.Text;
 using Noob.Clients;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace Noob.Auditing
 {
@@ -34,6 +35,11 @@ namespace Noob.Auditing
     /// <seealso cref="Noob.DependencyInjection.ITransientDependency" />
     public class AuditingHelper : IAuditingHelper, ITransientDependency
     {
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        /// <value>The logger.</value>
+        protected ILogger<AuditingHelper> Logger { get; }
         /// <summary>
         /// Gets the auditing store.
         /// </summary>
@@ -82,6 +88,7 @@ namespace Noob.Auditing
         ICurrentUser currentUser,
         ICurrentClient currentClient,
         IAuditingStore auditingStore,
+        ILogger<AuditingHelper> logger,
         IServiceProvider serviceProvider,
         ICorrelationIdProvider correlationIdProvider)
         {
@@ -91,6 +98,7 @@ namespace Noob.Auditing
             CurrentClient = currentClient;
             AuditingStore = auditingStore;
 
+            Logger = logger;
             ServiceProvider = serviceProvider;
             CorrelationIdProvider = correlationIdProvider;
         }
@@ -233,6 +241,7 @@ namespace Noob.Auditing
                     ? type.FullName
                     : "",
                 MethodName = method.Name,
+                // 序列化参数信息。
                 Parameters = SerializeConvertArguments(arguments),
                 ExecutionTime = DateTime.Now
             };
@@ -260,6 +269,7 @@ namespace Noob.Auditing
                     }
                     catch (Exception ex)
                     {
+                        Logger.LogException(ex, LogLevel.Warning);
                     }
                 }
             }
@@ -291,11 +301,12 @@ namespace Noob.Auditing
                         dictionary[argument.Key] = argument.Value;
                     }
                 }
-
+                // 调用序列化器，序列化 Action 的调用参数。
                 return AuditSerializer.Serialize(dictionary);
             }
             catch (Exception ex)
             {
+                Logger.LogException(ex, LogLevel.Warning);
                 return "{}";
             }
         }
