@@ -81,14 +81,6 @@ namespace Noob.EntityFrameworkCore
             var sqlConnection = CreateDatabaseAndGetConnection();
             Configure<EfCoreDbContextOptions>(options =>
             {
-                options.PreConfigure(dbContextConfigurationContext =>
-                {
-                    dbContextConfigurationContext.DbContextOptions
-                        .ConfigureWarnings(warnings =>
-                        {
-                            warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
-                        });
-                });
                 options.Configure(dbContextConfigurationContext =>
                 {
                     dbContextConfigurationContext.DbContextOptions.UseSqlServer(sqlConnection);
@@ -115,7 +107,7 @@ namespace Noob.EntityFrameworkCore
             context.Services.AddTransient<IHybridServiceScopeFactory, DefaultServiceScopeFactory>();
             //context.Services.AddSingleton<IUnitOfWorkManager, UnitOfWorkManager>();
             //注册IDbContextProvider 组件。
-            context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
+            //context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
 
             //context.Services.TryAddTransient<ICityRepository, CityRepository>();
             //context.Services.TryAddTransient<IPersonRepository, PersonRepository>();
