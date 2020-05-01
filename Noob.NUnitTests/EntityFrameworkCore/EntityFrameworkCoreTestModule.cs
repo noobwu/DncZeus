@@ -76,17 +76,17 @@ namespace Noob.EntityFrameworkCore
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
                 });
             });
-            var sqliteConnection = CreateDatabaseAndGetConnection();
+            var sqlConnection = CreateDatabaseAndGetConnection();
             Configure<EfCoreDbContextOptions>(options =>
             {
                 options.Configure(dbContextConfigurationContext =>
                 {
-                    dbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                    dbContextConfigurationContext.DbContextOptions.UseSqlServer(sqlConnection);
                 });
             });
             context.Services.AddDbContext<TestAppDbContext>(options =>
             {
-                options.UseSqlite(sqliteConnection);
+                options.UseSqlServer(sqlConnection);
             });
             //context.Services.AddEfCoreDbContext<TestAppDbContext>(options =>
             //{

@@ -120,15 +120,18 @@ namespace Noob.TestApp
         private async Task AddPeople()
         {
             var douglas = new Person(UserDouglasId, "Douglas", 42, cityId: LondonCityId);
+            douglas.CreationTime = DateTime.Now;
             douglas.Phones.Add(new Phone(douglas.Id, "123456789"));
             douglas.Phones.Add(new Phone(douglas.Id, "123456780", PhoneType.Home));
 
             await _personRepository.InsertAsync(douglas);
 
-            await _personRepository.InsertAsync(new Person(UserJohnDeletedId, "John-Deleted", 33));
+            await _personRepository.InsertAsync(new Person(UserJohnDeletedId, "John-Deleted", 33) { CreationTime=DateTime.Now});
 
             var person1 = new Person(Guid.NewGuid(), "Person1", 42);
+            person1.CreationTime = DateTime.Now;
             var person2 = new Person(Guid.NewGuid(),"Person2", 43);
+            person2.CreationTime = DateTime.Now;
 
             await _personRepository.InsertAsync(person1);
             await _personRepository.InsertAsync(person2);
