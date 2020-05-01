@@ -43,6 +43,7 @@ namespace Noob.EntityFrameworkCore
     /// Implements the <see cref="Noob.Modularity.Module" />
     /// </summary>
     /// <seealso cref="Noob.Modularity.Module" />
+    [DependsOn(typeof(EntityFrameworkCoreModule))]
     public class EntityFrameworkCoreTestModule : Module
     {
         /// <summary>
@@ -112,7 +113,7 @@ namespace Noob.EntityFrameworkCore
             context.Services.AddTransient<IUnitOfWork, UnitOfWork>();
             context.Services.AddSingleton<IAmbientUnitOfWork, AmbientUnitOfWork>();
             context.Services.AddTransient<IHybridServiceScopeFactory, DefaultServiceScopeFactory>();
-            context.Services.AddSingleton<IUnitOfWorkManager, UnitOfWorkManager>();
+            //context.Services.AddSingleton<IUnitOfWorkManager, UnitOfWorkManager>();
             //注册IDbContextProvider 组件。
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
 

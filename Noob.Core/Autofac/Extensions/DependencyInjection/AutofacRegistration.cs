@@ -106,17 +106,19 @@ namespace Autofac.Extensions.DependencyInjection
 
             foreach (var service in services)
             {
+
                 if (service.ImplementationType != null)
                 {
+                    //指定了服务的实现类型（对应于ImplementationType属性），那么最终的服务实例将通过调用定义在实现类型中某一个构造函数来创建
                     // Test if the an open generic type is being registered
                     var serviceTypeInfo = service.ServiceType.GetTypeInfo();
-                    if (serviceTypeInfo.IsGenericTypeDefinition)
+                    if (serviceTypeInfo.IsGenericTypeDefinition) //是否是泛型
                     {
                         builder
                             .RegisterGeneric(service.ImplementationType)
                             .As(service.ServiceType)
                             .ConfigureLifecycle(service.Lifetime)
-                            .ConfigureConventions(moduleContainer, registrationActionList);
+                            .ConfigureConventions(moduleContainer, registrationActionList); //包含拦截器
                     }
                     else
                     {
@@ -129,6 +131,7 @@ namespace Autofac.Extensions.DependencyInjection
                 }
                 else if (service.ImplementationFactory != null)
                 {
+                    //指定的是一个Func<IServiceProvider, object>对象（对应于ImplementationFactory属性），那么IServiceProvider对象将会将自身作为输入参数调用该委托对象来提供服务实例
                     var registration = RegistrationBuilder.ForDelegate(service.ServiceType, (context, parameters) =>
                     {
                         var serviceProvider = context.Resolve<IServiceProvider>();
@@ -142,6 +145,7 @@ namespace Autofac.Extensions.DependencyInjection
                 }
                 else
                 {
+                    //直接指定一个现有的对象（对应的属性为ImplementationInstance），那么该对象就是最终提供的服务实例。
                     builder
                         .RegisterInstance(service.ImplementationInstance)
                         .As(service.ServiceType)

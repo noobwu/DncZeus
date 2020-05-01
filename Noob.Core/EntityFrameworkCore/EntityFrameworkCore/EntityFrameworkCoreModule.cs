@@ -13,6 +13,7 @@
 // ***********************************************************************
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Noob.Domain;
 using Noob.Modularity;
 using Noob.Uow.EntityFrameworkCore;
 /// <summary>
@@ -20,12 +21,13 @@ using Noob.Uow.EntityFrameworkCore;
 /// </summary>
 namespace Noob.EntityFrameworkCore
 {
-    //[DependsOn(typeof(DddDomainModule))]
+
     /// <summary>
     /// Class EntityFrameworkCoreModule.
     /// Implements the <see cref="Noob.Modularity.Module" />
     /// </summary>
     /// <seealso cref="Noob.Modularity.Module" />
+    [DependsOn(typeof(DddDomainModule))]
     public class EntityFrameworkCoreModule :Module
     {
         /// <summary>

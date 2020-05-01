@@ -52,11 +52,11 @@ namespace Autofac.Builder
             var implementationType = registrationBuilder.ActivatorData.ImplementationType;
             if (implementationType == null)
             {
-                return registrationBuilder;
+                return registrationBuilder;//没有实现指定类型（对应于ImplementationType属性）
             }
 
-            registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
-            registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
+            registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);//当前type程序集包含Abp模块则开启属性注入
+            registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);//调用registration HOOK  如果有拦截器，则添加拦截器
 
             return registrationBuilder;
         }
@@ -94,7 +94,7 @@ namespace Autofac.Builder
         }
 
         /// <summary>
-        /// Enables the property injection.
+        ///  启用属性注入.
         /// </summary>
         /// <typeparam name="TLimit">The type of the t limit.</typeparam>
         /// <typeparam name="TActivatorData">The type of the t activator data.</typeparam>
@@ -119,7 +119,7 @@ namespace Autofac.Builder
         }
 
         /// <summary>
-        /// Adds the interceptors.
+        /// 增加拦截器
         /// </summary>
         /// <typeparam name="TLimit">The type of the t limit.</typeparam>
         /// <typeparam name="TActivatorData">The type of the t activator data.</typeparam>

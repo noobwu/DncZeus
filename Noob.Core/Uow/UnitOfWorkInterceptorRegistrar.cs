@@ -11,8 +11,10 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
 using System.Reflection;
 using Noob.DependencyInjection;
+using Noob.DynamicProxy;
 
 namespace Noob.Uow
 {
@@ -27,10 +29,21 @@ namespace Noob.Uow
         /// <param name="context">The context.</param>
         public static void RegisterIfNeeded(IOnServiceRegistredContext context)
         {
-            if (UnitOfWorkHelper.IsUnitOfWorkType(context.ImplementationType.GetTypeInfo()))
+            // 根据回调传入的context 绑定的实现类型，判断是否应该为该类型注册 UnitOfWorkInterceptor 拦截器。
+            if (ShouldIntercept(context.ImplementationType))
             {
                 context.Interceptors.TryAdd<UnitOfWorkInterceptor>();
             }
+        }
+
+        /// <summary>
+        /// Shoulds the intercept.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool ShouldIntercept(Type type)
+        {
+            return !DynamicProxyIgnoreTypes.Contains(type) && UnitOfWorkHelper.IsUnitOfWorkType(type.GetTypeInfo());
         }
     }
 }
