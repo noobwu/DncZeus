@@ -46,11 +46,16 @@ namespace Noob.Internal
             ApplicationCreationOptions applicationCreationOptions)
         {
             var moduleLoader = new ModuleLoader();
+
+            //StartupModules=>Modules=>Assemblies
             var assemblyFinder = new AssemblyFinder(aplication);
+
+            //封装了所有程序集中所有的Types
             var typeFinder = new TypeFinder(assemblyFinder);
 
             if (!services.IsAdded<IConfiguration>())
             {
+                //生成Configuration对象并注册（默认规则appsetting.json环境变量,命令行参数等）
                 services.ReplaceConfiguration(
                     ConfigurationHelper.BuildConfiguration(
                         applicationCreationOptions.Configuration
@@ -62,8 +67,10 @@ namespace Noob.Internal
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
             services.TryAddSingleton<ITypeFinder>(typeFinder);
 
+            //添加Noob.Core程序集（基于约定方式的，注册程序集中services）IMPORTANT
             services.AddAssemblyOf<IApplication>();
 
+            //配置模块声明周期的HOOKS
             services.Configure<ModuleLifecycleOptions>(options =>
             {
                 options.Contributors.Add<OnPreApplicationInitializationModuleLifecycleContributor>();

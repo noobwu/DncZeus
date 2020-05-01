@@ -70,14 +70,17 @@ namespace Noob
             StartupModuleType = startupModuleType;
             Services = services;
 
+            //ObjectAccessor采用头插法，放入其中的查找较快。 AddObjectAccessor一注册注册一对儿：ObjectAccessor；IObjectAccessor
             services.TryAddObjectAccessor<IServiceProvider>();
 
             var options = new ApplicationCreationOptions(services);
             optionsAction?.Invoke(options);
+
             // 当前的 Application 就是一个模块容器。
             services.AddSingleton<IApplication>(this);
             services.AddSingleton<IModuleContainer>(this);
 
+            //核心基本服务  Options  Logging Localization
             services.AddCoreServices();
             // 注入模块加载类，以及模块的四个应用程序生命周期。
             services.AddAppCoreServices(this, options);

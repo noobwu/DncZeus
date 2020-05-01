@@ -61,20 +61,21 @@ namespace Noob.Auditing
                 await invocation.ProceedAsync();
                 return;
             }
-
+            // 开始进行计时操作。
             var stopwatch = Stopwatch.StartNew();
-
             try
             {
                 await invocation.ProceedAsync();
             }
             catch (Exception ex)
             {
+                // 如果出现了异常，一样的将异常信息添加到审计日志结果中。
                 auditLog.Exceptions.Add(ex);
                 throw;
             }
             finally
             {
+                // 统计完成，并将信息加入到审计日志结果中。
                 stopwatch.Stop();
                 auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
                 auditLog.Actions.Add(auditLogAction);
@@ -100,18 +101,18 @@ namespace Noob.Auditing
             {
                 return false;
             }
-
+            // 如果没有获取到 Scop，则返回 false。
             var auditLogScope = _auditingManager.Current;
             if (auditLogScope == null)
             {
                 return false;
             }
-
+            // 进行二次判断是否需要存储审计日志。
             if (!_auditingHelper.ShouldSaveAudit(invocation.Method))
             {
                 return false;
             }
-
+            // 构建审计日志信息。
             auditLog = auditLogScope.Log;
             auditLogAction = _auditingHelper.CreateAuditLogAction(
                 auditLog,
