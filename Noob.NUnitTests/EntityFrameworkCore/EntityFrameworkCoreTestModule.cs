@@ -34,6 +34,7 @@ using Noob.Linq;
 using Noob.EntityFrameworkCore.TestApp.SecondContext;
 using Noob.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Noob.EntityFrameworkCore
 {
@@ -70,7 +71,7 @@ namespace Noob.EntityFrameworkCore
             context.Services.AddEfCoreDbContext<TestAppDbContext>(options =>
             {
                 options.AddDefaultRepositories(true);
-                //options.ReplaceDbContext<IThirdDbContext>();
+                options.ReplaceDbContext<IThirdDbContext>();
                 options.Entity<Person>(opt =>
                 {
                     opt.DefaultWithDetailsFunc = q => q.Include(p => p.Phones);
@@ -79,6 +80,14 @@ namespace Noob.EntityFrameworkCore
             var sqlConnection = CreateDatabaseAndGetConnection();
             Configure<EfCoreDbContextOptions>(options =>
             {
+                options.PreConfigure(dbContextConfigurationContext =>
+                {
+                    dbContextConfigurationContext.DbContextOptions
+                        .ConfigureWarnings(warnings =>
+                        {
+                            warnings.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning);
+                        });
+                });
                 options.Configure(dbContextConfigurationContext =>
                 {
                     dbContextConfigurationContext.DbContextOptions.UseSqlServer(sqlConnection);
@@ -104,6 +113,7 @@ namespace Noob.EntityFrameworkCore
             context.Services.AddSingleton<IAmbientUnitOfWork, AmbientUnitOfWork>();
             context.Services.AddTransient<IHybridServiceScopeFactory, DefaultServiceScopeFactory>();
             context.Services.AddSingleton<IUnitOfWorkManager, UnitOfWorkManager>();
+            //注册IDbContextProvider 组件。
             context.Services.TryAddTransient(typeof(IDbContextProvider<>), typeof(UnitOfWorkDbContextProvider<>));
 
             //context.Services.TryAddTransient<ICityRepository, CityRepository>();

@@ -20,7 +20,7 @@ using Noob.Uow.EntityFrameworkCore;
 /// </summary>
 namespace Noob.EntityFrameworkCore
 {
-    //[DependsOn(typeof(AbpDddDomainModule))]
+    //[DependsOn(typeof(DddDomainModule))]
     /// <summary>
     /// Class EntityFrameworkCoreModule.
     /// Implements the <see cref="Noob.Modularity.Module" />

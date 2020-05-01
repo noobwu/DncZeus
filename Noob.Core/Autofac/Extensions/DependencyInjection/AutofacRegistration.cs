@@ -116,7 +116,7 @@ namespace Autofac.Extensions.DependencyInjection
                             .RegisterGeneric(service.ImplementationType)
                             .As(service.ServiceType)
                             .ConfigureLifecycle(service.Lifetime)
-                            .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                            .ConfigureConventions(moduleContainer, registrationActionList);
                     }
                     else
                     {
@@ -124,7 +124,7 @@ namespace Autofac.Extensions.DependencyInjection
                             .RegisterType(service.ImplementationType)
                             .As(service.ServiceType)
                             .ConfigureLifecycle(service.Lifetime)
-                            .ConfigureAbpConventions(moduleContainer, registrationActionList);
+                            .ConfigureConventions(moduleContainer, registrationActionList);
                     }
                 }
                 else if (service.ImplementationFactory != null)

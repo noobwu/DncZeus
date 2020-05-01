@@ -23,7 +23,7 @@ using Noob.Modularity;
 namespace Autofac.Builder
 {
     /// <summary>
-    /// Class RegistrationBuilderExtensions.
+    /// Class AbpRegistrationBuilderExtensions.
     /// </summary>
     public static class RegistrationBuilderExtensions
     {
@@ -37,9 +37,9 @@ namespace Autofac.Builder
         /// <param name="moduleContainer">The module container.</param>
         /// <param name="registrationActionList">The registration action list.</param>
         /// <returns>IRegistrationBuilder&lt;TLimit, TActivatorData, TRegistrationStyle&gt;.</returns>
-        public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureAbpConventions<TLimit, TActivatorData, TRegistrationStyle>(
-                this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, 
-                IModuleContainer moduleContainer, 
+        public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureConventions<TLimit, TActivatorData, TRegistrationStyle>(
+                this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+                IModuleContainer moduleContainer,
                 ServiceRegistrationActionList registrationActionList)
             where TActivatorData : ReflectionActivatorData
         {
@@ -72,7 +72,7 @@ namespace Autofac.Builder
         /// <param name="serviceType">Type of the service.</param>
         /// <param name="implementationType">Type of the implementation.</param>
         /// <returns>IRegistrationBuilder&lt;TLimit, TActivatorData, TRegistrationStyle&gt;.</returns>
-        private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, ServiceRegistrationActionList registrationActionList, Type serviceType, Type implementationType) 
+        private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, ServiceRegistrationActionList registrationActionList, Type serviceType, Type implementationType)
             where TActivatorData : ReflectionActivatorData
         {
             var serviceRegistredArgs = new OnServiceRegistredContext(serviceType, implementationType);
@@ -104,12 +104,12 @@ namespace Autofac.Builder
         /// <param name="implementationType">Type of the implementation.</param>
         /// <returns>IRegistrationBuilder&lt;TLimit, TActivatorData, TRegistrationStyle&gt;.</returns>
         private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
-                this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, 
+                this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
                 IModuleContainer moduleContainer,
-                Type implementationType) 
+                Type implementationType)
             where TActivatorData : ReflectionActivatorData
         {
-            //Enable Property Injection only for types in an assembly containing an Module
+            //Enable Property Injection only for types in an assembly containing an AbpModule
             if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly))
             {
                 registrationBuilder = registrationBuilder.PropertiesAutowired();
@@ -129,7 +129,7 @@ namespace Autofac.Builder
         /// <param name="interceptors">The interceptors.</param>
         /// <returns>IRegistrationBuilder&lt;TLimit, TActivatorData, TRegistrationStyle&gt;.</returns>
         private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> AddInterceptors<TLimit, TActivatorData, TRegistrationStyle>(
-            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, 
+            this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
             Type serviceType,
             IEnumerable<Type> interceptors)
             where TActivatorData : ReflectionActivatorData
