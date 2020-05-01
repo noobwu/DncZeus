@@ -54,9 +54,10 @@ namespace Autofac.Builder
             {
                 return registrationBuilder;//没有实现指定类型（对应于ImplementationType属性）
             }
-
-            registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);//当前type程序集包含Abp模块则开启属性注入
-            registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);//调用registration HOOK  如果有拦截器，则添加拦截器
+            //当前type程序集包含模块则开启属性注入
+            registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
+            //调用registration HOOK  如果有拦截器，则添加拦截器
+            registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
 
             return registrationBuilder;
         }
@@ -79,6 +80,7 @@ namespace Autofac.Builder
 
             foreach (var registrationAction in registrationActionList)
             {
+                //执行注册操作
                 registrationAction.Invoke(serviceRegistredArgs);
             }
 
@@ -112,9 +114,9 @@ namespace Autofac.Builder
             //Enable Property Injection only for types in an assembly containing an AbpModule
             if (moduleContainer.Modules.Any(m => m.Assembly == implementationType.Assembly))
             {
+                //属性注入
                 registrationBuilder = registrationBuilder.PropertiesAutowired();
             }
-
             return registrationBuilder;
         }
 
@@ -145,6 +147,7 @@ namespace Autofac.Builder
 
             foreach (var interceptor in interceptors)
             {
+                //创建代理类来拦截
                 registrationBuilder.InterceptedBy(
                     typeof(AsyncDeterminationInterceptor<>).MakeGenericType(interceptor)
                 );
