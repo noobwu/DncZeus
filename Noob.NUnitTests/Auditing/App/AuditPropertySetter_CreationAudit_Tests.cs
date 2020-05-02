@@ -41,7 +41,7 @@ namespace Noob.Auditing
         {
             AuditPropertySetter.SetCreationProperties(TargetObject);
 
-            TargetObject.CreationTime.ShouldBe(Now);
+            TargetObject.CreationTime.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Noob.Auditing
         {
             AuditPropertySetter.SetCreationProperties(TargetObject);
 
-            TargetObject.CreationTime.ShouldBe(Now);
+            TargetObject.CreationTime.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.CreatorId.ShouldBe(null);
         }
 
@@ -66,7 +66,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetCreationProperties(TargetObject);
 
-            TargetObject.CreationTime.ShouldBe(Now);
+            TargetObject.CreationTime.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.CreatorId.ShouldBe(CurrentUserId);
         }
 
@@ -83,7 +83,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetCreationProperties(TargetObject);
 
-            TargetObject.CreationTime.ShouldBe(Now);
+            TargetObject.CreationTime.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.CreatorId.ShouldBe(oldCreatorUserId);
         }
 
@@ -97,7 +97,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetCreationProperties(TargetObject);
 
-            TargetObject.CreationTime.ShouldBe(Now);
+            TargetObject.CreationTime.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.CreatorId.ShouldBe(CurrentUserId);
         }
 
@@ -111,7 +111,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetCreationProperties(TargetObject);
 
-            TargetObject.CreationTime.ShouldBe(Now);
+            TargetObject.CreationTime.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.CreatorId.ShouldBe(null);
         }
     }

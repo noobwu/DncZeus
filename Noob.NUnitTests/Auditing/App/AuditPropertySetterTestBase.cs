@@ -27,6 +27,10 @@ namespace Noob.Auditing
         /// </summary>
         protected Guid? CurrentUserId = null;
         /// <summary>
+        /// The time subtract seconds
+        /// </summary>
+        protected int TimeSubtractSeconds = 5;
+        /// <summary>
         /// The now
         /// </summary>
         protected DateTime Now = DateTime.Now;

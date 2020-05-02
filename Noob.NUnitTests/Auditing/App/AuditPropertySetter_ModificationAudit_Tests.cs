@@ -41,7 +41,7 @@ namespace Noob.Auditing
         {
             AuditPropertySetter.SetModificationProperties(TargetObject);
 
-            TargetObject.LastModificationTime.ShouldBe(Now);
+            TargetObject.LastModificationTime.Value.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetModificationProperties(TargetObject);
 
-            TargetObject.LastModificationTime.ShouldBe(Now);
+            TargetObject.LastModificationTime.Value.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.LastModifierId.ShouldBe(null);
         }
 
@@ -68,7 +68,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetModificationProperties(TargetObject);
 
-            TargetObject.LastModificationTime.ShouldBe(Now);
+            TargetObject.LastModificationTime.Value.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.LastModifierId.ShouldBe(CurrentUserId);
         }
 
@@ -83,7 +83,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetModificationProperties(TargetObject);
 
-            TargetObject.LastModificationTime.ShouldBe(Now);
+            TargetObject.LastModificationTime.Value.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.LastModifierId.ShouldBe(CurrentUserId);
         }
 
@@ -97,7 +97,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetModificationProperties(TargetObject);
 
-            TargetObject.LastModificationTime.ShouldBe(Now);
+            TargetObject.LastModificationTime.Value.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.LastModifierId.ShouldBe(CurrentUserId);
         }
 
@@ -112,7 +112,7 @@ namespace Noob.Auditing
 
             AuditPropertySetter.SetModificationProperties(TargetObject);
 
-            TargetObject.LastModificationTime.ShouldBe(Now);
+            TargetObject.LastModificationTime.Value.Subtract(Now).TotalSeconds.ShouldBeLessThanOrEqualTo(TimeSubtractSeconds);
             TargetObject.LastModifierId.ShouldBe(null);
         }
     }

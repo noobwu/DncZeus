@@ -104,11 +104,11 @@ namespace Noob.Auditing
             /// <returns>Task&lt;ResultObject&gt;.</returns>
             public async virtual Task<ResultObject> DoItAsync(InputObject inputObject)
             {
-                return new ResultObject
+                return await Task.FromResult(new ResultObject
                 {
                     Value1 = inputObject.Value1 + "-result",
                     Value2 = inputObject.Value2 + 1
-                };
+                });
             }
         }
 
