@@ -42,18 +42,16 @@ namespace Noob.Auditing
         /// <param name="context">The context.</param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            var sqliteConnection = CreateDatabaseAndGetConnection();
             context.Services.AddEfCoreDbContext<AuditingTestDbContext>(options =>
             {
                 options.AddDefaultRepositories(true);
             });
-
-            var sqliteConnection = CreateDatabaseAndGetConnection();
-
             Configure<EfCoreDbContextOptions>(options =>
             {
-                options.Configure(abpDbContextConfigurationContext =>
+                options.Configure(dbContextConfigurationContext =>
                 {
-                    abpDbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
+                    dbContextConfigurationContext.DbContextOptions.UseSqlite(sqliteConnection);
                 });
             });
 
@@ -65,7 +63,6 @@ namespace Noob.Auditing
                         type => type == typeof(AppEntityWithSelector))
                 );
             });
-
             context.Services.AddType<Auditing_Tests.MyAuditedObject1>();
         }
 

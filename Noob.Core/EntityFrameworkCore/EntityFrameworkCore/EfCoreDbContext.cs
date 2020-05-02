@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Noob.Auditing;
 using Noob.Data;
+using Noob.DependencyInjection;
 using Noob.Domain.Entities;
 using Noob.EntityFrameworkCore.Modeling;
 using Noob.Guids;
@@ -38,7 +39,7 @@ namespace Noob.EntityFrameworkCore
     /// <typeparam name="TDbContext">The type of the t database context.</typeparam>
     /// <seealso cref="Noob.EntityFrameworkCore.IEfCoreDbContext" />
     /// <seealso cref="Microsoft.EntityFrameworkCore.DbContext" />
-    public class EfCoreDbContext<TDbContext> : DbContext,IEfCoreDbContext
+    public class EfCoreDbContext<TDbContext> : DbContext,IEfCoreDbContext,ITransientDependency
           where TDbContext : DbContext
     {
         /// <summary>

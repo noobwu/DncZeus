@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using Noob.Auditing;
 using Noob.Data;
 using Noob.Guids;
 using Noob.Modularity;
@@ -24,7 +25,13 @@ namespace Noob.Domain
     /// Implements the <see cref="Noob.Modularity.Module" />
     /// </summary>
     /// <seealso cref="Noob.Modularity.Module" />
-    [DependsOn(typeof(GuidsModule),typeof(ThreadingModule),typeof(UnitOfWorkModule))]
+    [DependsOn(
+        typeof(AuditingModule),
+        typeof(DataModule),
+        typeof(GuidsModule),
+        typeof(ThreadingModule),
+        typeof(UnitOfWorkModule)
+        )]
     public class DddDomainModule : Module
     {
 
