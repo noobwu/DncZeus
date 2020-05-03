@@ -29,9 +29,4 @@
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AspNetCore\" />
-    <Folder Include="Ddd\Application\Services\" />
-  </ItemGroup>
-
 </Project>
