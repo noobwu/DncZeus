@@ -498,5 +498,160 @@ namespace System
 
             return str.Substring(str.Length - len, len);
         }
+
+        /// <summary>
+        /// Gets a substring of a string from beginning of the string.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="str"/> is null</exception>
+        /// <exception cref="ArgumentException">Thrown if <paramref name="len"/> is bigger that string's length</exception>
+        public static string Left(this string str, int len)
+        {
+            Check.NotNull(str, nameof(str));
+
+            if (str.Length < len)
+            {
+                throw new ArgumentException("len argument can not be bigger than given string's length!");
+            }
+
+            return str.Substring(0, len);
+        }
+
+        /// <summary>
+        /// Converts line endings in the string to <see cref="Environment.NewLine"/>.
+        /// </summary>
+        public static string NormalizeLineEndings(this string str)
+        {
+            return str.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", Environment.NewLine);
+        }
+
+        /// <summary>
+        /// Gets index of nth occurrence of a char in a string.
+        /// </summary>
+        /// <param name="str">source string to be searched</param>
+        /// <param name="c">Char to search in <see cref="str"/></param>
+        /// <param name="n">Count of the occurrence</param>
+        public static int NthIndexOf(this string str, char c, int n)
+        {
+            Check.NotNull(str, nameof(str));
+
+            var count = 0;
+            for (var i = 0; i < str.Length; i++)
+            {
+                if (str[i] != c)
+                {
+                    continue;
+                }
+
+                if ((++count) == n)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Removes first occurrence of the given postfixes from end of the given string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="postFixes">one or more postfix.</param>
+        /// <returns>Modified string or the same string if it has not any of given postfixes</returns>
+        public static string RemovePostFix(this string str, params string[] postFixes)
+        {
+            return str.RemovePostFix(StringComparison.Ordinal, postFixes);
+        }
+
+        /// <summary>
+        /// Removes first occurrence of the given postfixes from end of the given string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="comparisonType">String comparison type</param>
+        /// <param name="postFixes">one or more postfix.</param>
+        /// <returns>Modified string or the same string if it has not any of given postfixes</returns>
+        public static string RemovePostFix(this string str, StringComparison comparisonType, params string[] postFixes)
+        {
+            if (str.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            if (postFixes.IsNullOrEmpty())
+            {
+                return str;
+            }
+
+            foreach (var postFix in postFixes)
+            {
+                if (str.EndsWith(postFix, comparisonType))
+                {
+                    return str.Left(str.Length - postFix.Length);
+                }
+            }
+            return str;
+        }
+
+
+        /// <summary>
+        /// Removes first occurrence of the given prefixes from beginning of the given string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="preFixes">one or more prefix.</param>
+        /// <returns>Modified string or the same string if it has not any of given prefixes</returns>
+        public static string RemovePreFix(this string str, params string[] preFixes)
+        {
+            return str.RemovePreFix(StringComparison.Ordinal, preFixes);
+        }
+
+        /// <summary>
+        /// Removes first occurrence of the given prefixes from beginning of the given string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="comparisonType">String comparison type</param>
+        /// <param name="preFixes">one or more prefix.</param>
+        /// <returns>Modified string or the same string if it has not any of given prefixes</returns>
+        public static string RemovePreFix(this string str, StringComparison comparisonType, params string[] preFixes)
+        {
+            if (str.IsNullOrEmpty())
+            {
+                return null;
+            }
+
+            if (preFixes.IsNullOrEmpty())
+            {
+                return str;
+            }
+
+            foreach (var preFix in preFixes)
+            {
+                if (str.StartsWith(preFix, comparisonType))
+                {
+                    return str.Right(str.Length - preFix.Length);
+                }
+            }
+
+            return str;
+        }
+        /// <summary>
+        /// Replaces the first.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="search">The search.</param>
+        /// <param name="replace">The replace.</param>
+        /// <param name="comparisonType">Type of the comparison.</param>
+        /// <returns>System.String.</returns>
+        public static string ReplaceFirst(this string str, string search, string replace, StringComparison comparisonType = StringComparison.Ordinal)
+        {
+            Check.NotNull(str, nameof(str));
+
+            var pos = str.IndexOf(search, comparisonType);
+            if (pos < 0)
+            {
+                return str;
+            }
+
+            return str.Substring(0, pos) + replace + str.Substring(pos + search.Length);
+        }
+
     }
 }
